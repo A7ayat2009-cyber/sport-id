@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة توقعات الزعيم</title>
+    <title>Sport ID - البطاقة الرياضية المدمجة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,7 +11,7 @@
             --card-accent: #10b981;
             --card-glow: rgba(16, 185, 129, 0.25);
             --bg-base: #0c1629;
-            --glass-bg: rgba(23, 37, 65, 0.82);
+            --glass-bg: rgba(23, 37, 65, 0.85);
             --glass-border: rgba(255, 255, 255, 0.15);
             --text-light: #f8fafc;
             --text-dim: #94a3b8;
@@ -44,7 +44,7 @@
             width: 100%; 
             max-width: 480px; 
             background: var(--glass-bg); 
-            padding: 32px 20px; 
+            padding: 28px 20px; 
             border-radius: 32px; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 
                         0 0 0 1px var(--glass-border) inset; 
@@ -62,17 +62,15 @@
         .tabs { 
             display: flex; 
             gap: 6px; 
-            margin-bottom: 24px; 
+            margin-bottom: 20px; 
             background: rgba(255, 255, 255, 0.06);
             padding: 5px;
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            flex-wrap: wrap;
         }
 
         .tab-btn { 
             flex: 1; 
-            min-width: 70px;
             padding: 10px 4px; 
             border: none; 
             background: transparent; 
@@ -81,9 +79,10 @@
             cursor: pointer; 
             font-weight: 700; 
             font-family: 'Cairo', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
-            position: relative;
+            text-align: center;
+            text-decoration: none;
         }
 
         .tab-btn.active { 
@@ -92,121 +91,82 @@
             box-shadow: 0 4px 15px var(--card-glow);
         }
 
-        .coming-soon-badge {
-            font-size: 0.55rem;
-            color: #ef4444;
-            font-weight: 900;
-            display: block;
-            line-height: 1;
-            margin-top: 2px;
-            letter-spacing: 0.5px;
-        }
-
-        .tab-btn.active .coming-soon-badge {
-            color: #fca5a5;
-        }
-
-        .content { display: none; }
-        .content.active { display: block; animation: tabFade 0.3s ease-out; }
-
-        @keyframes tabFade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .title { 
             text-align: center; 
-            font-size: 1.8rem; 
-            margin-bottom: 20px; 
+            font-size: 1.6rem; 
+            margin-bottom: 16px; 
             font-weight: 900; 
-            letter-spacing: -0.5px;
             background: linear-gradient(180deg, #ffffff 30%, #86efac 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .coming-soon-container {
-            text-align: center;
-            padding: 20px 10px;
-        }
-
-        .pulse-icon {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .rules-box { 
-            background: rgba(23, 37, 65, 0.65); 
-            padding: 20px; 
-            border-radius: 20px; 
-            margin-bottom: 22px; 
-            font-size: 0.88rem; 
-            color: #e2e8f0; 
-            border-right: 4px solid var(--card-accent); 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-right-width: 4px;
         }
 
         .notice-box {
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.35);
             border-right: 4px solid var(--card-accent);
-            padding: 14px 16px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            font-size: 0.82rem;
             color: #ffffff;
-            line-height: 1.6;
+            line-height: 1.5;
             font-weight: 600;
         }
 
-        .prize-section { 
-            margin-bottom: 12px; 
-            padding-bottom: 10px; 
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.12); 
+        .wizard-step {
+            display: none;
+        }
+        .wizard-step.active-step {
+            display: block;
+            animation: tabFade 0.3s ease-out;
         }
 
-        .prize-section:last-child { 
-            border-bottom: none; 
-            margin-bottom: 0; 
-            padding-bottom: 0; 
+        @keyframes tabFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .draw-list { 
-            margin: 6px 0 0 0; 
-            padding-right: 18px; 
-            line-height: 1.6; 
-            color: #94a3b8;
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .step-dot {
+            flex: 1;
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            position: relative;
+            padding-bottom: 6px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .step-dot.active {
+            color: var(--card-accent);
+            border-bottom-color: var(--card-accent);
         }
 
         input, select, textarea { 
             width: 100%; 
-            padding: 14px 16px; 
-            margin: 8px 0; 
+            padding: 13px 15px; 
+            margin: 7px 0; 
             border: 1px solid rgba(255, 255, 255, 0.12); 
             border-radius: 14px; 
             box-sizing: border-box; 
             font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             background: rgba(10, 18, 35, 0.7);
             color: #ffffff;
             transition: all 0.3s ease;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: #64748b;
-        }
-
-        select option {
-            background: #172541;
-            color: #ffffff;
-        }
+        input::placeholder, textarea::placeholder { color: #64748b; }
+        select option { background: #172541; color: #ffffff; }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
@@ -215,256 +175,35 @@
             box-shadow: 0 0 0 3px var(--card-glow);
         }
 
-        button[type="submit"], .action-btn { 
+        .action-btn { 
             width: 100%; 
-            padding: 15px; 
+            padding: 14px; 
             background: linear-gradient(135deg, var(--primary) 0%, #004400 100%); 
             color: white; 
             border: none; 
             border-radius: 14px; 
             font-weight: 800; 
             font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer; 
-            margin-top: 14px; 
+            margin-top: 12px; 
             transition: all 0.3s ease;
             box-shadow: 0 6px 20px var(--card-glow);
         }
 
-        button[type="submit"]:hover, .action-btn:hover {
+        .action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--card-glow);
             filter: brightness(1.1);
         }
 
-        .rank-card { 
-            background: rgba(10, 18, 35, 0.6); 
-            padding: 12px 16px; 
-            border-radius: 14px; 
-            margin-bottom: 10px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            border-right: 4px solid var(--card-accent); 
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-right-width: 4px;
-        }
-
-        .footer { 
-            text-align: center; 
-            margin-top: 26px; 
-            padding-top: 18px; 
-            border-top: 1px solid rgba(255, 255, 255, 0.08); 
-            color: var(--text-dim); 
-            font-size: 0.82rem; 
-            font-weight: 600;
-        }
-        
-        .sponsor-container { 
-            margin-top: 12px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 6px; 
-            width: 100%;
-        }
-
-        .sponsors-row { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 12px; 
-            width: 100%; 
-            max-width: 100%;
-            margin-top: 4px;
-            overflow: hidden;
-        }
-
-        .sponsor-logo-uniform { 
-            width: 70px; 
-            height: 70px; 
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
-        }
-
-        #halha-logo {
-            width: 95px;
-            height: 95px;
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
-        }
-
-        #samar-logo {
-            width: 110px;
-            height: 110px;
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transform: scale(1.5);
-            margin: 0 5px;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 6px 15px rgba(0,0,0,0.6));
-        }
-
-        .identity-card-preview {
-            background: linear-gradient(145deg, rgba(23, 37, 65, 0.95) 0%, rgba(12, 22, 41, 0.98) 100%);
-            border-radius: 24px;
-            padding: 26px;
-            margin-top: 20px;
-            border: 2px solid var(--card-accent);
-            text-align: center;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
-            backdrop-filter: blur(20px);
-        }
-
-        .id-name {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 4px;
-        }
-
-        .id-role-badge {
-            background: var(--card-glow);
-            color: var(--card-accent);
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 800;
-            display: inline-block;
-            margin-bottom: 14px;
-            border: 1px solid var(--card-accent);
-        }
-
-        .profile-link-box {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            color: #a7f3d0;
-            direction: ltr;
-            margin-bottom: 16px;
-            border: 1px dashed var(--card-accent);
-            word-break: break-all;
-        }
-
-        .discord-cards-container {
+        .btn-group {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
-            text-align: right;
-        }
-
-        .discord-info-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .discord-card-label {
-            font-size: 0.78rem;
-            color: var(--text-dim);
-            font-weight: 700;
-        }
-
-        .discord-card-value {
-            font-size: 0.88rem;
-            color: #ffffff;
-            font-weight: 800;
-        }
-
-        .id-bio {
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            margin-bottom: 16px;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .id-socials {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-
-        .id-social-icon {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .id-social-icon:hover {
-            background: var(--card-accent);
-            transform: scale(1.1);
-        }
-
-        .card-footer-identity {
-            margin-top: 15px;
-            padding-top: 12px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
-            font-size: 0.76rem;
-            color: #e2e8f0;
-            font-weight: 700;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        .collapsible-trigger {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px dashed var(--card-accent);
-            color: var(--card-accent);
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin: 10px 0;
-            transition: all 0.3s;
-        }
-
-        .collapsible-trigger:hover {
-            background: rgba(16, 185, 129, 0.25);
-        }
-
-        .extra-fields-container {
-            display: none;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px;
-            border-radius: 12px;
-            margin: 8px 0;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .color-picker-wrapper {
-            margin: 12px 0;
+            margin: 10px 0;
             background: rgba(0,0,0,0.25);
             padding: 12px;
             border-radius: 14px;
@@ -473,10 +212,9 @@
 
         .color-options {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             justify-content: center;
             margin-top: 8px;
-            flex-wrap: wrap;
         }
 
         .color-bubble {
@@ -488,192 +226,171 @@
             transition: transform 0.2s;
         }
 
-        .color-bubble:hover {
-            transform: scale(1.15);
-        }
-
         .color-bubble.selected {
             border-color: #fff;
             transform: scale(1.15);
             box-shadow: 0 0 10px currentColor;
         }
 
-        .share-box-instruction {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid var(--card-accent);
-            padding: 12px;
-            border-radius: 14px;
-            margin-bottom: 14px;
+        .identity-card-preview {
+            background: linear-gradient(145deg, rgba(23, 37, 65, 0.95) 0%, rgba(12, 22, 41, 0.98) 100%);
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 10px;
+            border: 2px solid var(--card-accent);
             text-align: center;
-            font-size: 0.82rem;
-            color: #fff;
-            font-weight: 700;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
         }
+
+        .id-name { font-size: 1.35rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+        .id-role-badge {
+            background: var(--card-glow);
+            color: var(--card-accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 12px;
+            border: 1px solid var(--card-accent);
+        }
+
+        .profile-link-box {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #a7f3d0;
+            direction: ltr;
+            margin-bottom: 12px;
+            border: 1px dashed var(--card-accent);
+            word-break: break-all;
+            cursor: pointer;
+        }
+
+        .discord-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+            text-align: right;
+        }
+
+        .discord-info-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .discord-card-label { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; }
+        .discord-card-value { font-size: 0.85rem; color: #ffffff; font-weight: 800; }
+
+        .id-bio {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .id-socials {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .id-social-icon {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .id-social-icon:hover { background: var(--card-accent); transform: scale(1.1); }
+
+        .card-footer-identity {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            font-size: 0.74rem;
+            color: #e2e8f0;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .footer { 
+            text-align: center; 
+            margin-top: 20px; 
+            padding-top: 14px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.08); 
+            color: var(--text-dim); 
+            font-size: 0.8rem; 
+        }
+        
+        .sponsor-container { 
+            margin-top: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 4px; 
+        }
+        .sponsors-row { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px; 
+            margin-top: 2px;
+        }
+        .sponsor-logo-uniform { width: 60px; height: 60px; object-fit: contain; }
+        #halha-logo { width: 80px; height: 80px; object-fit: contain; }
+        #samar-logo { width: 90px; height: 90px; object-fit: contain; transform: scale(1.4); margin: 0 4px; }
     </style>
 </head>
 <body>
-<div id="instagram-warning" style="display:none;position:fixed;inset:0;background:#0c1629;z-index:99999;padding:30px;color:white;font-family:Cairo,sans-serif;justify-content:center;align-items:center;text-align:center;">
-    <div style="max-width:420px;background:#172541;padding:25px;border-radius:22px;border:2px solid #10b981;">
-        <h2>🔐 فتح المنصة</h2>
-        <p style="line-height:1.8">
-            لضمان عمل جميع خدمات المنصة بالشكل الصحيح، يرجى فتح الموقع باستخدام المتصفح الخارجي بدلاً من متصفح إنستغرام.
-        </p>
-        <div style="background:#10b98122;padding:15px;border-radius:15px;margin:20px 0;">
-            اضغط على <b>•••</b><br><br>
-            ثم اختر<br><br>
-            <b>Open in external browser</b>
-        </div>
-        <p style="color:#94a3b8;font-size:13px">
-            لأفضل تجربة استخدام، افتح المنصة في المتصفح الخارجي. عندها ستتوفر جميع المزايا والوظائف بكامل كفاءتها
-        </p>
-    </div>
-</div>
 
 <div class="box">
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('about', event)">منصتنا</button>
-        <button class="tab-btn" onclick="showTab('prediction', event)">سجل توقعك</button>
-        <button class="tab-btn" onclick="showTab('leaderboard', event)">الجدول</button>
-        <button class="tab-btn" onclick="showTab('identity', event)">الهوية الرياضية</button>
-        <button class="tab-btn" onclick="showTab('kickoff', event)">
-            Kick off
-            <span class="coming-soon-badge">soon</span>
+        <a href="YOUR_PREDICTION_PAGE_URL" class="tab-btn">منصتنا</a>
+        <button class="tab-btn active">Sport ID</button>
+    </div>
+
+    <div class="title">⚡ Sport ID</div>
+    
+    <div id="login-box" class="notice-box" style="text-align:center;">
+        <button type="button" class="action-btn" id="google-login-btn" style="margin-top:0;">
+            🔐 تسجيل الدخول بواسطة Google لحفظ بطاقتك دائمًا
         </button>
+        <p id="login-status" style="font-size:0.78rem; margin-top:6px; color:#4ade80;"></p>
     </div>
 
-    <div id="about" class="content active">
-        <div class="title">منصة توقعات الزعيم ⚽️</div>
+    <form id="identity-form" onsubmit="event.preventDefault();">
         
-        <div class="notice-box">
-            ⏰ <b>ملاحظة هامة جداً:</b><br>
-            يفتح استقبال التوقعات من بداية يوم المباراة، ويتم إغلاق باب التوقعات نهائياً <b>بعد نزول التشكيلة الرسمية بـ 5 دقائق فقط!</b>
+        <div class="step-indicator">
+            <div class="step-dot active" id="dot-1">1. الأساسيات</div>
+            <div class="step-dot" id="dot-2">2. التصميم واللون</div>
+            <div class="step-dot" id="dot-3">3. التفاصيل الخاصة</div>
+            <div class="step-dot" id="dot-4">4. التواصل والنبذة</div>
         </div>
 
-        <div class="rules-box" style="text-align: center; line-height: 1.7; font-size: 0.95rem;">
-            منصة تفاعلية مخصصة لجماهير النادي العربي لتوقع نتائج المباريات والمنافسة على جوائز قييمة طوال الموسم بكل حماس واثارة.
-        </div>
-        
-        <div class="rules-box">
-            <h3 style="margin-top: 0; margin-bottom: 12px; font-weight: 700;">🏆 نظام الجوائز والبروتوكول:</h3>
-            
-            <div class="prize-section">
-                <div><b>المركز الأول (على مستوى الموسم):</b></div>
-                <div style="margin-top: 4px;">10$ ( gift card من اختيارك ) + جوائز مميزة من لعبة <b>Samar</b>.</div>
-            </div>
-
-            <div class="prize-section">
-                <div><b>سحوبات المباريات (الدربيات):</b></div>
-                <ul class="draw-list">
-                    <li>5$ ( gift card من اختيارك )</li>
-                    <li>كود لعبة من سمر</li>
-                    <li>كود لعبة من حلها</li>
-                    <li>جولة من لعبة اضمنها</li>
-                </ul>
-                <div style="margin-top: 8px; font-size: 0.82rem; font-weight: 700; line-height: 1.6; color: #cbd5e1;">
-                    سيتم سحب اسم عشوائياً من الذين توقعوا توقع صحيح<br>
-                    (على المباريات التي سيتم الاعلان عنها بالحساب (انستاغرام))<br>
-                    يشترط إضافة حسابات الرعاة:<br>
-                    @7lha.app<br>
-                    @play_samar<br>
-                    @idmanhakw
-                </div>
-            </div>
-
-            <div style="margin-top: 12px; font-weight: 700; background: rgba(0,128,0,0.2); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.3);">
-                نقطتين للنتيجة | نقطتين لتوقع عدد الأهداف | أربع نقاط لتوقع اسم اللاعب المسجل.
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>إدارة المنصة: @alza3eem__kw</p>
-            <div class="sponsor-container">
-                <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
-                <div class="sponsors-row">
-                    <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
-                    <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
-                    <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="prediction" class="content">
-        <div class="title">منصة توقعات الزعيم ⚽️</div>
-        
-        <div class="notice-box">
-            ⏰ <b>ملاحظة هامة جداً:</b><br>
-            يفتح استقبال التوقعات من بداية يوم المباراة، ويتم إغلاق باب التوقعات نهائياً <b>بعد نزول التشكيلة الرسمية بـ 5 دقائق فقط!</b>
-        </div>
-        
-        <form action="https://formsubmit.co/alza3eem.kw@gmail.com" method="POST" id="my-form">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="توقع جديد في منصة الزعيم ⚽️">
-            <input type="hidden" name="_next" value="">
-
-            <input type="text" name="الاسم" id="name-input" placeholder="الاسم الكريم" required>
-            <input type="text" name="حساب_الانستقرام" id="insta-input" placeholder="@حساب الإنستغرام" required>
-            <select name="التوقع" id="prediction-select">
-                <option value="" disabled selected>اختر توقع النتيجة</option>
-                <option>فوز العربي</option>
-                <option>تعادل</option>
-                <option>خسارة</option>
-            </select>
-            <input type="text" name="اسم_اللاعب" id="player-input" placeholder="توقع اسم لاعب سيسجل للنادي العربي" required>
-            <select name="عدد_الاهداف" id="goals-select">
-                <option value="" disabled selected>توقع عدد أهداف العربي</option>
-                <option>صفر</option>
-                <option>أقل من 3</option>
-                <option>أكثر من 3</option>
-            </select>
-            <button type="submit">إرسال التوقع</button>
-        </form>
-        <p id="my-form-status"></p>
-        
-        <div class="footer">
-            <p>إدارة المنصة: @alza3eem__kw</p>
-            <div class="sponsor-container">
-                <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
-                <div class="sponsors-row">
-                    <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
-                    <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
-                    <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="leaderboard" class="content">
-        <div class="title">🏆 جدول التوب 10</div>
-        <div id="rank-list"></div>
-        <div class="footer">
-            <p>إدارة المنصة: @alza3eem__kw</p>
-            <div class="sponsor-container">
-                <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
-                <div class="sponsors-row">
-                    <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
-                    <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
-                    <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="identity" class="content">
-        <div class="title" style="font-size: 1.5rem;">⚡ الهوية الرياضية</div>
-        <div class="notice-box" style="font-size: 0.8rem; margin-bottom: 12px;">
-            <div id="login-box" style="margin-bottom:15px;">
-                <button type="button" class="action-btn" onclick="googleLogin()" style="margin-top:0;">
-                    🔐 تسجيل الدخول بواسطة Google
-                </button>
-                <p id="login-status" style="text-align:center;font-size:.8rem;margin-top:8px;color:#4ade80;"></p>
-            </div>
-            أنشئ بطاقتك الرياضية بحرية تامة وخصص بياناتها بحسب نوع البطاقة المختارة!
-        </div>
-
-        <form id="identity-form" onsubmit="generateIdentityCard(event); return false;">
+        <div class="wizard-step active-step" id="step-1">
             <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
-            
-            <select id="id-type" onchange="updateDynamicFields()" required>
+            <select id="id-type" required>
                 <option value="" disabled selected>اختر نوع البطاقة الرياضية *</option>
                 <option value="fan">👤 بطاقة مشجع</option>
                 <option value="player">⚽ بطاقة لاعب</option>
@@ -681,138 +398,103 @@
                 <option value="creator">🎥 بطاقة صانع محتوى</option>
                 <option value="academy">🏆 بطاقة فريق / أكاديمية</option>
             </select>
-
             <input type="text" id="id-username-link" placeholder="اسم المستخدم للرابط (مثال: ahmed) *" required>
-
-            <div class="color-picker-wrapper">
-                <label style="font-size: 0.8rem; font-weight: 700; color: #fff; display: block; margin-bottom: 6px;">🎨 اختر لون البطاقة:</label>
-                <div class="color-options">
-                    <div class="color-bubble selected" style="background: #10b981;" onclick="setCardColor('#10b981', '#008000', this)" title="أخضر"></div>
-                    <div class="color-bubble" style="background: #3b82f6;" onclick="setCardColor('#3b82f6', '#1d4ed8', this)" title="أزرق"></div>
-                    <div class="color-bubble" style="background: #ef4444;" onclick="setCardColor('#ef4444', '#b91c1c', this)" title="أحمر"></div>
-                    <div class="color-bubble" style="background: #f59e0b;" onclick="setCardColor('#f59e0b', '#b45309', this)" title="ذهبي"></div>
-                    <div class="color-bubble" style="background: #64748b;" onclick="setCardColor('#64748b', '#334155', this)" title="أسود"></div>
-                    <div class="color-bubble" style="background: #8b5cf6;" onclick="setCardColor('#8b5cf6', '#6d28d9', this)" title="بنفسجي"></div>
-                </div>
-                <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 0.75rem; color: var(--text-dim);">أو لون مخصص:</span>
-                    <input type="color" id="custom-color-picker" value="#10b981" onchange="setCustomColor(this.value)" style="width: 40px; height: 32px; padding: 0; border: none; cursor: pointer; background: transparent;">
-                </div>
-            </div>
-
-            <div id="dynamic-fields-container" style="margin: 12px 0;"></div>
-
-            <textarea id="id-bio" placeholder="نبذة بسيطة عنك (اختياري)..." rows="2" style="resize: none; margin: 4px 0; font-size: 0.8rem; padding: 10px;"></textarea>
-
-            <div class="collapsible-trigger" onclick="toggleExtraFields()">
-                ➕ معلومات شخصية عامة إضافية (اختياري)
-            </div>
-
-            <div id="extra-fields" class="extra-fields-container">
-                <input type="text" id="id-country" placeholder="الدولة (اختياري)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="id-city" placeholder="المدينة (اختياري)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <div style="display: flex; gap: 6px;">
-                    <input type="number" id="id-age" placeholder="العمر (اختياري)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                    <input type="text" id="id-height" placeholder="الطول سم (اختياري)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                </div>
-                <div style="display: flex; gap: 6px;">
-                    <input type="text" id="id-weight" placeholder="الوزن كغ (اختياري)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                </div>
-            </div>
-
-            <div id="socials-input-box" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; margin: 8px 0;">
-                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">معرفات وسائل التواصل (اختياري):</label>
-                <input type="text" id="social-insta" placeholder="Instagram (@username)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="social-snap" placeholder="Snapchat" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="social-x" placeholder="X (Twitter)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="social-tiktok" placeholder="TikTok" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="social-whatsapp" placeholder="WhatsApp (رقم الهاتف)" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-            </div>
-
-            <button type="submit" class="action-btn" id="create-card-btn">إنشاء البطاقة الرياضية</button>
-        </form>
-
-        <div id="identity-result" style="display: none;">
-            <div class="share-box-instruction">
-                ✨ تم إنشاء بطاقتك بنجاح! انسخ الرابط أدناه وانشره في منصات التواصل الاجتماعي لمشاركتها مع أصدقائك:
-            </div>
-
-            <div class="identity-card-preview" id="card-preview-box">
-                <div class="id-name" id="prev-name">اسم المستخدم</div>
-                <div class="id-role-badge" id="prev-role">بطاقة مشجع</div>
-                
-                <div class="profile-link-box" id="prev-link" title="انقر لنسخ الرابط" style="cursor: pointer;" onclick="copyCardLink()">
-                    platform.com/ahmed
-                </div>
-                
-                <button type="button" class="action-btn" onclick="copyCardLink()" style="margin: 0 0 16px 0; padding: 10px; font-size: 0.85rem; background: var(--card-accent); color: #000;">
-                    📋 اضغط هنا لنسخ رابط بطاقتك ونشره
-                </button>
-                <p id="copy-status" style="font-size: 0.75rem; color: #4ade80; margin: -10px 0 10px 0; text-align: center; display: none;"></p>
-                
-                <div class="discord-cards-container" id="prev-discord-cards"></div>
-                
-                <div class="id-bio" id="prev-bio" style="display: none;"></div>
-                
-                <div class="id-socials" id="prev-socials"></div>
-
-                <div class="card-footer-identity">
-                    هذا حساب انستا: @alza3eem__kw<br>
-                    وهذا تويتر: @alza3eem__kw<br>
-                    (تابع لمنصة توقعات الزعيم الرياضية)
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button id="edit-btn" type="button" class="action-btn" onclick="editCurrentCard()" style="background: var(--card-accent); color: #000; margin-top: 0; display: none;">
-                    تعديل البطاقة
-                </button>
-                <button id="delete-btn" type="button" class="action-btn" onclick="deleteCurrentCard()" style="background: #ef4444; margin-top: 0; display: none;">
-                    حذف البطاقة
-                </button>
-            </div>
-            <button type="button" class="action-btn" onclick="resetIdentityForm()" style="background: rgba(255,255,255,0.1); margin-top: 10px;">إنشاء بطاقة جديدة</button>
+            <button type="button" class="action-btn" id="btn-next-1">التالي ⬅</button>
         </div>
 
-        <div class="footer">
-            <p>إدارة المنصة: @alza3eem__kw</p>
-            <div class="sponsor-container">
-                <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
-                <div class="sponsors-row">
-                    <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
-                    <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
-                    <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
+        <div class="wizard-step" id="step-2">
+            <div class="color-picker-wrapper">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">🎨 اختر لون البطاقة:</label>
+                <div class="color-options">
+                    <div class="color-bubble selected" data-color="#10b981" data-primary="#008000" style="background: #10b981;"></div>
+                    <div class="color-bubble" data-color="#3b82f6" data-primary="#1d4ed8" style="background: #3b82f6;"></div>
+                    <div class="color-bubble" data-color="#ef4444" data-primary="#b91c1c" style="background: #ef4444;"></div>
+                    <div class="color-bubble" data-color="#f59e0b" data-primary="#b45309" style="background: #f59e0b;"></div>
+                    <div class="color-bubble" data-color="#8b5cf6" data-primary="#6d28d9" style="background: #8b5cf6;"></div>
+                </div>
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-dim);">لون مخصص:</span>
+                    <input type="color" id="custom-color-picker" value="#10b981" style="width: 40px; height: 30px; border:none; background:transparent; cursor:pointer;">
                 </div>
             </div>
+            <div class="btn-group">
+                <button type="button" class="action-btn" id="btn-prev-2" style="background: rgba(255,255,255,0.1);">السابق</button>
+                <button type="button" class="action-btn" id="btn-next-2">التالي ⬅</button>
+            </div>
+        </div>
+
+        <div class="wizard-step" id="step-3">
+            <div id="dynamic-fields-container" style="margin: 6px 0;"></div>
+            <div style="font-size:0.78rem; font-weight:700; color:#fff; margin-top:10px;">معلومات إضافية (اختياري):</div>
+            <div style="display: flex; gap: 6px;">
+                <input type="text" id="id-country" placeholder="الدولة">
+                <input type="text" id="id-city" placeholder="المدينة">
+            </div>
+            <div style="display: flex; gap: 6px;">
+                <input type="number" id="id-age" placeholder="العمر">
+                <input type="text" id="id-height" placeholder="الطول (سم)">
+                <input type="text" id="id-weight" placeholder="الوزن (كغ)">
+            </div>
+            <div class="btn-group">
+                <button type="button" class="action-btn" id="btn-prev-3" style="background: rgba(255,255,255,0.1);">السابق</button>
+                <button type="button" class="action-btn" id="btn-next-3">التالي ⬅</button>
+            </div>
+        </div>
+
+        <div class="wizard-step" id="step-4">
+            <textarea id="id-bio" placeholder="نبذة بسيطة عنك..." rows="2" style="resize:none; padding:10px; font-size:0.8rem;"></textarea>
+            <input type="text" id="social-insta" placeholder="Instagram (@username)" style="padding:10px; font-size:0.8rem;">
+            <input type="text" id="social-snap" placeholder="Snapchat" style="padding:10px; font-size:0.8rem;">
+            <input type="text" id="social-x" placeholder="X (Twitter)" style="padding:10px; font-size:0.8rem;">
+            <input type="text" id="social-tiktok" placeholder="TikTok" style="padding:10px; font-size:0.8rem;">
+            <input type="text" id="social-whatsapp" placeholder="WhatsApp" style="padding:10px; font-size:0.8rem;">
+            
+            <div class="btn-group">
+                <button type="button" class="action-btn" id="btn-prev-4" style="background: rgba(255,255,255,0.1);">السابق</button>
+                <button type="button" class="action-btn" id="btn-save-card" style="background: var(--card-accent); color:#000;">إنشاء وحفظ البطاقة النهائية</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div id="identity-result" style="display: none;">
+        <div class="notice-box" style="text-align:center;">
+            ✨ تمتلك بطاقة محفوظة ودائمة! انسخ رابط بطاقتك وضعه في البايو أو أرسله لأصدقائك:
+        </div>
+
+        <div class="identity-card-preview" id="card-preview-box">
+            <div class="id-name" id="prev-name"></div>
+            <div class="id-role-badge" id="prev-role"></div>
+            
+            <div class="profile-link-box" id="prev-link" title="انقر لنسخ الرابط"></div>
+            <button type="button" class="action-btn" id="btn-copy-link" style="margin: 0 0 12px 0; padding: 10px; font-size: 0.8rem; background: var(--card-accent); color: #000;">
+                📋 اضغط هنا لنسخ الرابط
+            </button>
+            <p id="copy-status" style="font-size: 0.72rem; color: #4ade80; margin: -6px 0 10px 0; display: none;"></p>
+            
+            <div class="discord-cards-container" id="prev-discord-cards"></div>
+            <div class="id-bio" id="prev-bio" style="display: none;"></div>
+            <div class="id-socials" id="prev-socials"></div>
+
+            <div class="card-footer-identity">
+                منصة توقعات الزعيم الرياضية - Alza3eem Prediction Platform
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button type="button" class="action-btn" id="btn-edit-card" style="background: var(--card-accent); color: #000; margin-top: 0;">تعديل البطاقة</button>
+            <button type="button" class="action-btn" id="btn-delete-card" style="background: #ef4444; margin-top: 0;">حذف</button>
         </div>
     </div>
 
-    <div id="kickoff" class="content">
-        <div class="coming-soon-container">
-            <div class="pulse-icon">⏳</div>
-            <div class="title" style="font-size: 1.6rem;">Kick off</div>
-            
-            <div class="notice-box" style="margin-top: 20px; text-align: right; line-height: 1.8;">
-                🙏 <b>شكراً على انتظاركم،</b><br>
-                ونعتذر أشد الاعتذار عالتاخير.<br><br>
-                <b>سبب التأخير:</b> نظراً للعمل على تطوير وتحديث واجهات النظام، إضافة ميزات تفاعلية جديدة، وإجراء اختبارات دقيقة لضمان استقرار المنصة وتقديمها بأفضل شكل ممكن للجميع.
-            </div>
-
-            <div class="rules-box" style="text-align: center; margin-top: 20px;">
-                تابعونا عبر إنستغرام:<br>
-                <b style="color: var(--card-accent); font-size: 1rem; display: block; margin-top: 8px;">@alza3eem__kw</b>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>إدارة المنصة: @alza3eem__kw</p>
-            <div class="sponsor-container">
-                <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
-                <div class="sponsors-row">
-                    <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
-                    <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
-                    <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
-                </div>
+    <div class="footer">
+        <p style="margin:0;">منصة توقعات الزعيم الرياضية</p>
+        <div class="sponsor-container">
+            <p style="font-size: 0.72rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
+            <div class="sponsors-row">
+                <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
+                <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
+                <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
             </div>
         </div>
     </div>
@@ -820,555 +502,341 @@
 
 <script type="module">
     import { db, auth } from './firebase-config.js';
-
-    import {
-      GoogleAuthProvider,
-      signInWithPopup,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    import {
-      doc,
-      setDoc,
-      getDoc,
-      deleteDoc,
-      query,
-      where,
-      collection,
-      getDocs,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { doc, setDoc, getDoc, deleteDoc, query, where, collection, getDocs, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const provider = new GoogleAuthProvider();
-
     let currentUser = null;
-    let viewingCard = null;
-    let myCardId = null;
-    let myCardData = null;
     let currentAccent = '#10b981';
     let currentPrimary = '#008000';
-
-    async function checkUserCard(user) {
-        if (!user) return;
-        try {
-            const docRef = doc(db, "identityCards", user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                myCardId = docSnap.id;
-                myCardData = data;
-                if (!window.location.hash) {
-                    renderCardData(data);
-                    document.getElementById("identity-form").style.display = "none";
-                    document.getElementById("identity-result").style.display = "block";
-                }
-            }
-        } catch (e) {
-            console.error("Error checking user card:", e);
-        }
-    }
+    let loadedCardData = null;
 
     onAuthStateChanged(auth, async (user) => {
         currentUser = user;
+        const loginStatus = document.getElementById("login-status");
+        const loginBox = document.getElementById("login-box");
         if (user) {
-            const loginStatus = document.getElementById("login-status");
-            const loginBox = document.getElementById("login-box");
-            if (loginStatus) loginStatus.innerHTML = `✅ ${user.displayName || user.email || "مستخدم مسجل"}`;
+            if (loginStatus) loginStatus.innerHTML = `✅ مسجل الدخول: ${user.displayName || user.email}`;
             if (loginBox) loginBox.style.display = "none";
-            await checkUserCard(user);
+            await checkAndLoadUserCard(user.uid);
         } else {
-            const loginBox = document.getElementById("login-box");
-            const loginStatus = document.getElementById("login-status");
             if (loginBox) loginBox.style.display = "block";
             if (loginStatus) loginStatus.innerHTML = "";
-            myCardId = null;
-            myCardData = null;
         }
-        updateOwnershipUI();
     });
 
-    function updateOwnershipUI() {
-        const editBtn = document.getElementById("edit-btn");
-        const deleteBtn = document.getElementById("delete-btn");
-        if (!editBtn || !deleteBtn) return;
-        
-        if (viewingCard) {
-            const isOwner = currentUser && currentUser.uid === viewingCard.ownerUid;
-            editBtn.style.display = isOwner ? "block" : "none";
-            deleteBtn.style.display = isOwner ? "block" : "none";
-        } else {
-            editBtn.style.display = "none";
-            deleteBtn.style.display = "none";
+    document.getElementById("google-login-btn").addEventListener("click", async () => {
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (e) {
+            alert("خطأ في تسجيل الدخول: " + e.message);
         }
+    });
+
+    function goToStep(stepNum) {
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active-step'));
+        document.querySelectorAll('.step-dot').forEach(el => el.classList.remove('active'));
+        
+        const targetStep = document.getElementById(`step-${stepNum}`);
+        const targetDot = document.getElementById(`dot-${stepNum}`);
+        if(targetStep) targetStep.classList.add('active-step');
+        if(targetDot) targetDot.classList.add('active');
     }
 
-    window.showTab = function(tabId, event) {
-        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        const targetTab = document.getElementById(tabId);
-        if (targetTab) targetTab.classList.add('active');
-        if (event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
-        } else {
-            const btns = document.querySelectorAll('.tab-btn');
-            btns.forEach(b => {
-                const onclickAttr = b.getAttribute('onclick');
-                if (onclickAttr && onclickAttr.includes(tabId)) {
-                    b.classList.add('active');
+    document.getElementById('btn-next-1').addEventListener('click', async () => {
+        const name = document.getElementById('id-fullname').value.trim();
+        const type = document.getElementById('id-type').value;
+        const uname = document.getElementById('id-username-link').value.trim();
+        if (!name || !type || !uname) {
+            alert("الرجاء تعبئة الاسم، نوع البطاقة، ورابط المستخدم أولاً.");
+            return;
+        }
+
+        // تحقق من أن usernameLink غير مستخدم من قبل مستخدم آخر
+        try {
+            const q = query(collection(db, "identityCards"), where("usernameLink", "==", uname));
+            const snap = statements = await getDocs(q);
+            let isTaken = false;
+            snap.forEach(docSnap => {
+                if (!currentUser || docSnap.id !== currentUser.uid) {
+                    isTaken = true;
                 }
             });
-        }
-    };
-
-    const leaderboardData = [
-        { rank: "01", name: "علي بدر", insta: "@Ali💚💚💚💚💚", points: 4 },
-        { rank: "02", name: "حسن احمد", insta: "@h_1j_e", points: 4 },
-        { rank: "03", name: "أحمد", insta: "@ah_me_502", points: 2 },
-        { rank: "04", name: "محمد", insta: "@a7.mjii", points: 2 },
-        { rank: "05", name: "فارس علي", insta: "@9gour_almal3ab1960", points: 2 },
-        { rank: "06", name: "M", insta: "@_2r7j", points: 2 },
-        { rank: "07", name: "AAR", insta: "@alarabi.forever", points: 2 },
-        { rank: "08", name: "محمد", insta: "@arbawi_alzaieem", points: 2 },
-        { rank: "09", name: "al3r.bawi", insta: "@al3r.bawi", points: 2 },
-        { rank: "10", name: "جاسم الفرس", insta: "@jassemalfaras.4", points: 0 }
-    ];
-
-    const rankList = document.getElementById('rank-list');
-    if (rankList) {
-        leaderboardData.forEach(item => {
-            rankList.innerHTML += `
-                <div class="rank-card">
-                    <div>
-                        <span style="color: var(--card-accent); font-weight: 800; margin-left: 6px;">${item.rank}.</span>
-                        <span style="font-weight: 700;">${item.name}</span>
-                        <span style="color: #94a3b8; font-size: 0.8rem; margin-right: 6px;">| ${item.insta}</span>
-                    </div>
-                    <b style="color: #4ade80;">${item.points} نقطة</b>
-                </div>
-            `;
-        });
-    }
-
-    const form = document.getElementById("my-form");
-    if (form) {
-        form.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const status = document.getElementById("my-form-status");
-            
-            const nameVal = document.getElementById("name-input").value.trim();
-            const instaVal = document.getElementById("insta-input").value.trim();
-            const predVal = document.getElementById("prediction-select").value;
-            const playerVal = document.getElementById("player-input").value.trim();
-            const goalsVal = document.getElementById("goals-select").value;
-
-            if (!nameVal || !instaVal || !predVal || !playerVal || !goalsVal) {
-                if (status) {
-                    status.innerHTML = "❌ الرجاء تعبئة كل البيانات قبل الارسال";
-                    setTimeout(() => { status.innerHTML = ""; }, 4000);
-                }
+            if (isTaken) {
+                alert("اسم المستخدم هذا مستخدم مسبقاً، الرجاء اختيار اسم آخر.");
                 return;
             }
+        } catch (e) {
+            console.error(e);
+        }
 
-            const data = new FormData(form);
-            if (status) status.innerHTML = "⏳ جاري إرسال توقعك...";
-            
-            fetch(form.action, {
-                method: form.method,
-                body: data,
-                headers: { 'Accept': 'application/json' }
-            }).then(response => {
-                if (response.ok) {
-                    if (status) {
-                        status.innerHTML = "✅ تم استلام توقعك بنجاح!";
-                        form.reset();
-                        setTimeout(() => { status.innerHTML = ""; }, 5000);
-                    }
-                } else {
-                    if (status) status.innerHTML = "❌ حدث خطأ، يرجى المحاولة مرة أخرى.";
-                }
-            }).catch(() => {
-                if (status) status.innerHTML = "❌ حدث خطأ في الاتصال بالشبكة.";
-            });
+        updateDynamicFields();
+        goToStep(2);
+    });
+
+    document.getElementById('btn-next-2').addEventListener('click', () => goToStep(3));
+    document.getElementById('btn-prev-2').addEventListener('click', () => goToStep(1));
+    document.getElementById('btn-next-3').addEventListener('click', () => goToStep(4));
+    document.getElementById('btn-prev-3').addEventListener('click', () => goToStep(2));
+    document.getElementById('btn-prev-4').addEventListener('click', () => goToStep(3));
+
+    document.querySelectorAll('.color-bubble').forEach(bubble => {
+        bubble.addEventListener('click', (e) => {
+            const accent = e.target.getAttribute('data-color');
+            const primary = e.target.getAttribute('data-primary');
+            setCardColor(accent, primary, e.target);
         });
-    }
+    });
 
-    window.setCardColor = function(accent, primary, element) {
+    document.getElementById('custom-color-picker').addEventListener('input', (e) => {
+        setCustomColor(e.target.value);
+    });
+
+    function setCardColor(accent, primary, element) {
         currentAccent = accent;
         currentPrimary = primary;
         document.querySelectorAll('.color-bubble').forEach(b => b.classList.remove('selected'));
         if(element) element.classList.add('selected');
-        const customPicker = document.getElementById('custom-color-picker');
-        if(customPicker) customPicker.value = accent;
-        updateRootColors(accent, primary);
-    };
+        document.documentElement.style.setProperty('--card-accent', accent);
+        document.documentElement.style.setProperty('--primary', primary);
+    }
 
-    window.setCustomColor = function(color) {
+    function setCustomColor(color) {
         currentAccent = color;
         currentPrimary = color;
         document.querySelectorAll('.color-bubble').forEach(b => b.classList.remove('selected'));
-        updateRootColors(color, color);
-    };
-
-    function updateRootColors(accent, primary) {
-        document.documentElement.style.setProperty('--card-accent', accent);
-        document.documentElement.style.setProperty('--primary', primary);
-        document.documentElement.style.setProperty('--card-glow', hexToRgba(accent, 0.3));
+        document.documentElement.style.setProperty('--card-accent', color);
+        document.documentElement.style.setProperty('--primary', color);
     }
 
-    function hexToRgba(hex, alpha) {
-        let c = hex.replace('#','');
-        if(c.length === 3) c = c.split('').map(x => x + x).join('');
-        let num = parseInt(c, 16);
-        return `rgba(${num >> 16}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
-    }
+    document.getElementById('id-type').addEventListener('change', () => {
+        updateDynamicFields();
+    });
 
-    window.toggleExtraFields = function() {
-        const extra = document.getElementById('extra-fields');
-        if (extra) {
-            extra.style.display = (extra.style.display === 'block') ? 'none' : 'block';
+    function getLabelsByType(type) {
+        switch(type) {
+            case 'fan': return { l1: 'النادي المفضّل', l2: 'المنتخب المفضّل', l3: 'اللاعب المفضّل' };
+            case 'player': return { l1: 'النادي / الفريق', l2: 'المركز', l3: 'رقم القميص' };
+            case 'athlete': return { l1: 'الرياضة الممارسة', l2: 'أبرز إنجاز', l3: 'الهدف الرياضي' };
+            case 'creator': return { l1: 'نوع المحتوى', l2: 'المنصة الأساسية', l3: 'شعار المحتوى' };
+            case 'academy': return { l1: 'اسم الفريق / الأكاديمية', l2: 'سنة التأسيس', l3: 'البطولات والألقاب' };
+            default: return { l1: 'بيانات أساسية 1', l2: 'بيانات أساسية 2', l3: 'بيانات أساسية 3' };
         }
-    };
+    }
 
-    window.updateDynamicFields = function(savedValues = {}) {
-        const cardTypeEl = document.getElementById('id-type');
-        if (!cardTypeEl) return;
-        const cardType = cardTypeEl.value;
+    function updateDynamicFields(saved = {}) {
+        const type = document.getElementById('id-type').value;
         const container = document.getElementById('dynamic-fields-container');
         if (!container) return;
-        let html = '';
-
-        if (cardType === 'fan') {
-            html = `
-                <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 6px;">⚽ بيانات بطاقة المشجع:</div>
-                <input type="text" id="dyn-1" placeholder="النادي المفضّل (مثال: النادي العربي)" value="${savedValues.dyn1 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-2" placeholder="المنتخب المفضّل" value="${savedValues.dyn2 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-3" placeholder="اللاعب المفضّل" value="${savedValues.dyn3 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-            `;
-        } else if (cardType === 'player') {
-            html = `
-                <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 6px;">⚽ بيانات بطاقة اللاعب:</div>
-                <input type="text" id="dyn-1" placeholder="النادي الحالي / الفريق" value="${savedValues.dyn1 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-2" placeholder="المركز (مثال: مهاجم، وسط، دفاع)" value="${savedValues.dyn2 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-3" placeholder="رقم القميص" value="${savedValues.dyn3 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-            `;
-        } else if (cardType === 'athlete') {
-            html = `
-                <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 6px;">🏃 بيانات بطاقة الرياضي:</div>
-                <input type="text" id="dyn-1" placeholder="الرياضة الممارسة (مثال: كرة قدم، جري، لياقة)" value="${savedValues.dyn1 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-2" placeholder="أبرز إنجاز رياضي" value="${savedValues.dyn2 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-3" placeholder="الهدف الرياضي الحالي" value="${savedValues.dyn3 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-            `;
-        } else if (cardType === 'creator') {
-            html = `
-                <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 6px;">🎥 بيانات صانع المحتوى:</div>
-                <input type="text" id="dyn-1" placeholder="نوع المحتوى (مثال: تحليل كروي، تصميم، جمنج)" value="${savedValues.dyn1 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-2" placeholder="المنصة الأساسية (انستغرام، يوتيوب، تيك توك)" value="${savedValues.dyn2 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-3" placeholder="شعارك أو رسالتك بالمحتوى" value="${savedValues.dyn3 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-            `;
-        } else if (cardType === 'academy') {
-            html = `
-                <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 6px;">🏆 بيانات الفريق / الأكاديمية:</div>
-                <input type="text" id="dyn-1" placeholder="اسم الفريق أو الأكاديمية" value="${savedValues.dyn1 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-2" placeholder="سنة التأسيس" value="${savedValues.dyn2 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-                <input type="text" id="dyn-3" placeholder="أبرز البطولات أو الألقاب" value="${savedValues.dyn3 || ''}" style="margin: 4px 0; font-size: 0.8rem; padding: 10px;">
-            `;
-        }
+        const lbls = getLabelsByType(type);
+        let html = `<input type="text" id="dyn-1" placeholder="${lbls.l1}" value="${saved.dyn1||''}" style="padding:10px; font-size:0.8rem;">
+                    <input type="text" id="dyn-2" placeholder="${lbls.l2}" value="${saved.dyn2||''}" style="padding:10px; font-size:0.8rem;">
+                    <input type="text" id="dyn-3" placeholder="${lbls.l3}" value="${saved.dyn3||''}" style="padding:10px; font-size:0.8rem;">`;
         container.innerHTML = html;
-    };
+    }
+
+    document.getElementById('btn-save-card').addEventListener('click', async () => {
+        if (!currentUser) { alert("يجب تسجيل الدخول أولاً لحفظ البطاقة."); return; }
+        const usernameKey = document.getElementById('id-username-link').value.trim();
+        
+        // التحقق مرة أخرى قبل الحفظ النهائي
+        try {
+            const q = query(collection(db, "identityCards"), where("usernameLink", "==", usernameKey));
+            const snap = await getDocs(q);
+            let isTaken = false;
+            snap.forEach(docSnap => {
+                if (docSnap.id !== currentUser.uid) {
+                    isTaken = true;
+                }
+            });
+            if (isTaken) {
+                alert("اسم المستخدم هذا مستخدم مسبقاً، الرجاء اختيار اسم آخر.");
+                return;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+
+        const docRef = doc(db, "identityCards", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        
+        let createdAtVal = serverTimestamp();
+        if (docSnap.exists() && docSnap.data().createdAt) {
+            createdAtVal = docSnap.data().createdAt;
+        }
+
+        const cardData = {
+            ownerUid: currentUser.uid,
+            fullName: document.getElementById('id-fullname').value.trim(),
+            type: document.getElementById('id-type').value,
+            usernameLink: usernameKey,
+            bio: document.getElementById('id-bio').value.trim(),
+            country: document.getElementById('id-country').value.trim(),
+            city: document.getElementById('id-city').value.trim(),
+            age: document.getElementById('id-age').value.trim(),
+            height: document.getElementById('id-height').value.trim(),
+            weight: document.getElementById('id-weight').value.trim(),
+            dyn1: document.getElementById('dyn-1')?.value.trim() || '',
+            dyn2: document.getElementById('dyn-2')?.value.trim() || '',
+            dyn3: document.getElementById('dyn-3')?.value.trim() || '',
+            insta: document.getElementById('social-insta').value.trim(),
+            snap: document.getElementById('social-snap').value.trim(),
+            x: document.getElementById('social-x').value.trim(),
+            tiktok: document.getElementById('social-tiktok').value.trim(),
+            whatsapp: document.getElementById('social-whatsapp').value.trim(),
+            accentColor: currentAccent,
+            primaryColor: currentPrimary,
+            createdAt: createdAtVal,
+            updatedAt: serverTimestamp()
+        };
+
+        try {
+            await setDoc(docRef, cardData, { merge: true });
+            window.location.hash = encodeURIComponent(usernameKey);
+            loadedCardData = cardData;
+            renderCard(cardData);
+        } catch (e) {
+            alert("حدث خطأ أثناء الحفظ: " + e.message);
+        }
+    });
+
+    async function checkAndLoadUserCard(uid) {
+        const hash = window.location.hash.replace('#', '').trim();
+        try {
+            if (hash) {
+                const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash)));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    loadedCardData = snap.docs[0].data();
+                    renderCard(loadedCardData);
+                    return;
+                }
+            }
+            const docRef = doc(db, "identityCards", uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                loadedCardData = docSnap.data();
+                renderCard(loadedCardData);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     window.addEventListener('DOMContentLoaded', async () => {
         const hash = window.location.hash.replace('#', '').trim();
         if (hash) {
             try {
-                const decodedHash = decodeURIComponent(hash);
-                const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodedHash));
-                const querySnap = await getDocs(q);
-                if (!querySnap.empty) {
-                    const docSnap = querySnap.docs[0];
-                    const data = docSnap.data();
-                    myCardId = docSnap.id;
-                    myCardData = data;
-                    renderCardData(data);
-                    showTab('identity');
-                    const formEl = document.getElementById('identity-form');
-                    const resEl = document.getElementById('identity-result');
-                    if (formEl) formEl.style.display = 'none';
-                    if (resEl) resEl.style.display = 'block';
+                const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash)));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    loadedCardData = snap.docs[0].data();
+                    renderCard(loadedCardData);
                 }
-            } catch (e) {
-                console.error("Error fetching card from Firestore via hash:", e);
-            }
+            } catch(e) { console.error(e); }
         }
     });
 
-    window.generateIdentityCard = async function(event) {
-        if (event) event.preventDefault();
-        if (!currentUser) {
-            alert("يجب تسجيل الدخول أولاً.");
-            return;
-        }
-        const fullNameEl = document.getElementById('id-fullname');
-        const typeEl = document.getElementById('id-type');
-        const usernameLinkEl = document.getElementById('id-username-link');
-
-        if (!fullNameEl || !typeEl || !usernameLinkEl) return;
-
-        if (!fullNameEl.value.trim() || !typeEl.value || !usernameLinkEl.value.trim()) {
-            alert('الرجاء تعبئة الحقول الأساسية المطلوبة (*)');
-            return;
-        }
-
-        const usernameKey = usernameLinkEl.value.trim();
-
-        try {
-            const q = query(collection(db, "identityCards"), where("usernameLink", "==", usernameKey));
-            const usernameSnap = await getDocs(q);
-            let taken = false;
-            usernameSnap.forEach((docItem) => {
-                if (docItem.id !== currentUser.uid) {
-                    taken = true;
-                }
-            });
-
-            if (taken) {
-                alert("هذا الرابط مستخدم بالفعل، اختر رابطًا آخر.");
-                return;
-            }
-
-            const docRef = doc(db, "identityCards", currentUser.uid);
-            const docSnap = await getDoc(docRef);
-            const isUpdate = docSnap.exists();
-
-            const cardData = {
-                ownerUid: currentUser.uid,
-                fullName: fullNameEl.value.trim(),
-                type: typeEl.value,
-                usernameLink: usernameKey,
-                bio: document.getElementById('id-bio').value.trim(),
-                country: document.getElementById('id-country')?.value.trim() || '',
-                city: document.getElementById('id-city')?.value.trim() || '',
-                age: document.getElementById('id-age')?.value.trim() || '',
-                height: document.getElementById('id-height')?.value.trim() || '',
-                weight: document.getElementById('id-weight')?.value.trim() || '',
-                
-                dyn1: document.getElementById('dyn-1')?.value.trim() || '',
-                dyn2: document.getElementById('dyn-2')?.value.trim() || '',
-                dyn3: document.getElementById('dyn-3')?.value.trim() || '',
-
-                insta: document.getElementById('social-insta').value.trim(),
-                snap: document.getElementById('social-snap').value.trim(),
-                x: document.getElementById('social-x').value.trim(),
-                tiktok: document.getElementById('social-tiktok').value.trim(),
-                whatsapp: document.getElementById('social-whatsapp').value.trim(),
-                accentColor: currentAccent,
-                primaryColor: currentPrimary,
-                createdAt: isUpdate ? (docSnap.data().createdAt || serverTimestamp()) : serverTimestamp(),
-                updatedAt: serverTimestamp()
-            };
-
-            await setDoc(docRef, cardData);
-            myCardId = currentUser.uid;
-            myCardData = cardData;
-            window.location.hash = encodeURIComponent(usernameKey);
-            renderCardData(cardData);
-            
-            const formEl = document.getElementById('identity-form');
-            const resEl = document.getElementById('identity-result');
-            if (formEl) formEl.style.display = 'none';
-            if (resEl) resEl.style.display = 'block';
-        } catch (e) {
-            console.error("Error saving card:", e);
-            alert(`حدث خطأ أثناء حفظ البطاقة: ${e.message}`);
-        }
-    };
-
-    function renderCardData(data) {
+    function renderCard(data) {
         if (!data) return;
-        viewingCard = data;
-        updateOwnershipUI();
+        if (data.accentColor) setCardColor(data.accentColor, data.primaryColor || data.accentColor, null);
 
-        if (data.accentColor) {
-            setCardColor(data.accentColor, data.primaryColor || data.accentColor, null);
-        }
-
-        const roleNames = {
-            'fan': '👤 بطاقة مشجع',
-            'player': '⚽ بطاقة لاعب',
-            'athlete': '🏃 بطاقة رياضي',
-            'creator': '🎥 بطاقة صانع محتوى',
-            'academy': '🏆 بطاقة فريق / أكاديمية'
-        };
-
-        const fullNameEl = document.getElementById('id-fullname');
-        const typeEl = document.getElementById('id-type');
-        const usernameLinkEl = document.getElementById('id-username-link');
-        const bioEl = document.getElementById('id-bio');
-
-        if (fullNameEl) fullNameEl.value = data.fullName || '';
-        if (typeEl) typeEl.value = data.type || '';
-        if (usernameLinkEl) usernameLinkEl.value = data.usernameLink || '';
-        if (bioEl) bioEl.value = data.bio || '';
+        const roles = { 'fan': '👤 بطاقة مشجع', 'player': '⚽ بطاقة لاعب', 'athlete': '🏃 بطاقة رياضي', 'creator': '🎥 صانع محتوى', 'academy': '🏆 فريق / أكاديمية' };
         
-        if (data.country) { const el = document.getElementById('id-country'); if (el) el.value = data.country; }
-        if (data.city) { const el = document.getElementById('id-city'); if (el) el.value = data.city; }
-        if (data.age) { const el = document.getElementById('id-age'); if (el) el.value = data.age; }
-        if (data.height) { const el = document.getElementById('id-height'); if (el) el.value = data.height; }
-        if (data.weight) { const el = document.getElementById('id-weight'); if (el) el.value = data.weight; }
+        document.getElementById('prev-name').innerText = data.fullName;
+        document.getElementById('prev-role').innerText = roles[data.type] || 'هوية رياضية';
         
-        if (data.insta) { const el = document.getElementById('social-insta'); if (el) el.value = data.insta; }
-        if (data.snap) { const el = document.getElementById('social-snap'); if (el) el.value = data.snap; }
-        if (data.x) { const el = document.getElementById('social-x'); if (el) el.value = data.x; }
-        if (data.tiktok) { const el = document.getElementById('social-tiktok'); if (el) el.value = data.tiktok; }
-        if (data.whatsapp) { const el = document.getElementById('social-whatsapp'); if (el) el.value = data.whatsapp; }
+        const fullUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(data.usernameLink)}`;
+        document.getElementById('prev-link').innerText = fullUrl;
 
-        updateDynamicFields(data);
-
-        const prevName = document.getElementById('prev-name');
-        const prevRole = document.getElementById('prev-role');
-        const prevLink = document.getElementById('prev-link');
-
-        if (prevName) prevName.innerText = data.fullName || '';
-        if (prevRole) prevRole.innerText = roleNames[data.type] || 'هوية رياضية';
+        const lbls = getLabelsByType(data.type);
+        let cardsHtml = '';
+        if (data.dyn1) cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">${lbls.l1}</span><span class="discord-card-value">${data.dyn1}</span></div>`;
+        if (data.dyn2) cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">${lbls.l2}</span><span class="discord-card-value">${data.dyn2}</span></div>`;
+        if (data.dyn3) cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">${lbls.l3}</span><span class="discord-card-value">${data.dyn3}</span></div>`;
+        if (data.country || data.city) cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">📍 الموقع</span><span class="discord-card-value">${data.country || ''} ${data.city ? `- ${data.city}` : ''}</span></div>`;
+        if (data.age) cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">🎂 العمر</span><span class="discord-card-value">${data.age} سنة</span></div>`;
         
-        const fullShareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(data.usernameLink || '')}`;
-        if (prevLink) prevLink.innerText = fullShareUrl;
+        document.getElementById('prev-discord-cards').innerHTML = cardsHtml;
 
         const bioBox = document.getElementById('prev-bio');
-        if (bioBox) {
-            if (data.bio) {
-                bioBox.innerText = `"${data.bio}"`;
-                bioBox.style.display = 'block';
-            } else {
-                bioBox.style.display = 'none';
-            }
-        }
-
-        let cardsHtml = '';
-        if (data.type === 'fan') {
-            if (data.dyn1) cardsHtml += createDiscordCard('⚽ النادي المفضّل', data.dyn1);
-            if (data.dyn2) cardsHtml += createDiscordCard('🌍 المنتخب المفضّل', data.dyn2);
-            if (data.dyn3) cardsHtml += createDiscordCard('⭐ اللاعب المفضّل', data.dyn3);
-        } else if (data.type === 'player') {
-            if (data.dyn1) cardsHtml += createDiscordCard('⚽ النادي / الفريق', data.dyn1);
-            if (data.dyn2) cardsHtml += createDiscordCard('📍 المركز', data.dyn2);
-            if (data.dyn3) cardsHtml += createDiscordCard('👕 رقم القميص', data.dyn3);
-        } else if (data.type === 'athlete') {
-            if (data.dyn1) cardsHtml += createDiscordCard('🏃 الرياضة الممارسة', data.dyn1);
-            if (data.dyn2) cardsHtml += createDiscordCard('🏆 أبرز إنجاز', data.dyn2);
-            if (data.dyn3) cardsHtml += createDiscordCard('🎯 الهدف الرياضي', data.dyn3);
-        } else if (data.type === 'creator') {
-            if (data.dyn1) cardsHtml += createDiscordCard('🎥 نوع المحتوى', data.dyn1);
-            if (data.dyn2) cardsHtml += createDiscordCard('📱 المنصة الأساسية', data.dyn2);
-            if (data.dyn3) cardsHtml += createDiscordCard('💬 شعار المحتوى', data.dyn3);
-        } else if (data.type === 'academy') {
-            if (data.dyn1) cardsHtml += createDiscordCard('🏆 اسم الفريق/الأكاديمية', data.dyn1);
-            if (data.dyn2) cardsHtml += createDiscordCard('📅 سنة التأسيس', data.dyn2);
-            if (data.dyn3) cardsHtml += createDiscordCard('⭐ البطولات والألقاب', data.dyn3);
-        }
-
-        if (data.country || data.city) cardsHtml += createDiscordCard('📍 الموقع', `${data.country || ''} ${data.city ? `- ${data.city}` : ''}`.trim());
-        if (data.age) cardsHtml += createDiscordCard('🎂 العمر', `${data.age} سنة`);
-        if (data.height) cardsHtml += createDiscordCard('📏 الطول', `${data.height} سم`);
-        if (data.weight) cardsHtml += createDiscordCard('⚖️ الوزن', `${data.weight} كغ`);
-
-        const discordCardsContainer = document.getElementById('prev-discord-cards');
-        if (discordCardsContainer) discordCardsContainer.innerHTML = cardsHtml;
+        if (data.bio) { bioBox.innerText = `"${data.bio}"`; bioBox.style.display = 'block'; } else { bioBox.style.display = 'none'; }
 
         let socialsHtml = '';
-        if (data.insta) socialsHtml += `<a href="https://instagram.com/${data.insta.replace('@','')}" target="_blank" class="id-social-icon" title="Instagram">IG</a>`;
-        if (data.snap) socialsHtml += `<a href="https://snapchat.com/add/${data.snap}" target="_blank" class="id-social-icon" title="Snapchat">SC</a>`;
-        if (data.x) socialsHtml += `<a href="https://x.com/${data.x.replace('@','')}" target="_blank" class="id-social-icon" title="X">X</a>`;
-        if (data.tiktok) socialsHtml += `<a href="https://tiktok.com/@${data.tiktok.replace('@','')}" target="_blank" class="id-social-icon" title="TikTok">TT</a>`;
-        if (data.whatsapp) socialsHtml += `<a href="https://wa.me/${data.whatsapp}" target="_blank" class="id-social-icon" title="WhatsApp">WA</a>`;
-        
-        const prevSocials = document.getElementById('prev-socials');
-        if (prevSocials) prevSocials.innerHTML = socialsHtml;
+        if (data.insta) socialsHtml += `<a href="https://instagram.com/${data.insta.replace('@','')}" target="_blank" class="id-social-icon">IG</a>`;
+        if (data.snap) socialsHtml += `<a href="https://snapchat.com/add/${data.snap}" target="_blank" class="id-social-icon">SC</a>`;
+        if (data.x) socialsHtml += `<a href="https://x.com/${data.x.replace('@','')}" target="_blank" class="id-social-icon">X</a>`;
+        if (data.tiktok) socialsHtml += `<a href="https://tiktok.com/@${data.tiktok.replace('@','')}" target="_blank" class="id-social-icon">TT</a>`;
+        if (data.whatsapp) socialsHtml += `<a href="https://wa.me/${data.whatsapp}" target="_blank" class="id-social-icon">WA</a>`;
+        document.getElementById('prev-socials').innerHTML = socialsHtml;
+
+        document.getElementById('identity-form').style.display = 'none';
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('identity-result').style.display = 'block';
     }
 
-    window.copyCardLink = function() {
-        const usernameKeyEl = document.getElementById('id-username-link');
-        if (!usernameKeyEl) return;
-        const usernameKey = usernameKeyEl.value.trim();
-        const fullShareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(usernameKey)}`;
-        navigator.clipboard.writeText(fullShareUrl).then(() => {
-            const statusEl = document.getElementById('copy-status');
-            if (statusEl) {
-                statusEl.innerText = "✅ تم نسخ رابط بطاقتك بنجاح! يمكنك لصقه ونشره الآن.";
-                statusEl.style.display = 'block';
-                setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
-            }
+    document.getElementById('btn-copy-link').addEventListener('click', () => {
+        const link = document.getElementById('prev-link').innerText;
+        navigator.clipboard.writeText(link).then(() => {
+            const status = document.getElementById('copy-status');
+            status.innerText = "✅ تم النسخ بنجاح!";
+            status.style.display = 'block';
+            setTimeout(() => { status.style.display = 'none'; }, 3000);
         });
-    };
+    });
 
-    function createDiscordCard(label, value) {
-        return `
-            <div class="discord-info-card">
-                <span class="discord-card-label">${label}</span>
-                <span class="discord-card-value">${value}</span>
-            </div>
-        `;
-    }
+    document.getElementById('prev-link').addEventListener('click', () => {
+        document.getElementById('btn-copy-link').click();
+    });
 
-    window.editCurrentCard = function() {
-        const formEl = document.getElementById('identity-form');
-        const resEl = document.getElementById('identity-result');
-        if (formEl) formEl.style.display = 'block';
-        if (resEl) resEl.style.display = 'none';
-    };
+    document.getElementById('btn-edit-card').addEventListener('click', () => {
+        if (loadedCardData) {
+            document.getElementById('id-fullname').value = loadedCardData.fullName || '';
+            document.getElementById('id-type').value = loadedCardData.type || '';
+            document.getElementById('id-username-link').value = loadedCardData.usernameLink || '';
+            document.getElementById('id-bio').value = loadedCardData.bio || '';
+            document.getElementById('id-country').value = loadedCardData.country || '';
+            document.getElementById('id-city').value = loadedCardData.city || '';
+            document.getElementById('id-age').value = loadedCardData.age || '';
+            document.getElementById('id-height').value = loadedCardData.height || '';
+            document.getElementById('id-weight').value = loadedCardData.weight || '';
+            
+            document.getElementById('social-insta').value = loadedCardData.insta || '';
+            document.getElementById('social-snap').value = loadedCardData.snap || '';
+            document.getElementById('social-x').value = loadedCardData.x || '';
+            document.getElementById('social-tiktok').value = loadedCardData.tiktok || '';
+            document.getElementById('social-whatsapp').value = loadedCardData.whatsapp || '';
 
-    window.deleteCurrentCard = async function() {
+            if (loadedCardData.accentColor) {
+                setCardColor(loadedCardData.accentColor, loadedCardData.primaryColor || loadedCardData.accentColor, null);
+                document.getElementById('custom-color-picker').value = loadedCardData.accentColor;
+            }
+
+            updateDynamicFields(loadedCardData);
+        }
+
+        document.getElementById('identity-form').style.display = 'block';
+        document.getElementById('identity-result').style.display = 'none';
+        goToStep(1);
+    });
+
+    document.getElementById('btn-delete-card').addEventListener('click', async () => {
         if (!currentUser) return;
-        if (confirm("هل أنت متأكد من حذف هذه البطاقة؟")) {
+        if (confirm("هل أنت متأكد من حذف بطاقتك؟")) {
             try {
                 await deleteDoc(doc(db, "identityCards", currentUser.uid));
                 window.location.hash = '';
-                myCardId = null;
-                myCardData = null;
-                viewingCard = null;
-                window.resetIdentityForm();
+                loadedCardData = null;
+                document.getElementById('identity-result').style.display = 'none';
+                document.getElementById('identity-form').style.display = 'block';
+                document.getElementById('identity-form').reset();
+                document.getElementById('login-box').style.display = "block";
+                goToStep(1);
             } catch (e) {
-                console.error("Error deleting card from Firestore:", e);
-                alert("حدث خطأ أثناء حذف البطاقة.");
+                alert("خطأ أثناء الحذف: " + e.message);
             }
         }
-    };
-
-    window.resetIdentityForm = function() {
-        window.location.hash = '';
-        const formEl = document.getElementById('identity-form');
-        const dynContainer = document.getElementById('dynamic-fields-container');
-        const extraFields = document.getElementById('extra-fields');
-        const resEl = document.getElementById('identity-result');
-
-        if (formEl) formEl.reset();
-        if (dynContainer) dynContainer.innerHTML = '';
-        if (extraFields) extraFields.style.display = 'none';
-        if (formEl) formEl.style.display = 'block';
-        if (resEl) resEl.style.display = 'none';
-        viewingCard = null;
-        updateOwnershipUI();
-    };
-
-    window.googleLogin = async function () {
-        try {
-            await signInWithPopup(auth, provider);
-            const loginStatus = document.getElementById("login-status");
-            const loginBox = document.getElementById("login-box");
-            if (loginStatus) loginStatus.innerHTML = "✅ تم تسجيل الدخول بنجاح";
-            if (loginBox) loginBox.style.display = "none";
-        } catch (e) {
-            console.error(e);
-            alert(`${e.code}\n\n${e.message}`);
-        }
-    };
-
-    const ua = navigator.userAgent;
-    if (ua.includes("Instagram")) {
-        const warningEl = document.getElementById("instagram-warning");
-        const boxEl = document.querySelector(".box");
-        if (warningEl) warningEl.style.display = "flex";
-        if (boxEl) boxEl.style.display = "none";
-    }
+    });
 </script>
 
 </body>
