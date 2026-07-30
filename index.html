@@ -1,3 +1,5 @@
+من الاول
+هذا الكود من البدايه شسوي بالضبطططط
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -555,7 +557,7 @@
         // تحقق من أن usernameLink غير مستخدم من قبل مستخدم آخر
         try {
             const q = query(collection(db, "identityCards"), where("usernameLink", "==", uname));
-            const snap = await getDocs(q);
+            const snap = statements = await getDocs(q);
             let isTaken = false;
             snap.forEach(docSnap => {
                 if (!currentUser || docSnap.id !== currentUser.uid) {
@@ -707,7 +709,8 @@
                 const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash)));
                 const snap = await getDocs(q);
                 if (!snap.empty) {
-                    renderCard(snap.docs[0].data());
+                    loadedCardData = snap.docs[0].data();
+                    renderCard(loadedCardData);
                     return;
                 }
             }
@@ -729,7 +732,8 @@
                 const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash)));
                 const snap = await getDocs(q);
                 if (!snap.empty) {
-                    renderCard(snap.docs[0].data());
+                    loadedCardData = snap.docs[0].data();
+                    renderCard(loadedCardData);
                 }
             } catch(e) { console.error(e); }
         }
@@ -737,10 +741,6 @@
 
     function renderCard(data) {
         if (!data) return;
-
-        const isOwner = currentUser && currentUser.uid === data.ownerUid;
-        document.getElementById("btn-edit-card").style.display = isOwner ? "block" : "none";
-        document.getElementById("btn-delete-card").style.display = isOwner ? "block" : "none";
         if (data.accentColor) setCardColor(data.accentColor, data.primaryColor || data.accentColor, null);
 
         const roles = { 'fan': '👤 بطاقة مشجع', 'player': '⚽ بطاقة لاعب', 'athlete': '🏃 بطاقة رياضي', 'creator': '🎥 صانع محتوى', 'academy': '🏆 فريق / أكاديمية' };
