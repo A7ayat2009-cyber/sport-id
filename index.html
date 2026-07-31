@@ -458,7 +458,7 @@
     </form>
 
     <div id="identity-result" style="display: none;">
-        <div class="notice-box" style="text-align:center;">
+        <div class="notice-box" id="result-notice" style="text-align:center;">
             ✨ تمتلك بطاقة محفوظة ودائمة! انسخ رابط بطاقتك وضعه في البايو أو أرسله لأصدقائك:
         </div>
 
@@ -481,7 +481,7 @@
             </div>
         </div>
         
-        <div style="display: flex; gap: 8px; margin-top: 10px;">
+        <div id="owner-actions" style="display: flex; gap: 8px; margin-top: 10px;">
             <button type="button" class="action-btn" id="btn-edit-card" style="background: var(--card-accent); color: #000; margin-top: 0;">تعديل البطاقة</button>
             <button type="button" class="action-btn" id="btn-delete-card" style="background: #ef4444; margin-top: 0;">حذف</button>
         </div>
@@ -503,7 +503,7 @@
 <script type="module">
     import { db, auth } from './firebase-config.js';
     import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { doc, setDoc, getDoc, deleteDoc, query, where, collection, getDocs, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { doc, setDoc, getDoc, deleteDoc, query, where, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const provider = new GoogleAuthProvider();
     let currentUser = null;
@@ -515,14 +515,16 @@
         currentUser = user;
         const loginStatus = document.getElementById("login-status");
         const loginBox = document.getElementById("login-box");
+        
         if (user) {
             if (loginStatus) loginStatus.innerHTML = `✅ مسجل الدخول: ${user.displayName || user.email}`;
             if (loginBox) loginBox.style.display = "none";
-            await checkAndLoadUserCard(user.uid);
         } else {
             if (loginBox) loginBox.style.display = "block";
             if (loginStatus) loginStatus.innerHTML = "";
         }
+        
+        await resolveAndLoadCard();
     });
 
     document.getElementById("google-login-btn").addEventListener("click", async () => {
@@ -546,16 +548,16 @@
     document.getElementById('btn-next-1').addEventListener('click', async () => {
         const name = document.getElementById('id-fullname').value.trim();
         const type = document.getElementById('id-type').value;
-        const uname = document.getElementById('id-username-link').value.trim();
+        const uname = document.getElementById('id-username-link').value.trim().toLowerCase();
+        
         if (!name || !type || !uname) {
             alert("الرجاء تعبئة الاسم، نوع البطاقة، ورابط المستخدم أولاً.");
             return;
         }
 
-        // تحقق من أن usernameLink غير مستخدم من قبل مستخدم آخر
         try {
             const q = query(collection(db, "identityCards"), where("usernameLink", "==", uname));
-            const snap = statements = await getDocs(q);
+            const snap = await getDocs(q);
             let isTaken = false;
             snap.forEach(docSnap => {
                 if (!currentUser || docSnap.id !== currentUser.uid) {
@@ -637,9 +639,8 @@
 
     document.getElementById('btn-save-card').addEventListener('click', async () => {
         if (!currentUser) { alert("يجب تسجيل الدخول أولاً لحفظ البطاقة."); return; }
-        const usernameKey = document.getElementById('id-username-link').value.trim();
+        const usernameKey = document.getElementById('id-username-link').value.trim().toLowerCase();
         
-        // التحقق مرة أخرى قبل الحفظ النهائي
         try {
             const q = query(collection(db, "identityCards"), where("usernameLink", "==", usernameKey));
             const snap = await getDocs(q);
@@ -700,11 +701,11 @@
         }
     });
 
-    async function checkAndLoadUserCard(uid) {
+    async function resolveAndLoadCard() {
         const hash = window.location.hash.replace('#', '').trim();
         try {
             if (hash) {
-                const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash)));
+                const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash).toLowerCase()));
                 const snap = await getDocs(q);
                 if (!snap.empty) {
                     loadedCardData = snap.docs[0].data();
@@ -712,29 +713,21 @@
                     return;
                 }
             }
-            const docRef = doc(db, "identityCards", uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                loadedCardData = docSnap.data();
-                renderCard(loadedCardData);
+            if (currentUser) {
+                const docRef = doc(db, "identityCards", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    loadedCardData = docSnap.data();
+                    renderCard(loadedCardData);
+                }
             }
         } catch (e) {
             console.error(e);
         }
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {
-        const hash = window.location.hash.replace('#', '').trim();
-        if (hash) {
-            try {
-                const q = query(collection(db, "identityCards"), where("usernameLink", "==", decodeURIComponent(hash)));
-                const snap = await getDocs(q);
-                if (!snap.empty) {
-                    loadedCardData = snap.docs[0].data();
-                    renderCard(loadedCardData);
-                }
-            } catch(e) { console.error(e); }
-        }
+    window.addEventListener('hashchange', async () => {
+        await resolveAndLoadCard();
     });
 
     function renderCard(data) {
@@ -770,9 +763,30 @@
         if (data.whatsapp) socialsHtml += `<a href="https://wa.me/${data.whatsapp}" target="_blank" class="id-social-icon">WA</a>`;
         document.getElementById('prev-socials').innerHTML = socialsHtml;
 
+        // تطبيق صلاحيات العرض (Public Profile Security) بناءً على الـ UID بشكل صارم
+        const isOwner = currentUser && data.ownerUid === currentUser.uid;
+
         document.getElementById('identity-form').style.display = 'none';
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('identity-result').style.display = 'block';
+
+        const ownerActions = document.getElementById('owner-actions');
+        const resultNotice = document.getElementById('result-notice');
+        const btnCopyLink = document.getElementById('btn-copy-link');
+        const prevLinkBox = document.getElementById('prev-link');
+
+        if (isOwner) {
+            ownerActions.style.display = 'flex';
+            resultNotice.style.display = 'block';
+            btnCopyLink.style.display = 'block';
+            prevLinkBox.style.display = 'block';
+            resultNotice.innerHTML = `✨ أنت تملك هذه البطاقة وتستطيع تعديلها أو نسخ رابطها في أي وقت:`;
+        } else {
+            ownerActions.style.display = 'none';
+            resultNotice.style.display = 'none';
+            btnCopyLink.style.display = 'none';
+            prevLinkBox.style.display = 'none';
+        }
     }
 
     document.getElementById('btn-copy-link').addEventListener('click', () => {
@@ -790,30 +804,33 @@
     });
 
     document.getElementById('btn-edit-card').addEventListener('click', () => {
-        if (loadedCardData) {
-            document.getElementById('id-fullname').value = loadedCardData.fullName || '';
-            document.getElementById('id-type').value = loadedCardData.type || '';
-            document.getElementById('id-username-link').value = loadedCardData.usernameLink || '';
-            document.getElementById('id-bio').value = loadedCardData.bio || '';
-            document.getElementById('id-country').value = loadedCardData.country || '';
-            document.getElementById('id-city').value = loadedCardData.city || '';
-            document.getElementById('id-age').value = loadedCardData.age || '';
-            document.getElementById('id-height').value = loadedCardData.height || '';
-            document.getElementById('id-weight').value = loadedCardData.weight || '';
-            
-            document.getElementById('social-insta').value = loadedCardData.insta || '';
-            document.getElementById('social-snap').value = loadedCardData.snap || '';
-            document.getElementById('social-x').value = loadedCardData.x || '';
-            document.getElementById('social-tiktok').value = loadedCardData.tiktok || '';
-            document.getElementById('social-whatsapp').value = loadedCardData.whatsapp || '';
-
-            if (loadedCardData.accentColor) {
-                setCardColor(loadedCardData.accentColor, loadedCardData.primaryColor || loadedCardData.accentColor, null);
-                document.getElementById('custom-color-picker').value = loadedCardData.accentColor;
-            }
-
-            updateDynamicFields(loadedCardData);
+        if (!currentUser || !loadedCardData || loadedCardData.ownerUid !== currentUser.uid) {
+            alert("غير مسموح لك بتعديل هذه البطاقة.");
+            return;
         }
+
+        document.getElementById('id-fullname').value = loadedCardData.fullName || '';
+        document.getElementById('id-type').value = loadedCardData.type || '';
+        document.getElementById('id-username-link').value = loadedCardData.usernameLink || '';
+        document.getElementById('id-bio').value = loadedCardData.bio || '';
+        document.getElementById('id-country').value = loadedCardData.country || '';
+        document.getElementById('id-city').value = loadedCardData.city || '';
+        document.getElementById('id-age').value = loadedCardData.age || '';
+        document.getElementById('id-height').value = loadedCardData.height || '';
+        document.getElementById('id-weight').value = loadedCardData.weight || '';
+        
+        document.getElementById('social-insta').value = loadedCardData.insta || '';
+        document.getElementById('social-snap').value = loadedCardData.snap || '';
+        document.getElementById('social-x').value = loadedCardData.x || '';
+        document.getElementById('social-tiktok').value = loadedCardData.tiktok || '';
+        document.getElementById('social-whatsapp').value = loadedCardData.whatsapp || '';
+
+        if (loadedCardData.accentColor) {
+            setCardColor(loadedCardData.accentColor, loadedCardData.primaryColor || loadedCardData.accentColor, null);
+            document.getElementById('custom-color-picker').value = loadedCardData.accentColor;
+        }
+
+        updateDynamicFields(loadedCardData);
 
         document.getElementById('identity-form').style.display = 'block';
         document.getElementById('identity-result').style.display = 'none';
@@ -821,7 +838,10 @@
     });
 
     document.getElementById('btn-delete-card').addEventListener('click', async () => {
-        if (!currentUser) return;
+        if (!currentUser || !loadedCardData || loadedCardData.ownerUid !== currentUser.uid) {
+            alert("غير مسموح لك بحذف هذه البطاقة.");
+            return;
+        }
         if (confirm("هل أنت متأكد من حذف بطاقتك؟")) {
             try {
                 await deleteDoc(doc(db, "identityCards", currentUser.uid));
@@ -838,6 +858,5 @@
         }
     });
 </script>
-
 </body>
 </html>
