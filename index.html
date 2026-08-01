@@ -551,10 +551,10 @@
             case 'fan': 
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'النادي المفضل' },
-                        { id: 'dyn2', label: 'المنتخب المفضل' },
-                        { id: 'dyn3', label: 'اللاعب المفضل' },
-                        { id: 'dyn4', label: 'الدوري المفضل' }
+                        { id: 'dyn1', label: 'النادي المفضل', type: 'select_other', options: ['العربي الكويتي', 'بايرن ميونخ', 'ريال مدريد', 'برشلونة', 'مانشستر سيتي', 'أخرى'] },
+                        { id: 'dyn2', label: 'المنتخب المفضل', type: 'select_other', options: ['الكويت', 'البرازيل', 'الأرجنتين', 'ألمانيا', 'فرنسا', 'أخرى'] },
+                        { id: 'dyn3', label: 'اللاعب المفضل', type: 'text' },
+                        { id: 'dyn4', label: 'الدوري المفضل', type: 'select_other', options: ['دوري روشن السعودي', 'الدوري الإنجليزي الممتاز', 'الدوري الإسباني', 'دوري زين الكويتي', 'دوري أبطال أوروبا', 'أخرى'] }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -562,9 +562,10 @@
             case 'player': 
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'النادي / الفريق' },
-                        { id: 'dyn2', label: 'المركز' },
-                        { id: 'dyn3', label: 'القدم المفضلة', type: 'select', options: ['يمين', 'يسار', 'كلتاهما'] }
+                        { id: 'dyn1', label: 'النادي / الفريق الحالي', type: 'text' },
+                        { id: 'dyn2', label: 'المركز الأساسي', type: 'select_other', options: ['حارس مرمى', 'مدافع', 'خط وسط', 'مهاجم', 'أخرى'] },
+                        { id: 'dyn3', label: 'القدم المفضلة', type: 'select_other', options: ['يمين', 'يسار', 'كلتاهما'] },
+                        { id: 'dyn4', label: 'رقم القميص', type: 'text' }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -572,9 +573,10 @@
             case 'athlete': 
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'الرياضة' },
-                        { id: 'dyn2', label: 'الفريق أو النادي' },
-                        { id: 'dyn3', label: 'أبرز إنجاز' }
+                        { id: 'dyn1', label: 'الرياضة الممارسة', type: 'select_other', options: ['كرة قدم', 'دراجات نارية / كواد (ديرت بايك 450cc)', 'سباحة', 'جري / ألعاب قوى', 'كروس فيت / لياقة', 'أخرى'] },
+                        { id: 'dyn2', label: 'الفريق أو النادي / الفئة', type: 'text' },
+                        { id: 'dyn3', label: 'أبرز إنجاز رياضي', type: 'text' },
+                        { id: 'dyn4', label: 'مستوى الخبرة / الاحتراف', type: 'select_other', options: ['هاوي', 'مستدعي / ناشئين', 'محترف', 'أخرى'] }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -582,10 +584,10 @@
             case 'creator': 
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'النادي المفضل' },
-                        { id: 'dyn2', label: 'المنتخب المفضل' },
-                        { id: 'dyn3', label: 'اللاعب المفضل' },
-                        { id: 'dyn4', label: 'نوع المحتوى', type: 'select', options: ['أخبار', 'تحليلات', 'تصميم', 'فيديوهات', 'بودكاست', 'عام'] }
+                        { id: 'dyn1', label: 'النادي المفضل', type: 'select_other', options: ['العربي الكويتي', 'بايرن ميونخ', 'ريال مدريد', 'برشلونة', 'أخرى'] },
+                        { id: 'dyn2', label: 'المنصة الرئيسية للنشر', type: 'select_other', options: ['تيك توك', 'إنستغرام', 'يوتيوب', 'إكس (تويتر)', 'سناب شات', 'أخرى'] },
+                        { id: 'dyn3', label: 'نوع المحتوى الرياضي', type: 'select_other', options: ['تحليلات وفيديوهات', 'أخبار حصرية', 'تصاميم وجرافيكس', 'تعليق ومباريات', 'أخرى'] },
+                        { id: 'dyn4', label: 'فريق العمل أو الدعم', type: 'text' }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -593,9 +595,10 @@
             case 'academy': 
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'سنة التأسيس' },
-                        { id: 'dyn2', label: 'الفئة المستهدفة' },
-                        { id: 'dyn3', label: 'نوع النشاط', type: 'select', options: ['كرة قدم', 'كرة سلة', 'سباحة', 'أخرى'] }
+                        { id: 'dyn1', label: 'سنة التأسيس', type: 'text' },
+                        { id: 'dyn2', label: 'الفئة العمرية المستهدفة', type: 'select_other', options: ['براعم (أقل من 10 سنوات)', 'ناشئين (10 - 15 سنة)', 'شباب وفريق أول', 'جميع الفئات', 'أخرى'] },
+                        { id: 'dyn3', label: 'نوع النشاط الرياضي الرئيسي', type: 'select_other', options: ['أكاديمية كرة قدم', 'مدرسة حراس مرمى', 'لياقة وتدريب بدني', 'أخرى'] },
+                        { id: 'dyn4', label: 'ملعب التدريب / المقر', type: 'text' }
                     ],
                     showPhysical: false,
                     showLocation: true
@@ -603,9 +606,10 @@
             default: 
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'بيانات 1' },
-                        { id: 'dyn2', label: 'بيانات 2' },
-                        { id: 'dyn3', label: 'بيانات 3' }
+                        { id: 'dyn1', label: 'بيانات 1', type: 'text' },
+                        { id: 'dyn2', label: 'بيانات 2', type: 'text' },
+                        { id: 'dyn3', label: 'بيانات 3', type: 'text' },
+                        { id: 'dyn4', label: 'بيانات 4', type: 'text' }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -669,7 +673,13 @@
         let cardsHtml = '';
         
         cfg.fields.forEach(f => {
-            const val = data[f.id];
+            let val = data[f.id];
+            // لو كان الحقل يحتوي على قيمة أخرى مخزنة مع بادئة أو مخصصة
+            if (f.id === 'dyn1' && data.dyn1_custom) val = data.dyn1_custom;
+            if (f.id === 'dyn2' && data.dyn2_custom) val = data.dyn2_custom;
+            if (f.id === 'dyn3' && data.dyn3_custom) val = data.dyn3_custom;
+            if (f.id === 'dyn4' && data.dyn4_custom) val = data.dyn4_custom;
+
             if (val) {
                 cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">${f.label}</span><span class="discord-card-value">${val}</span></div>`;
             }
@@ -683,7 +693,7 @@
         
         if (cfg.showPhysical) {
             if (data.age) {
-                cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">🎂 العمر</span><span class="discord-card-value">${data.age} سنة</span></div>`;
+                cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">🎂 العمر / الطول / الوزن</span><span class="discord-card-value">${data.age} سنة ${data.height ? ' | ' + data.height + ' سم' : ''} ${data.weight ? ' | ' + data.weight + ' كغ' : ''}</span></div>`;
             }
         }
         
@@ -852,18 +862,53 @@
             let html = '';
             cfg.fields.forEach(f => {
                 const val = saved[f.id] || '';
-                if (f.type === 'select') {
-                    let optionsHtml = `<option value="" disabled ${!val ? 'selected' : ''}>اختر ${f.label} *</option>`;
+                const customVal = saved[f.id + '_custom'] || '';
+                
+                if (f.type === 'select_other') {
+                    let isOtherSelected = f.options.includes(val) ? false : (val !== '' ? true : false);
+                    let selectVal = isOtherSelected ? 'أخرى' : val;
+
+                    let optionsHtml = `<option value="" disabled ${!selectVal ? 'selected' : ''}>اختر ${f.label} *</option>`;
                     f.options.forEach(opt => {
-                        optionsHtml += `<option value="${opt}" ${val === opt ? 'selected' : ''}>${opt}</option>`;
+                        optionsHtml += `<option value="${opt}" ${selectVal === opt ? 'selected' : ''}>${opt}</option>`;
                     });
-                    html += `<select id="${f.id}" style="padding:10px; font-size:0.8rem;" required>${optionsHtml}</select>`;
+
+                    html += `
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
+                            <select id="${f.id}" class="dynamic-select-field" data-target="${f.id}_custom_wrapper" style="padding:10px; font-size:0.8rem;" required>
+                                ${optionsHtml}
+                            </select>
+                            <input type="text" id="${f.id}_custom" placeholder="اكتب ${f.label} الخاصة بك..." value="${isOtherSelected ? val : customVal}" style="padding:10px; font-size:0.8rem; margin-top:4px; display: ${isOtherSelected ? 'block' : 'none'};">
+                        </div>
+                    `;
                 } else {
-                    html += `<input type="text" id="${f.id}" placeholder="${f.label}" value="${val}" style="padding:10px; font-size:0.8rem;">`;
+                    html += `
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
+                            <input type="text" id="${f.id}" placeholder="${f.label}" value="${val}" style="padding:10px; font-size:0.8rem;" required>
+                        </div>
+                    `;
                 }
             });
 
             container.innerHTML = html;
+
+            // إضافة تفاعل اختيار "أخرى" لإظهار حقل الإدخال الحر
+            document.querySelectorAll('.dynamic-select-field').forEach(sel => {
+                sel.addEventListener('change', (e) => {
+                    const targetId = e.target.getAttribute('data-target');
+                    const customInput = document.getElementById(targetId);
+                    if (e.target.value === 'أخرى') {
+                        customInput.style.display = 'block';
+                        customInput.required = true;
+                    } else {
+                        customInput.style.display = 'none';
+                        customInput.required = false;
+                        customInput.value = '';
+                    }
+                });
+            });
         }
 
         document.getElementById('btn-save-card').addEventListener('click', async () => {
@@ -889,14 +934,13 @@
                 }
             } catch (e) { console.error(e); }
 
-            const docRef = doc(db, "identityCards", currentUser.uid);
-            const docSnap = await getDoc(docRef);
-            let createdAtVal = docSnap.exists() && docSnap.data().createdAt ? docSnap.data().createdAt : serverTimestamp();
+            const typeVal = document.getElementById('id-type').value;
+            const cfg = getConfigByType(typeVal);
 
-            const cardData = {
+            let cardData = {
                 ownerUid: currentUser.uid,
                 fullName: document.getElementById('id-fullname').value.trim(),
-                type: document.getElementById('id-type').value,
+                type: typeVal,
                 usernameLink: usernameKey,
                 bio: document.getElementById('id-bio').value.trim(),
                 country: document.getElementById('id-country')?.value.trim() || '',
@@ -904,10 +948,6 @@
                 age: document.getElementById('id-age')?.value.trim() || '',
                 height: document.getElementById('id-height')?.value.trim() || '',
                 weight: document.getElementById('id-weight')?.value.trim() || '',
-                dyn1: document.getElementById('dyn1')?.value.trim() || '',
-                dyn2: document.getElementById('dyn2')?.value.trim() || '',
-                dyn3: document.getElementById('dyn3')?.value.trim() || '',
-                dyn4: document.getElementById('dyn4')?.value.trim() || '',
                 insta: document.getElementById('social-insta').value.trim(),
                 snap: document.getElementById('social-snap').value.trim(),
                 x: document.getElementById('social-x').value.trim(),
@@ -915,9 +955,28 @@
                 whatsapp: document.getElementById('social-whatsapp').value.trim(),
                 accentColor: currentAccent,
                 primaryColor: currentPrimary,
-                createdAt: createdAtVal,
                 updatedAt: serverTimestamp()
             };
+
+            cfg.fields.forEach(f => {
+                const fieldEl = document.getElementById(f.id);
+                if (fieldEl) {
+                    const val = fieldEl.value.trim();
+                    if (val === 'أخرى') {
+                        const customEl = document.getElementById(f.id + '_custom');
+                        const customVal = customEl ? customEl.value.trim() : '';
+                        cardData[f.id] = customVal;
+                        cardData[f.id + '_custom'] = customVal;
+                    } else {
+                        cardData[f.id] = val;
+                        cardData[f.id + '_custom'] = '';
+                    }
+                }
+            });
+
+            const docRef = doc(db, "identityCards", currentUser.uid);
+            const docSnap = await getDoc(docRef);
+            cardData.createdAt = docSnap.exists() && docSnap.data().createdAt ? docSnap.data().createdAt : serverTimestamp();
 
             try {
                 await setDoc(docRef, cardData, { merge: true });
