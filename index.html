@@ -448,8 +448,16 @@
 
             <div class="wizard-step active-step" id="step-1">
                 <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
-                <!-- تحويل خيار نوع البطاقة إلى حقل نصي كتابي -->
-                <input type="text" id="id-type" placeholder="نوع البطاقة الرياضية (مثال: مشجع، لاعب، رياضي...) *" required>
+                <select id="id-type" required>
+                    <option value="" disabled selected>اختر نوع البطاقة الرياضية *</option>
+                    <option value="مشجع">مشجع رياضي</option>
+                    <option value="لاعب">لاعب / رياضي</option>
+                    <option value="محلل">محلل رياضي</option>
+                    <option value="إداري">إداري / منظم</option>
+                    <option value="أخرى">أخرى (اكتبه بنفسك)</option>
+                </select>
+                <input type="text" id="id-type-custom" placeholder="اكتب نوع البطاقة هنا..." style="display:none; margin-top:5px;">
+                
                 <input type="text" id="id-username-link" placeholder="اسم المستخدم للرابط (مثال: ahmed) *" required>
                 <button type="button" class="action-btn" id="btn-next-1">التالي ⬅</button>
             </div>
@@ -533,17 +541,54 @@
     const usernameQuery = urlParams.get('u');
 
     function getConfigByType(type) {
-        // جميع الحقول أصبحت نصية بالكامل بدون أي خيارات قائمة منسدلة
-        return {
-            fields: [
-                { id: 'dyn1', label: 'البيانات الرياضية الأولى (مثل: النادي أو الرياضة المفضلـة)' },
-                { id: 'dyn2', label: 'البيانات الرياضية الثانية (مثل: المنتخب أو المركز أو الفريق)' },
-                { id: 'dyn3', label: 'البيانات الرياضية الثالثة (مثل: اللاعب أو الإنجاز أو القدم)' },
-                { id: 'dyn4', label: 'البيانات الرياضية الرابعة (مثل: الدوري أو المنصة أو النشاط)' }
-            ],
-            showPhysical: true,
-            showLocation: true
-        };
+        switch (type) {
+            case 'مشجع':
+                return {
+                    fields: [
+                        { id: 'dyn1', label: 'النادي المفضّل (اختر أو اكتب)', options: ['العربي الكويتي 🇰🇼', 'بايرن ميونخ 🇩🇪', 'ريال مدريد 🇪🇸', 'برشلونة 🇪🇸', 'أخرى'] },
+                        { id: 'dyn2', label: 'المنتخب المفضّل (اختر أو اكتب)', options: ['الكويت 🇰🇼', 'السعودية 🇸🇦', 'البرازيل 🇧🇷', 'الأرجنتين 🇦🇷', 'أخرى'] }
+                    ],
+                    showPhysical: false,
+                    showLocation: true
+                };
+            case 'لاعب':
+                return {
+                    fields: [
+                        { id: 'dyn1', label: 'الرياضة (اختر أو اكتب)', options: ['كرة القدم ⚽', 'دراجات نارية / راليات 🏍️', 'كورة صالات 🥅', 'أخرى'] },
+                        { id: 'dyn2', label: 'المركز (اختر أو اكتب)', options: ['هجوم ⚡', 'وسط 🎯', 'دفاع 🛡️', 'حراسة 🧤', 'أخرى'] },
+                        { id: 'dyn3', label: 'القدم المفضلة (اختر أو اكتب)', options: ['يمنى 🦶', 'يسرى 🦵', 'كلا القدمين ⚡', 'أخرى'] }
+                    ],
+                    showPhysical: true,
+                    showLocation: true
+                };
+            case 'محلل':
+                return {
+                    fields: [
+                        { id: 'dyn1', label: 'الدوري أو البطولة المتابعة (اختر أو اكتب)', options: ['دوري روشن 🇸🇦', 'دوري زين الكويتي 🇰🇼', 'دوري أبطال أوروبا 🇪🇺', 'أخرى'] },
+                        { id: 'dyn2', label: 'التخصص التحليلي (اختر أو اكتب)', options: ['فني وتكتيكي 📊', 'إحصائيات وأرقام 📈', 'عام وشامل 🎙️', 'أخرى'] }
+                    ],
+                    showPhysical: false,
+                    showLocation: true
+                };
+            case 'إداري':
+                return {
+                    fields: [
+                        { id: 'dyn1', label: 'الصفة الإدارية (اختر أو اكتب)', options: ['منظم بطولات 🏆', 'رئيس رابطة مشجعين 🗣️', 'مشرف عام ⚙️', 'أخرى'] },
+                        { id: 'dyn2', label: 'المنصة أو الجهة (اختر أو اكتب)', options: ['منصة توقعات الزعيم ⚡', 'فريق رياضي 🏅', 'رابطة رسمية 🏛️', 'أخرى'] }
+                    ],
+                    showPhysical: false,
+                    showLocation: true
+                };
+            default:
+                return {
+                    fields: [
+                        { id: 'dyn1', label: 'الاهتمام الرياضي الأول (اكتبه هنا)', options: [] },
+                        { id: 'dyn2', label: 'الاهتمام الرياضي الثاني (اكتبه هنا)', options: [] }
+                    ],
+                    showPhysical: true,
+                    showLocation: true
+                };
+        }
     }
 
     function sanitizeUsername(rawUsername) {
@@ -711,9 +756,27 @@
             document.getElementById(`dot-${stepNum}`).classList.add('active');
         }
 
+        const typeSelect = document.getElementById('id-type');
+        const typeCustomInput = document.getElementById('id-type-custom');
+
+        typeSelect.addEventListener('change', () => {
+            if (typeSelect.value === 'أخرى') {
+                typeCustomInput.style.display = 'block';
+                typeCustomInput.required = true;
+            } else {
+                typeCustomInput.style.display = 'none';
+                typeCustomInput.required = false;
+                typeCustomInput.value = '';
+            }
+            updateDynamicFields();
+        });
+
         document.getElementById('btn-next-1').addEventListener('click', async () => {
             const name = document.getElementById('id-fullname').value.trim();
-            const type = document.getElementById('id-type').value.trim();
+            let type = typeSelect.value;
+            if (type === 'أخرى') {
+                type = typeCustomInput.value.trim();
+            }
             const rawUname = document.getElementById('id-username-link').value;
             const uname = sanitizeUsername(rawUname);
             
@@ -759,10 +822,10 @@
             });
         });
 
-        document.getElementById('id-type').addEventListener('input', () => updateDynamicFields());
-
         function updateDynamicFields(saved = {}) {
-            const type = document.getElementById('id-type').value;
+            let type = typeSelect.value;
+            if (type === 'أخرى') type = typeCustomInput.value;
+            
             const container = document.getElementById('dynamic-fields-container');
             const physicalWrapper = document.getElementById('physical-fields-wrapper');
             const locationWrapper = document.getElementById('location-fields-wrapper');
@@ -784,16 +847,50 @@
 
             let html = '';
             cfg.fields.forEach(f => {
-                const val = saved[f.id] || '';
-                html += `
-                    <div style="margin-bottom: 8px;">
-                        <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
-                        <input type="text" id="${f.id}" placeholder="${f.label}" value="${val}" style="padding:10px; font-size:0.8rem;">
-                    </div>
-                `;
+                const savedVal = saved[f.id] || '';
+                let isFromOptions = false;
+                if (f.options && f.options.length > 0) {
+                    isFromOptions = f.options.includes(savedVal);
+                }
+
+                if (f.options && f.options.length > 0) {
+                    const selectVal = isFromOptions ? savedVal : (savedVal ? 'أخرى' : '');
+                    const customVal = !isFromOptions && savedVal ? savedVal : '';
+
+                    html += `
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
+                            <select id="${f.id}" class="dyn-select" data-custom-id="${f.id}-custom" style="padding:10px; font-size:0.8rem;">
+                                <option value="" disabled ${!selectVal ? 'selected' : ''}>اختر أو اكتب...</option>
+                                ${f.options.map(opt => `<option value="${opt}" ${selectVal === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                            </select>
+                            <input type="text" id="${f.id}-custom" placeholder="اكتب هنا..." value="${customVal}" style="display: ${selectVal === 'أخرى' ? 'block' : 'none'}; margin-top: 5px; padding:10px; font-size:0.8rem;">
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
+                            <input type="text" id="${f.id}" placeholder="${f.label}" value="${savedVal}" style="padding:10px; font-size:0.8rem;">
+                        </div>
+                    `;
+                }
             });
 
             container.innerHTML = html;
+
+            container.querySelectorAll('.dyn-select').forEach(sel => {
+                sel.addEventListener('change', (e) => {
+                    const customInput = document.getElementById(e.target.getAttribute('data-custom-id'));
+                    if (e.target.value === 'أخرى') {
+                        customInput.style.display = 'block';
+                        customInput.focus();
+                    } else {
+                        customInput.style.display = 'none';
+                        customInput.value = '';
+                    }
+                });
+            });
         }
 
         document.getElementById('btn-save-card').addEventListener('click', async () => {
@@ -819,7 +916,8 @@
                 }
             } catch (e) { console.error(e); }
 
-            const typeVal = document.getElementById('id-type').value.trim();
+            let typeVal = typeSelect.value;
+            if (typeVal === 'أخرى') typeVal = typeCustomInput.value.trim();
             const cfg = getConfigByType(typeVal);
 
             let cardData = {
@@ -846,7 +944,16 @@
             cfg.fields.forEach(f => {
                 const fieldEl = document.getElementById(f.id);
                 if (fieldEl) {
-                    cardData[f.id] = fieldEl.value.trim();
+                    if (fieldEl.tagName === 'SELECT') {
+                        if (fieldEl.value === 'أخرى') {
+                            const customEl = document.getElementById(`${f.id}-custom`);
+                            cardData[f.id] = customEl ? customEl.value.trim() : '';
+                        } else {
+                            cardData[f.id] = fieldEl.value;
+                        }
+                    } else {
+                        cardData[f.id] = fieldEl.value.trim();
+                    }
                 }
             });
 
@@ -872,7 +979,18 @@
         document.getElementById('btn-open-edit').addEventListener('click', () => {
             if (!myLoadedCard) return;
             document.getElementById('id-fullname').value = myLoadedCard.fullName || '';
-            document.getElementById('id-type').value = myLoadedCard.type || '';
+            
+            const standardTypes = ['مشجع', 'لاعب', 'محلل', 'إداري'];
+            if (standardTypes.includes(myLoadedCard.type)) {
+                typeSelect.value = myLoadedCard.type;
+                typeCustomInput.style.display = 'none';
+                typeCustomInput.value = '';
+            } else {
+                typeSelect.value = 'أخرى';
+                typeCustomInput.style.display = 'block';
+                typeCustomInput.value = myLoadedCard.type || '';
+            }
+
             document.getElementById('id-username-link').value = myLoadedCard.usernameLink || '';
             document.getElementById('id-bio').value = myLoadedCard.bio || '';
             
