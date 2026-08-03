@@ -8,110 +8,320 @@
     <style>
         :root {
             --primary: #008000;
+            --primary-dark: #005500;
             --card-accent: #10b981;
             --card-glow: rgba(16, 185, 129, 0.25);
             --bg-base: #0c1629;
-            --glass-bg: rgba(23, 37, 65, 0.85);
+            --glass-bg: rgba(23, 37, 65, 0.88);
             --glass-border: rgba(255, 255, 255, 0.15);
             --text-light: #f8fafc;
             --text-dim: #94a3b8;
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body { 
             font-family: 'Cairo', sans-serif; 
             background: var(--bg-base);
             background-image: 
-                radial-gradient(circle at 15% 15%, var(--card-glow) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 45%),
-                linear-gradient(135deg, #09111e 0%, #172541 100%);
+                radial-gradient(circle at 10% 10%, rgba(0, 128, 0, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
+                linear-gradient(135deg, #070d18 0%, #172541 100%);
             background-attachment: fixed;
             min-height: 100vh;
             margin: 0;
-            padding: 20px; 
-            display: flex; 
-            justify-content: center; 
+            padding: 0;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             overflow-x: hidden;
             color: var(--text-light);
+        }
+
+        /* Modern Sticky Header with Glassmorphism & Micro-interactions */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            background: rgba(12, 22, 41, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 28px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-logo {
+            display: inline-flex;
+            align-items: center;
+            cursor: default;
+            text-decoration: none;
+        }
+
+        .header-logo img {
+            height: 45px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .header-logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .hamburger-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-light);
+            font-size: 1.3rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: var(--card-accent);
+            color: var(--card-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px var(--card-glow);
+        }
+
+        .hamburger-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Side Drawer Overlay & Panel */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 10, 20, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1100;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            right: -340px;
+            width: 320px;
+            height: 100%;
+            background: linear-gradient(180deg, #0e1930 0%, #0a1224 100%);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: -15px 0 40px rgba(0, 0, 0, 0.7);
+            z-index: 1200;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 28px 22px;
+        }
+
+        .side-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .drawer-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
+        .close-drawer {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            color: var(--text-dim);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.25s ease;
+        }
+
+        .close-drawer:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .drawer-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-dim);
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-item span.icon {
+            font-size: 1.25rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .drawer-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #ffffff;
+            transform: translateX(-6px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .drawer-item:hover span.icon {
+            transform: scale(1.15);
+        }
+
+        .drawer-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 20px var(--card-glow);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .drawer-footer-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            margin-top: auto;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            color: #34d399;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .drawer-footer-link:hover {
+            background: rgba(16, 185, 129, 0.2);
+            box-shadow: 0 6px 22px var(--card-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Main Wrapper & Container Layout */
+        .main-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 110px 20px 50px 20px;
+            min-height: 100vh;
         }
 
         .box { 
             width: 100%; 
             max-width: 480px; 
             background: var(--glass-bg); 
-            padding: 28px 20px; 
-            border-radius: 32px; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--glass-border) inset; 
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            padding: 36px 24px; 
+            border-radius: 36px; 
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), 
+                        0 0 0 1px var(--glass-border) inset; 
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             position: relative;
-            transition: var(--transition-smooth);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .tabs { 
-            display: flex; 
-            gap: 6px; 
-            margin-bottom: 20px; 
-            background: rgba(255, 255, 255, 0.06);
-            padding: 5px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .tab-btn { 
-            flex: 1; 
-            padding: 10px 4px; 
-            border: none; 
-            background: transparent; 
-            color: var(--text-dim);
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.8rem;
-            text-align: center;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-        }
-
-        .tab-btn.active { 
-            background: linear-gradient(135deg, var(--primary) 0%, #004400 100%); 
-            color: #ffffff; 
-            box-shadow: 0 4px 15px var(--card-glow);
+            display: none; 
         }
 
         .title { 
             text-align: center; 
-            font-size: 1.5rem; 
-            margin-bottom: 4px; 
+            font-size: 1.7rem; 
+            margin-bottom: 6px; 
             font-weight: 900; 
-            background: linear-gradient(180deg, #ffffff 30%, #86efac 100%);
+            letter-spacing: -0.5px;
+            background: linear-gradient(180deg, #ffffff 20%, #86efac 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.2));
         }
 
         .subtitle-tagline {
             text-align: center;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: #cbd5e1;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
         .notice-box {
-            background: rgba(16, 185, 129, 0.12);
+            background: rgba(18, 30, 53, 0.75);
             border: 1px solid rgba(16, 185, 129, 0.35);
             border-right: 4px solid var(--card-accent);
-            padding: 12px 14px;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            font-size: 0.82rem;
+            padding: 16px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            font-size: 0.88rem;
             color: #ffffff;
-            line-height: 1.5;
+            line-height: 1.6;
             font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: var(--transition-smooth);
         }
 
@@ -121,16 +331,16 @@
         .step-indicator {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .step-dot {
             flex: 1;
             text-align: center;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--text-dim);
-            padding-bottom: 6px;
+            padding-bottom: 8px;
             border-bottom: 2px solid rgba(255,255,255,0.1);
             transition: var(--transition-smooth);
         }
@@ -142,106 +352,115 @@
 
         input, select, textarea { 
             width: 100%; 
-            padding: 13px 15px; 
-            margin: 7px 0; 
+            padding: 15px 18px; 
+            margin: 9px 0; 
             border: 1px solid rgba(255, 255, 255, 0.12); 
-            border-radius: 14px; 
+            border-radius: 16px; 
+            box-sizing: border-box; 
             font-family: 'Cairo', sans-serif;
-            font-size: 0.88rem;
-            background: rgba(10, 18, 35, 0.7);
+            font-size: 0.92rem;
+            background: rgba(10, 18, 35, 0.75);
             color: #ffffff;
-            transition: var(--transition-smooth);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #64748b;
+        }
+
+        select option {
+            background: #101c33;
+            color: #ffffff;
+            padding: 12px;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--card-accent);
-            box-shadow: 0 0 0 3px var(--card-glow);
+            background: rgba(10, 18, 35, 0.95);
+            box-shadow: 0 0 0 4px var(--card-glow), inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .action-btn { 
             width: 100%; 
-            padding: 14px; 
-            background: linear-gradient(135deg, var(--primary) 0%, #004400 100%); 
+            padding: 16px; 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
             color: white; 
             border: none; 
-            border-radius: 14px; 
+            border-radius: 16px; 
             font-weight: 800; 
             font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             cursor: pointer; 
-            margin-top: 12px; 
-            box-shadow: 0 6px 20px var(--card-glow);
+            margin-top: 14px; 
+            box-shadow: 0 8px 25px var(--card-glow);
             text-decoration: none;
             display: inline-block;
             text-align: center;
-            transition: var(--transition-smooth);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .action-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--card-glow);
             filter: brightness(1.1);
         }
 
-        .btn-group { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-group { display: flex; gap: 10px; margin-top: 12px; }
 
         .color-picker-wrapper {
-            margin: 10px 0;
-            background: rgba(0,0,0,0.25);
-            padding: 12px;
-            border-radius: 14px;
+            margin: 12px 0;
+            background: rgba(18, 30, 53, 0.6);
+            padding: 16px;
+            border-radius: 18px;
             border: 1px solid rgba(255,255,255,0.08);
         }
 
-        .color-options { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+        .color-options { display: flex; gap: 12px; justify-content: center; margin-top: 10px; }
         .color-bubble {
-            width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.3);
+            width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.3);
             transition: var(--transition-smooth);
         }
-        .color-bubble.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .color-bubble.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 12px rgba(255,255,255,0.6); }
 
         .identity-card-preview {
             background: linear-gradient(145deg, rgba(23, 37, 65, 0.95) 0%, rgba(12, 22, 41, 0.98) 100%);
-            border-radius: 24px;
-            padding: 24px;
+            border-radius: 28px;
+            padding: 26px;
             border: 2px solid var(--card-accent);
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
-            margin-bottom: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px var(--card-glow);
+            margin-bottom: 18px;
             animation: fadeIn 0.4s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .id-name { font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 6px; }
+        .id-name { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 8px; }
         .id-role-badge {
             background: var(--card-glow);
             color: var(--card-accent);
-            padding: 5px 14px;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 800;
             display: inline-block;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             border: 1px solid var(--card-accent);
         }
 
         .discord-cards-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 14px;
+            gap: 10px;
+            margin-bottom: 16px;
             text-align: right;
         }
 
         .discord-info-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 10px 14px;
+            border-radius: 14px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -252,40 +471,40 @@
             background: rgba(255, 255, 255, 0.07);
         }
 
-        .discord-card-label { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; }
-        .discord-card-value { font-size: 0.85rem; color: #ffffff; font-weight: 800; }
+        .discord-card-label { font-size: 0.8rem; color: var(--text-dim); font-weight: 700; }
+        .discord-card-value { font-size: 0.9rem; color: #ffffff; font-weight: 800; }
 
         .id-bio {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #cbd5e1;
-            margin-bottom: 16px;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px;
-            border-radius: 12px;
+            margin-bottom: 18px;
+            line-height: 1.7;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 14px;
+            border-radius: 14px;
             text-align: right;
         }
 
         .id-socials-linktree {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .linktree-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.07);
             color: #fff;
-            border-radius: 14px;
+            border-radius: 16px;
             text-decoration: none;
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             border: 1px solid rgba(255, 255, 255, 0.12);
             transition: var(--transition-smooth);
         }
@@ -294,243 +513,375 @@
             background: var(--card-accent);
             color: #000;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--card-glow);
+            box-shadow: 0 6px 18px var(--card-glow);
         }
 
         .card-footer-identity {
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
-            font-size: 0.75rem;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.12);
+            font-size: 0.8rem;
             color: #e2e8f0;
             font-weight: 700;
         }
 
         .profile-link-box {
             background: rgba(255, 255, 255, 0.04);
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
             color: #a7f3d0;
             direction: ltr;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             border: 1px dashed var(--card-accent);
             word-break: break-all;
             text-align: center;
         }
 
-        .error-state { text-align: center; padding: 20px; animation: fadeIn 0.3s ease; }
-        .error-title { font-size: 1.3rem; font-weight: 900; color: #ef4444; margin-bottom: 10px; }
-        .error-desc { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; line-height: 1.5; }
+        .error-state { text-align: center; padding: 25px; animation: fadeIn 0.3s ease; }
+        .error-title { font-size: 1.4rem; font-weight: 900; color: #ef4444; margin-bottom: 12px; }
+        .error-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 22px; line-height: 1.6; }
 
         .loading-overlay {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             text-align: center;
         }
         .spinner {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border: 4px solid rgba(255, 255, 255, 0.1);
             border-top-color: var(--card-accent);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .footer { text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-dim); font-size: 0.8rem; }
-        .sponsor-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .sponsors-row { display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .sponsor-logo-uniform { width: 60px; height: 60px; object-fit: contain; }
-        #halha-logo { width: 80px; height: 80px; object-fit: contain; }
-        #samar-logo { width: 90px; height: 90px; object-fit: contain; transform: scale(1.4); margin: 0 4px; }
+        .footer { 
+            text-align: center; 
+            margin-top: 30px; 
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.08); 
+            color: var(--text-dim); 
+            font-size: 0.85rem; 
+            font-weight: 600;
+        }
+        
+        .sponsor-container { 
+            margin-top: 14px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 8px; 
+            width: 100%;
+        }
+
+        .sponsors-row { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 14px; 
+            width: 100%; 
+            max-width: 100%;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .sponsor-logo-uniform { 
+            width: 75px; 
+            height: 75px; 
+            object-fit: contain;
+            display: block;
+            flex-shrink: 0;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+        }
+
+        .sponsor-logo-uniform:hover {
+            transform: scale(1.1);
+        }
+
+        #halha-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            display: block;
+            flex-shrink: 0;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+        }
+
+        #halha-logo:hover {
+            transform: scale(1.08);
+        }
+
+        #samar-logo {
+            width: 115px;
+            height: 115px;
+            object-fit: contain;
+            display: block;
+            flex-shrink: 0;
+            transform: scale(1.5);
+            margin: 0 6px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
+        }
+
+        #samar-logo:hover {
+            transform: scale(1.62);
+        }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <div class="tabs">
-        <a href="https://alza3eemkw.github.io/alza3eem.github.io/" class="tab-btn">منصتنا</a>
-        <a href="index.html" class="tab-btn active" id="tab-mode-btn">لوحة التحكم</a>
-    </div>
-
-    <!-- شاشة التحميل العامة -->
-    <div id="global-loader" class="loading-overlay">
-        <div class="spinner"></div>
-        <div style="font-size: 0.85rem; color: var(--text-dim); font-weight: 700;">جاري تحميل البيانات...</div>
-    </div>
-
-    <!-- قسم عرض البطاقة للزوار -->
-    <div id="public-profile-view" style="display: none;">
-        <div class="identity-card-preview">
-            <div class="id-name" id="prev-name"></div>
-            <div class="id-role-badge" id="prev-role">Sport ID</div>
-            
-            <div class="discord-cards-container" id="prev-discord-cards"></div>
-            <div class="id-bio" id="prev-bio" style="display: none;"></div>
-            <div class="id-socials-linktree" id="prev-socials"></div>
-
-            <div class="card-footer-identity">
-                منصة الزعيم الرياضية - Alza3eem Prediction Platform
-            </div>
+    <!-- Sticky Header (Logo non-clickable / decorative only as requested) -->
+    <header class="sticky-header">
+        <div class="header-logo">
+            <img src="https://i.ibb.co/Q3417SNF/972-CDF93-4-F40-4-B7-D-82-A1-FCC9-BB608-B51.png" alt="Alza3eem Logo">
         </div>
+        <button class="hamburger-btn" id="hamburgerToggle" aria-label="فتح القائمة">
+            ☰
+        </button>
+    </header>
+
+    <!-- Side Drawer & Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <span class="drawer-title">قائمة المنصة</span>
+            <button class="close-drawer" id="closeDrawer" aria-label="إغلاق القائمة">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="https://alza3eemkw.github.io/alza3eem.github.io/" class="drawer-item">
+                <span class="icon">🏠</span>
+                <span>منصتنا</span>
+            </a>
+            <a href="https://alza3eemkw.github.io/alza3eem.github.io/#prediction" class="drawer-item">
+                <span class="icon">🎯</span>
+                <span>سجل توقعك</span>
+            </a>
+            <a href="https://alza3eemkw.github.io/alza3eem.github.io/#leaderboard" class="drawer-item">
+                <span class="icon">📊</span>
+                <span>الجدول</span>
+            </a>
+            <a href="index.html" class="drawer-item active">
+                <span class="icon">🪪</span>
+                <span>Sport ID</span>
+            </a>
+            <a href="https://alza3eemkw.github.io/alza3eem.github.io/#kickoff" class="drawer-item">
+                <span class="icon">⏳</span>
+                <span>Kick off</span>
+            </a>
+        </nav>
+        <a href="https://instagram.com/alza3eem__kw" target="_blank" class="drawer-footer-link">
+            <span>📸</span>
+            <span>تواصل معنا</span>
+        </a>
     </div>
 
-    <!-- حالة الخطأ للبطاقة غير الموجودة -->
-    <div id="error-container" class="error-state" style="display: none;">
-        <div class="error-title">⚠️ هذه البطاقة غير موجودة</div>
-        <div class="error-desc">عذراً، اسم المستخدم الذي تبحث عنه غير مسجل أو تم حذف البطاقة المرتبطة به.</div>
-        <a href="index.html" class="action-btn">إنشاء بطاقتك</a>
-    </div>
-
-    <!-- لوحة التحكم وتسجيل الدخول -->
-    <div id="dashboard-container" style="display: none;">
-        <div class="title">⚡ لوحة تحكم Sport ID</div>
-        <div class="subtitle-tagline">أنشئ هويتك الرياضية وشاركها عبر رابط واحد.</div>
-        
-        <div id="login-box" class="notice-box" style="text-align:center;">
-            <button type="button" class="action-btn" id="google-login-btn" style="margin-top:0;">
-                🔐 تسجيل الدخول بواسطة Google لإدارة بطاقتك
-            </button>
-            <p id="login-status" style="font-size:0.78rem; margin-top:6px; color:#4ade80;"></p>
-        </div>
-
-        <!-- معاينة البطاقة للمالك بعد الإنشاء -->
-        <div id="owner-preview-panel" style="display: none;">
-            <div class="notice-box" style="text-align:center; background: rgba(16, 185, 129, 0.15);">
-                ✨ معاينة بطاقتك كما ستظهر للزوار:
-            </div>
-            
-            <div class="identity-card-preview" style="margin-bottom: 15px;">
-                <div class="id-name" id="owner-prev-name"></div>
-                <div class="id-role-badge" id="owner-prev-role">Sport ID</div>
-                <div class="discord-cards-container" id="owner-prev-discord-cards"></div>
-                <div class="id-bio" id="owner-prev-bio" style="display: none;"></div>
-                <div class="id-socials-linktree" id="owner-prev-socials"></div>
-                <div class="card-footer-identity">
-                    منصة الزعيم الرياضية - Alza3eem Prediction Platform
-                </div>
+    <!-- Main Wrapper & Container Layout -->
+    <div class="main-wrapper">
+        <div class="box">
+            <!-- شاشة التحميل العامة -->
+            <div id="global-loader" class="loading-overlay">
+                <div class="spinner"></div>
+                <div style="font-size: 0.9rem; color: var(--text-dim); font-weight: 700;">جاري تحميل البيانات...</div>
             </div>
 
-            <div class="profile-link-box" id="prev-link" style="display: none;"></div>
-            
-            <button type="button" class="action-btn" id="btn-open-edit" style="background: #3b82f6; margin-bottom: 10px;">
-                ✏️ تعديل البطاقة
-            </button>
+            <!-- قسم عرض البطاقة للزوار -->
+            <div id="public-profile-view" style="display: none;">
+                <div class="identity-card-preview">
+                    <div class="id-name" id="prev-name"></div>
+                    <div class="id-role-badge" id="prev-role">Sport ID</div>
+                    
+                    <div class="discord-cards-container" id="prev-discord-cards"></div>
+                    <div class="id-bio" id="prev-bio" style="display: none;"></div>
+                    <div class="id-socials-linktree" id="prev-socials"></div>
 
-            <button type="button" class="action-btn" id="btn-copy-link" style="background: var(--card-accent); color: #000; margin-bottom: 10px;">
-                📋 نسخ رابط البطاقة (للبايو)
-            </button>
-
-            <button type="button" class="action-btn" id="btn-delete-card" style="background: #ef4444; margin-bottom: 0;">
-                🗑️ حذف البطاقة نهائياً
-            </button>
-        </div>
-
-        <!-- نموذج إنشاء / تعديل البطاقة -->
-        <form id="identity-form" onsubmit="event.preventDefault();" style="display: none;">
-            <div style="font-size: 0.76rem; color: #cbd5e1; margin-bottom: 10px; font-weight: 600; text-align: center;">
-                أنشئ هويتك الرياضية وشاركها عبر رابط واحد.
-            </div>
-
-            <div class="step-indicator">
-                <div class="step-dot active" id="dot-1">1. الأساسيات</div>
-                <div class="step-dot" id="dot-2">2. التصميم</div>
-                <div class="step-dot" id="dot-3">3. التفاصيل</div>
-                <div class="step-dot" id="dot-4">4. التواصل</div>
-            </div>
-
-            <div class="wizard-step active-step" id="step-1">
-                <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
-                <select id="id-type" required>
-                    <option value="" disabled selected>اختر نوع البطاقة الرياضية *</option>
-                    <option value="مشجع">مشجع رياضي</option>
-                    <option value="لاعب">لاعب / رياضي</option>
-                    <option value="محلل">محلل رياضي</option>
-                    <option value="إداري">إداري / منظم</option>
-                    <option value="أخرى">أخرى (اكتبه بنفسك)</option>
-                </select>
-                <input type="text" id="id-type-custom" placeholder="اكتب نوع البطاقة هنا..." style="display:none; margin-top:5px;">
-                
-                <input type="text" id="id-username-link" placeholder="اسم المستخدم للرابط (مثال: ahmed) *" required>
-                <button type="button" class="action-btn" id="btn-next-1">التالي ⬅</button>
-            </div>
-
-            <div class="wizard-step" id="step-2">
-                <div class="color-picker-wrapper">
-                    <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">🎨 اختر لون البطاقة:</label>
-                    <div class="color-options">
-                        <div class="color-bubble selected" data-color="#10b981" data-primary="#008000" style="background: #10b981;"></div>
-                        <div class="color-bubble" data-color="#3b82f6" data-primary="#1d4ed8" style="background: #3b82f6;"></div>
-                        <div class="color-bubble" data-color="#ef4444" data-primary="#b91c1c" style="background: #ef4444;"></div>
-                        <div class="color-bubble" data-color="#f59e0b" data-primary="#b45309" style="background: #f59e0b;"></div>
-                        <div class="color-bubble" data-color="#8b5cf6" data-primary="#6d28d9" style="background: #8b5cf6;"></div>
+                    <div class="card-footer-identity">
+                        منصة الزعيم الرياضية - Alza3eem Prediction Platform
                     </div>
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="action-btn" id="btn-prev-2" style="background: rgba(255,255,255,0.1);">السابق</button>
-                    <button type="button" class="action-btn" id="btn-next-2">التالي ⬅</button>
-                </div>
             </div>
 
-            <div class="wizard-step" id="step-3">
-                <div id="dynamic-fields-container" style="margin: 6px 0;"></div>
+            <!-- حالة الخطأ للبطاقة غير الموجودة -->
+            <div id="error-container" class="error-state" style="display: none;">
+                <div class="error-title">⚠️ هذه البطاقة غير موجودة</div>
+                <div class="error-desc">عذراً، اسم المستخدم الذي تبحث عنه غير مسجل أو تم حذف البطاقة المرتبطة به.</div>
+                <a href="index.html" class="action-btn">إنشاء بطاقتك</a>
+            </div>
+
+            <!-- لوحة التحكم وتسجيل الدخول -->
+            <div id="dashboard-container" style="display: none;">
+                <div class="title">⚡ لوحة تحكم Sport ID</div>
+                <div class="subtitle-tagline">أنشئ هويتك الرياضية وشاركها عبر رابط واحد.</div>
                 
-                <div id="location-fields-wrapper">
-                    <div style="display: flex; gap: 6px;">
-                        <input type="text" id="id-country" placeholder="الدولة">
-                        <input type="text" id="id-city" placeholder="المدينة">
+                <div id="login-box" class="notice-box" style="text-align:center;">
+                    <button type="button" class="action-btn" id="google-login-btn" style="margin-top:0;">
+                        🔐 تسجيل الدخول بواسطة Google لإدارة بطاقتك
+                    </button>
+                    <p id="login-status" style="font-size:0.82rem; margin-top:8px; color:#4ade80;"></p>
+                </div>
+
+                <!-- معاينة البطاقة للمالك بعد الإنشاء -->
+                <div id="owner-preview-panel" style="display: none;">
+                    <div class="notice-box" style="text-align:center; background: rgba(16, 185, 129, 0.15);">
+                        ✨ معاينة بطاقتك كما ستظهر للزوار:
+                    </div>
+                    
+                    <div class="identity-card-preview" style="margin-bottom: 18px;">
+                        <div class="id-name" id="owner-prev-name"></div>
+                        <div class="id-role-badge" id="owner-prev-role">Sport ID</div>
+                        <div class="discord-cards-container" id="owner-prev-discord-cards"></div>
+                        <div class="id-bio" id="owner-prev-bio" style="display: none;"></div>
+                        <div class="id-socials-linktree" id="owner-prev-socials"></div>
+                        <div class="card-footer-identity">
+                            منصة الزعيم الرياضية - Alza3eem Prediction Platform
+                        </div>
+                    </div>
+
+                    <div class="profile-link-box" id="prev-link" style="display: none;"></div>
+                    
+                    <button type="button" class="action-btn" id="btn-open-edit" style="background: #3b82f6; margin-bottom: 12px;">
+                        ✏️ تعديل البطاقة
+                    </button>
+
+                    <button type="button" class="action-btn" id="btn-copy-link" style="background: var(--card-accent); color: #000; margin-bottom: 12px;">
+                        📋 نسخ رابط البطاقة (للبايو)
+                    </button>
+
+                    <button type="button" class="action-btn" id="btn-delete-card" style="background: #ef4444; margin-bottom: 0;">
+                        🗑️ حذف البطاقة نهائياً
+                    </button>
+                </div>
+
+                <!-- نموذج إنشاء / تعديل البطاقة -->
+                <form id="identity-form" onsubmit="event.preventDefault();" style="display: none;">
+                    <div style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 14px; font-weight: 600; text-align: center;">
+                        أنشئ هويتك الرياضية وشاركها عبر رابط واحد.
+                    </div>
+
+                    <div class="step-indicator">
+                        <div class="step-dot active" id="dot-1">1. الأساسيات</div>
+                        <div class="step-dot" id="dot-2">2. التصميم</div>
+                        <div class="step-dot" id="dot-3">3. التفاصيل</div>
+                        <div class="step-dot" id="dot-4">4. التواصل</div>
+                    </div>
+
+                    <div class="wizard-step active-step" id="step-1">
+                        <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
+                        <select id="id-type" required>
+                            <option value="" disabled selected>اختر نوع البطاقة الرياضية *</option>
+                            <option value="مشجع">مشجع رياضي</option>
+                            <option value="لاعب">لاعب / رياضي</option>
+                            <option value="محلل">محلل رياضي</option>
+                            <option value="إداري">إداري / منظم</option>
+                            <option value="أخرى">أخرى (اكتبه بنفسك)</option>
+                        </select>
+                        <input type="text" id="id-type-custom" placeholder="اكتب نوع البطاقة هنا..." style="display:none; margin-top:8px;">
+                        
+                        <input type="text" id="id-username-link" placeholder="اسم المستخدم للرابط (مثال: ahmed) *" required>
+                        <button type="button" class="action-btn" id="btn-next-1">التالي ⬅</button>
+                    </div>
+
+                    <div class="wizard-step" id="step-2">
+                        <div class="color-picker-wrapper">
+                            <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 8px;">🎨 اختر لون البطاقة:</label>
+                            <div class="color-options">
+                                <div class="color-bubble selected" data-color="#10b981" data-primary="#008000" style="background: #10b981;"></div>
+                                <div class="color-bubble" data-color="#3b82f6" data-primary="#1d4ed8" style="background: #3b82f6;"></div>
+                                <div class="color-bubble" data-color="#ef4444" data-primary="#b91c1c" style="background: #ef4444;"></div>
+                                <div class="color-bubble" data-color="#f59e0b" data-primary="#b45309" style="background: #f59e0b;"></div>
+                                <div class="color-bubble" data-color="#8b5cf6" data-primary="#6d28d9" style="background: #8b5cf6;"></div>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="action-btn" id="btn-prev-2" style="background: rgba(255,255,255,0.1); margin-top:0;">السابق</button>
+                            <button type="button" class="action-btn" id="btn-next-2" style="margin-top:0;">التالي ⬅</button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" id="step-3">
+                        <div id="dynamic-fields-container" style="margin: 8px 0;"></div>
+                        
+                        <div id="location-fields-wrapper">
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="id-country" placeholder="الدولة">
+                                <input type="text" id="id-city" placeholder="المدينة">
+                            </div>
+                        </div>
+
+                        <div id="physical-fields-wrapper">
+                            <div style="display: flex; gap: 8px;">
+                                <input type="number" id="id-age" placeholder="العمر">
+                                <input type="text" id="id-height" placeholder="الطول (سم)">
+                                <input type="text" id="id-weight" placeholder="الوزن (كغ)">
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="action-btn" id="btn-prev-3" style="background: rgba(255,255,255,0.1); margin-top:0;">السابق</button>
+                            <button type="button" class="action-btn" id="btn-next-3" style="margin-top:0;">التالي ⬅</button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" id="step-4">
+                        <textarea id="id-bio" placeholder="نبذة بسيطة عنك..." rows="2" style="resize:none; padding:12px; font-size:0.85rem;"></textarea>
+                        <input type="text" id="social-insta" placeholder="Instagram (@username)" style="padding:12px; font-size:0.85rem;">
+                        <input type="text" id="social-snap" placeholder="Snapchat" style="padding:12px; font-size:0.85rem;">
+                        <input type="text" id="social-x" placeholder="X (Twitter)" style="padding:12px; font-size:0.85rem;">
+                        <input type="text" id="social-tiktok" placeholder="TikTok" style="padding:12px; font-size:0.85rem;">
+                        <input type="text" id="social-whatsapp" placeholder="WhatsApp" style="padding:12px; font-size:0.85rem;">
+                        
+                        <div class="btn-group">
+                            <button type="button" class="action-btn" id="btn-prev-4" style="background: rgba(255,255,255,0.1); margin-top:0;">السابق</button>
+                            <button type="button" class="action-btn" id="btn-save-card" style="background: var(--card-accent); color:#000; margin-top:0;">حفظ البطاقة</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="footer">
+                <p>إدارة المنصة: @alza3eem__kw</p>
+                <div class="sponsor-container">
+                    <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
+                    <div class="sponsors-row">
+                        <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
+                        <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
+                        <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
                     </div>
                 </div>
-
-                <div id="physical-fields-wrapper">
-                    <div style="display: flex; gap: 6px;">
-                        <input type="number" id="id-age" placeholder="العمر">
-                        <input type="text" id="id-height" placeholder="الطول (سم)">
-                        <input type="text" id="id-weight" placeholder="الوزن (كغ)">
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button type="button" class="action-btn" id="btn-prev-3" style="background: rgba(255,255,255,0.1);">السابق</button>
-                    <button type="button" class="action-btn" id="btn-next-3">التالي ⬅</button>
-                </div>
-            </div>
-
-            <div class="wizard-step" id="step-4">
-                <textarea id="id-bio" placeholder="نبذة بسيطة عنك..." rows="2" style="resize:none; padding:10px; font-size:0.8rem;"></textarea>
-                <input type="text" id="social-insta" placeholder="Instagram (@username)" style="padding:10px; font-size:0.8rem;">
-                <input type="text" id="social-snap" placeholder="Snapchat" style="padding:10px; font-size:0.8rem;">
-                <input type="text" id="social-x" placeholder="X (Twitter)" style="padding:10px; font-size:0.8rem;">
-                <input type="text" id="social-tiktok" placeholder="TikTok" style="padding:10px; font-size:0.8rem;">
-                <input type="text" id="social-whatsapp" placeholder="WhatsApp" style="padding:10px; font-size:0.8rem;">
-                
-                <div class="btn-group">
-                    <button type="button" class="action-btn" id="btn-prev-4" style="background: rgba(255,255,255,0.1);">السابق</button>
-                    <button type="button" class="action-btn" id="btn-save-card" style="background: var(--card-accent); color:#000;">حفظ البطاقة</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div class="footer">
-        <p style="margin:0;">منصة الزعيم الرياضية</p>
-        <div class="sponsor-container">
-            <p style="font-size: 0.72rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
-            <div class="sponsors-row">
-                <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
-                <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
-                <img src="https://i.ibb.co/1JZ77zpt/IMG-5227.png" alt="اضمنها" class="sponsor-logo-uniform">
             </div>
         </div>
     </div>
-</div>
+
+<script>
+    // Navigation Drawer Toggle Logic
+    const hamburgerBtn = document.getElementById('hamburgerToggle');
+    const closeDrawerBtn = document.getElementById('closeDrawer');
+    const sideDrawer = document.getElementById('sideDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+
+    function toggleDrawer(open) {
+        if (open) {
+            sideDrawer.classList.add('open');
+            drawerOverlay.classList.add('open');
+        } else {
+            sideDrawer.classList.remove('open');
+            drawerOverlay.classList.remove('open');
+        }
+    }
+
+    if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => toggleDrawer(true));
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => toggleDrawer(false));
+    if (drawerOverlay) drawerOverlay.addEventListener('click', () => toggleDrawer(false));
+</script>
 
 <script type="module">
     import { db, auth } from './firebase-config.js';
@@ -608,7 +959,6 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         if (usernameQuery) {
-            document.getElementById('tab-mode-btn').innerText = 'إنشاء بطاقتك';
             loadPublicProfile();
         } else {
             initDashboard();
@@ -858,20 +1208,20 @@
                     const customVal = !isFromOptions && savedVal ? savedVal : '';
 
                     html += `
-                        <div style="margin-bottom: 8px;">
-                            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
-                            <select id="${f.id}" class="dyn-select" data-custom-id="${f.id}-custom" style="padding:10px; font-size:0.8rem;">
+                        <div style="margin-bottom: 10px;">
+                            <label style="font-size:0.8rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
+                            <select id="${f.id}" class="dyn-select" data-custom-id="${f.id}-custom">
                                 <option value="" disabled ${!selectVal ? 'selected' : ''}>اختر أو اكتب...</option>
                                 ${f.options.map(opt => `<option value="${opt}" ${selectVal === opt ? 'selected' : ''}>${opt}</option>`).join('')}
                             </select>
-                            <input type="text" id="${f.id}-custom" placeholder="اكتب هنا..." value="${customVal}" style="display: ${selectVal === 'أخرى' ? 'block' : 'none'}; margin-top: 5px; padding:10px; font-size:0.8rem;">
+                            <input type="text" id="${f.id}-custom" placeholder="اكتب هنا..." value="${customVal}" style="display: ${selectVal === 'أخرى' ? 'block' : 'none'}; margin-top: 6px;">
                         </div>
                     `;
                 } else {
                     html += `
-                        <div style="margin-bottom: 8px;">
-                            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:2px;">${f.label}</label>
-                            <input type="text" id="${f.id}" placeholder="${f.label}" value="${savedVal}" style="padding:10px; font-size:0.8rem;">
+                        <div style="margin-bottom: 10px;">
+                            <label style="font-size:0.8rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
+                            <input type="text" id="${f.id}" placeholder="${f.label}" value="${savedVal}">
                         </div>
                     `;
                 }
@@ -1002,10 +1352,11 @@
             if (document.getElementById('id-height')) document.getElementById('id-height').value = myLoadedCard.height || '';
             if (document.getElementById('id-weight')) document.getElementById('id-weight').value = myLoadedCard.weight || '';
 
+            document.getElementById('header-logo').value = myLoadedCard.insta || '';
             document.getElementById('social-insta').value = myLoadedCard.insta || '';
             document.getElementById('social-snap').value = myLoadedCard.snap || '';
             document.getElementById('social-x').value = myLoadedCard.x || '';
-            document.getElementById('social-tiktok').value = myLoadedCard.tiktok || '';
+            document.getElementById('social-tiktok').value, document.getElementById('social-tiktok').value = myLoadedCard.tiktok || '';
             document.getElementById('social-whatsapp').value = myLoadedCard.whatsapp || '';
 
             document.getElementById('owner-preview-panel').style.display = 'none';
