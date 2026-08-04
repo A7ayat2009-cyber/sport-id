@@ -39,7 +39,7 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            /* Fixed: Ensure scroll works */
+            /* Fixed: Ensure scrolling works */
             overflow-y: auto;
             color: var(--text-light);
             transition: background 0.5s ease;
@@ -53,7 +53,7 @@
                 radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 1) 0%, transparent 50%),
                 radial-gradient(circle at 100% 100%, rgba(0, 80, 0, 0.2) 0%, transparent 50%),
                 linear-gradient(180deg, #050a05 0%, #000000 100%);
-            /* Fixed: Allow scroll if content exceeds screen */
+            /* Fixed: Ensure scrolling works in profile mode */
             height: auto;
             min-height: 100vh;
             overflow-y: auto;
@@ -958,10 +958,6 @@
                             <input type="file" id="id-photo-upload" accept="image/*" style="display: none;">
                             <button type="button" class="photo-upload-btn" id="btn-upload-photo">📸 اختيار صورة شخصية</button>
                             <div id="photo-upload-status" style="font-size: 0.75rem; color: var(--card-accent); margin-top: 8px; display: none;">تم اختيار الصورة</div>
-                            <!-- Progress Bar -->
-                            <div id="upload-progress-container" style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 10px; display: none;">
-                                <div id="upload-progress-bar" style="width: 0%; height: 100%; background: var(--card-accent); border-radius: 3px; transition: width 0.3s ease;"></div>
-                            </div>
                         </div>
 
                         <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
@@ -1078,10 +1074,9 @@
 </script>
 
 <script type="module">
-    import { db, auth, storage } from './firebase-config.js';
+    import { db, auth } from './firebase-config.js';
     import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { doc, setDoc, getDoc, deleteDoc, query, where, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const usernameQuery = urlParams.get('u');
@@ -1193,8 +1188,8 @@
         // Render Photo or Avatar
         const photoContainer = document.getElementById(photoContainerId);
         if (photoContainer) {
-            if (data.photoURL) {
-                photoContainer.innerHTML = `<img src="${data.photoURL}" alt="Profile Photo" class="id-photo">`;
+            if (data.profileImage) {
+                photoContainer.innerHTML = `<img src="${data.profileImage}" alt="Profile Photo" class="id-photo">`;
             } else {
                 const firstLetter = data.fullName ? data.fullName.charAt(0).toUpperCase() : '?';
                 photoContainer.innerHTML = `<div class="id-avatar">${firstLetter}</div>`;
@@ -1259,7 +1254,7 @@
         let currentAccent = '#10b981';
         let currentPrimary = '#008000';
         let myLoadedCard = null;
-        let selectedPhotoFile = null;
+        let selectedBase64Image = null;
 
         // Photo Upload Logic
         const photoUploadInput = document.getElementById('id-photo-upload');
@@ -1268,8 +1263,6 @@
         const photoAvatarPlaceholder = document.getElementById('photo-avatar-placeholder');
         const photoUploadStatus = document.getElementById('photo-upload-status');
         const fullnameInput = document.getElementById('id-fullname');
-        const progressContainer = document.getElementById('upload-progress-container');
-        const progressBar = document.getElementById('upload-progress-bar');
 
         btnUploadPhoto.addEventListener('click', () => {
             photoUploadInput.click();
@@ -1277,20 +1270,47 @@
 
         photoUploadInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files[0]) {
-                selectedPhotoFile = e.target.files[0];
+                const file = e.target.files[0];
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    photoPreviewImg.src = e.target.result;
-                    photoPreviewImg.style.display = 'block';
-                    photoAvatarPlaceholder.style.display = 'none';
-                    photoUploadStatus.style.display = 'block';
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxSide = 400;
+
+                        if (width > height) {
+                            if (width > maxSide) {
+                                height *= maxSide / width;
+                                width = maxSide;
+                            }
+                        } else {
+                            if (height > maxSide) {
+                                width *= maxSide / height;
+                                height = maxSide;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        selectedBase64Image = canvas.toDataURL('image/jpeg', 0.8);
+                        
+                        photoPreviewImg.src = selectedBase64Image;
+                        photoPreviewImg.style.display = 'block';
+                        photoAvatarPlaceholder.style.display = 'none';
+                        photoUploadStatus.style.display = 'block';
+                    };
+                    img.src = event.target.result;
                 };
-                reader.readAsDataURL(selectedPhotoFile);
+                reader.readAsDataURL(file);
             }
         });
 
         fullnameInput.addEventListener('input', () => {
-            if (!selectedPhotoFile && (!myLoadedCard || !myLoadedCard.photoURL)) {
+            if (!selectedBase64Image && (!myLoadedCard || !myLoadedCard.profileImage)) {
                 const name = fullnameInput.value.trim();
                 photoAvatarPlaceholder.innerText = name ? name.charAt(0).toUpperCase() : '?';
             }
@@ -1333,6 +1353,7 @@
                     myLoadedCard = docSnap.data();
                     const profileUrl = `${window.location.origin}${window.location.pathname}?u=${encodeURIComponent(myLoadedCard.usernameLink)}`;
                     document.getElementById('prev-link').innerText = profileUrl;
+                    document.getElementById('prev-link').style.display = 'block';
                     
                     renderProfileCard(myLoadedCard, 'owner-prev-name', 'owner-prev-role', 'owner-prev-discord-cards', 'owner-prev-bio', 'owner-prev-socials', 'owner-prev-photo-container');
                     
@@ -1528,52 +1549,7 @@
             if (typeVal === 'أخرى') typeVal = typeCustomInput.value.trim();
             const cfg = getConfigByType(typeVal);
 
-            let photoURL = myLoadedCard ? myLoadedCard.photoURL : null;
-
-            // Handle Photo Upload with Progress
-            if (selectedPhotoFile) {
-                try {
-                    // Delete old photo if exists
-                    if (photoURL) {
-                        try {
-                            const oldPhotoRef = ref(storage, photoURL);
-                            await deleteObject(oldPhotoRef);
-                        } catch (err) {
-                            console.log("Old photo not found or couldn't be deleted", err);
-                        }
-                    }
-                    
-                    const fileExt = selectedPhotoFile.name.split('.').pop();
-                    const photoRef = ref(storage, `profile_photos/${currentUser.uid}_${Date.now()}.${fileExt}`);
-                    
-                    progressContainer.style.display = 'block';
-                    const uploadTask = uploadBytesResumable(photoRef, selectedPhotoFile);
-
-                    photoURL = await new Promise((resolve, reject) => {
-                        uploadTask.on('state_changed', 
-                            (snapshot) => {
-                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                                progressBar.style.width = progress + '%';
-                            }, 
-                            (error) => {
-                                progressContainer.style.display = 'none';
-                                reject(error);
-                            }, 
-                            () => {
-                                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                                    progressContainer.style.display = 'none';
-                                    resolve(downloadURL);
-                                });
-                            }
-                        );
-                    });
-                } catch (error) {
-                    alert("حدث خطأ أثناء رفع الصورة: " + error.message);
-                    saveBtn.innerText = originalBtnText;
-                    saveBtn.disabled = false;
-                    return;
-                }
-            }
+            let profileImage = selectedBase64Image || (myLoadedCard ? myLoadedCard.profileImage : null);
 
             let cardData = {
                 ownerUid: currentUser.uid,
@@ -1593,7 +1569,7 @@
                 whatsapp: document.getElementById('social-whatsapp').value.trim(),
                 accentColor: currentAccent,
                 primaryColor: currentPrimary,
-                photoURL: photoURL,
+                profileImage: profileImage,
                 updatedAt: serverTimestamp()
             };
 
@@ -1620,7 +1596,7 @@
             try {
                 await setDoc(docRef, cardData, { merge: true });
                 myLoadedCard = cardData;
-                selectedPhotoFile = null; // Reset after successful save
+                selectedBase64Image = null; // Reset after successful save
                 alert("✅ تم حفظ البطاقة وتثبيتها بنجاح!");
                 await checkAndLoadDashboard();
             } catch (e) { 
@@ -1642,12 +1618,12 @@
             if (!myLoadedCard) return;
             
             // Reset photo selection
-            selectedPhotoFile = null;
+            selectedBase64Image = null;
             photoUploadInput.value = '';
             photoUploadStatus.style.display = 'none';
 
-            if (myLoadedCard.photoURL) {
-                photoPreviewImg.src = myLoadedCard.photoURL;
+            if (myLoadedCard.profileImage) {
+                photoPreviewImg.src = myLoadedCard.profileImage;
                 photoPreviewImg.style.display = 'block';
                 photoAvatarPlaceholder.style.display = 'none';
             } else {
@@ -1694,16 +1670,6 @@
         document.getElementById('btn-delete-card').addEventListener('click', async () => {
             if (!currentUser || !confirm("هل أنت متأكد من حذف بطاقتك بشكل نهائي؟")) return;
             try {
-                // Delete photo from storage if exists
-                if (myLoadedCard && myLoadedCard.photoURL) {
-                    try {
-                        const photoRef = ref(storage, myLoadedCard.photoURL);
-                        await deleteObject(photoRef);
-                    } catch (err) {
-                        console.log("Photo not found or couldn't be deleted", err);
-                    }
-                }
-
                 await deleteDoc(doc(db, "identityCards", currentUser.uid));
                 myLoadedCard = null;
                 alert("🗑️ تم حذف البطاقة بنجاح.");
