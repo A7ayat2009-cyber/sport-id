@@ -40,9 +40,116 @@
             align-items: center;
             overflow-x: hidden;
             color: var(--text-light);
+            transition: background 0.5s ease;
         }
 
-        /* Modern Sticky Header with Glassmorphism & Micro-interactions */
+        /* --- Profile Mode Specific Styles --- */
+        body.profile-mode {
+            background: #000;
+            background-image: 
+                radial-gradient(circle at 50% -20%, rgba(0, 128, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(0, 80, 0, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #050a05 0%, #000000 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.profile-mode::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body.profile-mode .sticky-header,
+        body.profile-mode .side-drawer,
+        body.profile-mode .drawer-overlay,
+        body.profile-mode .footer,
+        body.profile-mode #dashboard-container {
+            display: none !important;
+        }
+
+        body.profile-mode .main-wrapper {
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        body.profile-mode .box {
+            max-width: 520px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 128, 0, 0.1);
+            border-radius: 40px;
+            padding: 40px 30px;
+            transform: scale(1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body.profile-mode .box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.9), 0 0 50px rgba(16, 185, 129, 0.15);
+        }
+
+        body.profile-mode .identity-card-preview {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.profile-mode .card-footer-identity {
+            display: none;
+        }
+
+        body.profile-mode .profile-footer-minimal {
+            display: block !important;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 3;
+        }
+
+        /* --- Linktree Style Buttons for Profile Mode --- */
+        body.profile-mode .linktree-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 18px;
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        body.profile-mode .linktree-btn:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--card-accent);
+            color: #fff;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--card-glow);
+        }
+
+        /* --- Standard Site Styles --- */
         .sticky-header {
             position: fixed;
             top: 0;
@@ -104,11 +211,6 @@
             box-shadow: 0 6px 18px var(--card-glow);
         }
 
-        .hamburger-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Side Drawer Overlay & Panel */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -213,7 +315,6 @@
         .drawer-item span.icon {
             font-size: 1.25rem;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-            transition: transform 0.3s ease;
         }
 
         .drawer-item:hover {
@@ -221,10 +322,6 @@
             color: #ffffff;
             transform: translateX(-6px);
             border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .drawer-item:hover span.icon {
-            transform: scale(1.15);
         }
 
         .drawer-item.active {
@@ -257,7 +354,6 @@
             transform: translateY(-2px);
         }
 
-        /* Main Wrapper & Container Layout */
         .main-wrapper {
             width: 100%;
             display: flex;
@@ -278,16 +374,12 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             position: relative;
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .tabs { 
-            display: none; 
         }
 
         .title { 
@@ -365,16 +457,6 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        input::placeholder, textarea::placeholder {
-            color: #64748b;
-        }
-
-        select option {
-            background: #101c33;
-            color: #ffffff;
-            padding: 12px;
-        }
-
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--card-accent);
@@ -435,32 +517,32 @@
             animation: fadeIn 0.4s ease-out;
         }
 
-        .id-name { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 8px; }
+        .id-name { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 8px; }
         .id-role-badge {
             background: var(--card-glow);
             color: var(--card-accent);
-            padding: 6px 16px;
+            padding: 6px 18px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 800;
             display: inline-block;
-            margin-bottom: 18px;
+            margin-bottom: 22px;
             border: 1px solid var(--card-accent);
         }
 
         .discord-cards-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 20px;
             text-align: right;
         }
 
         .discord-info-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 12px 16px;
+            border-radius: 16px;
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -469,20 +551,22 @@
 
         .discord-info-card:hover {
             background: rgba(255, 255, 255, 0.07);
+            transform: translateX(-4px);
         }
 
-        .discord-card-label { font-size: 0.8rem; color: var(--text-dim); font-weight: 700; }
-        .discord-card-value { font-size: 0.9rem; color: #ffffff; font-weight: 800; }
+        .discord-card-label { font-size: 0.85rem; color: var(--text-dim); font-weight: 700; }
+        .discord-card-value { font-size: 0.95rem; color: #ffffff; font-weight: 800; }
 
         .id-bio {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #cbd5e1;
-            margin-bottom: 18px;
-            line-height: 1.7;
+            margin-bottom: 22px;
+            line-height: 1.8;
             background: rgba(0, 0, 0, 0.25);
-            padding: 14px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: 16px;
             text-align: right;
+            font-style: italic;
         }
 
         .id-socials-linktree {
@@ -498,13 +582,13 @@
             justify-content: center;
             gap: 12px;
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: rgba(255, 255, 255, 0.07);
             color: #fff;
-            border-radius: 16px;
+            border-radius: 18px;
             text-decoration: none;
             font-weight: 800;
-            font-size: 0.98rem;
+            font-size: 1rem;
             border: 1px solid rgba(255, 255, 255, 0.12);
             transition: var(--transition-smooth);
         }
@@ -512,8 +596,8 @@
         .linktree-btn:hover {
             background: var(--card-accent);
             color: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px var(--card-glow);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--card-glow);
         }
 
         .card-footer-identity {
@@ -603,44 +687,22 @@
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
         }
 
-        .sponsor-logo-uniform:hover {
-            transform: scale(1.1);
-        }
+        #halha-logo { width: 100px; height: 100px; object-fit: contain; }
+        #samar-logo { width: 115px; height: 115px; object-fit: contain; transform: scale(1.5); margin: 0 6px; }
 
-        #halha-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-        }
-
-        #halha-logo:hover {
-            transform: scale(1.08);
-        }
-
-        #samar-logo {
-            width: 115px;
-            height: 115px;
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transform: scale(1.5);
-            margin: 0 6px;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
-        }
-
-        #samar-logo:hover {
-            transform: scale(1.62);
+        @media (max-width: 600px) {
+            body.profile-mode .box {
+                padding: 30px 20px;
+                width: 92%;
+                border-radius: 30px;
+            }
+            .id-name { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sticky Header (Logo non-clickable / decorative only as requested) -->
+    <!-- Sticky Header -->
     <header class="sticky-header">
         <div class="header-logo">
             <img src="https://i.ibb.co/Q3417SNF/972-CDF93-4-F40-4-B7-D-82-A1-FCC9-BB608-B51.png" alt="Alza3eem Logo">
@@ -861,6 +923,11 @@
         </div>
     </div>
 
+    <!-- Minimal Footer for Profile View -->
+    <div class="profile-footer-minimal" style="display: none;">
+        منصة الزعيم الرياضية
+    </div>
+
 <script>
     // Navigation Drawer Toggle Logic
     const hamburgerBtn = document.getElementById('hamburgerToggle');
@@ -891,6 +958,11 @@
     const urlParams = new URLSearchParams(window.location.search);
     const usernameQuery = urlParams.get('u');
 
+    // Apply Profile Mode if username is present
+    if (usernameQuery) {
+        document.body.classList.add('profile-mode');
+    }
+
     function getConfigByType(type) {
         switch (type) {
             case 'مشجع':
@@ -905,9 +977,8 @@
             case 'لاعب':
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'الرياضة (اختر أو اكتب)', options: ['كرة القدم ⚽', 'دراجات نارية / راليات 🏍️', 'كورة صالات 🥅', 'أخرى'] },
-                        { id: 'dyn2', label: 'المركز (اختر أو اكتب)', options: ['هجوم ⚡', 'وسط 🎯', 'دفاع 🛡️', 'حراسة 🧤', 'أخرى'] },
-                        { id: 'dyn3', label: 'القدم المفضلة (اختر أو اكتب)', options: ['يمنى 🦶', 'يسرى 🦵', 'كلا القدمين ⚡', 'أخرى'] }
+                        { id: 'dyn1', label: 'الرياضة (اختر أو اكتب)', options: ['كرة القدم ⚽', 'كرة السلة 🏀', 'بادل 🎾', 'سباحة 🏊‍♂️', 'أخرى'] },
+                        { id: 'dyn2', label: 'النادي الحالي', options: [] }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -915,8 +986,8 @@
             case 'محلل':
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'الدوري أو البطولة المتابعة (اختر أو اكتب)', options: ['دوري روشن 🇸🇦', 'دوري زين الكويتي 🇰🇼', 'دوري أبطال أوروبا 🇪🇺', 'أخرى'] },
-                        { id: 'dyn2', label: 'التخصص التحليلي (اختر أو اكتب)', options: ['فني وتكتيكي 📊', 'إحصائيات وأرقام 📈', 'عام وشامل 🎙️', 'أخرى'] }
+                        { id: 'dyn1', label: 'التخصص (اختر أو اكتب)', options: ['تحليل تكتيكي 📋', 'إحصائيات 📊', 'سوق الانتقالات 🔄', 'أخرى'] },
+                        { id: 'dyn2', label: 'المنصة الأساسية', options: ['تويتر (X)', 'يوتيوب', 'تيك توك', 'أخرى'] }
                     ],
                     showPhysical: false,
                     showLocation: true
@@ -924,32 +995,23 @@
             case 'إداري':
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'الصفة الإدارية (اختر أو اكتب)', options: ['منظم بطولات 🏆', 'رئيس رابطة مشجعين 🗣️', 'مشرف عام ⚙️', 'أخرى'] },
-                        { id: 'dyn2', label: 'المنصة أو الجهة (اختر أو اكتب)', options: ['منصة توقعات الزعيم ⚡', 'فريق رياضي 🏅', 'رابطة رسمية 🏛️', 'أخرى'] }
+                        { id: 'dyn1', label: 'المنصب / المسمى الإداري', options: [] },
+                        { id: 'dyn2', label: 'الجهة / المنظمة', options: [] }
                     ],
                     showPhysical: false,
                     showLocation: true
                 };
             default:
-                return {
-                    fields: [
-                        { id: 'dyn1', label: 'الاهتمام الرياضي الأول (اكتبه هنا)', options: [] },
-                        { id: 'dyn2', label: 'الاهتمام الرياضي الثاني (اكتبه هنا)', options: [] }
-                    ],
-                    showPhysical: true,
-                    showLocation: true
-                };
+                return { fields: [], showPhysical: false, showLocation: false };
         }
     }
 
-    function sanitizeUsername(rawUsername) {
-        if (!rawUsername) return '';
-        return rawUsername.trim().toLowerCase();
+    function sanitizeUsername(u) {
+        return u ? u.toLowerCase().replace(/[^a-z0-9_-]/g, '') : '';
     }
 
-    function validateUsernameFormat(username) {
-        const regex = /^[a-z0-9_-]+$/;
-        return regex.test(username);
+    function validateUsernameFormat(u) {
+        return /^[a-z0-9_-]+$/.test(u);
     }
 
     function hideLoader() {
@@ -957,13 +1019,13 @@
         if (loader) loader.style.display = 'none';
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.onload = async () => {
         if (usernameQuery) {
-            loadPublicProfile();
+            await loadPublicProfile();
         } else {
             initDashboard();
         }
-    });
+    };
 
     async function loadPublicProfile() {
         try {
@@ -1213,6 +1275,7 @@
                             <select id="${f.id}" class="dyn-select" data-custom-id="${f.id}-custom">
                                 <option value="" disabled ${!selectVal ? 'selected' : ''}>اختر أو اكتب...</option>
                                 ${f.options.map(opt => `<option value="${opt}" ${selectVal === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                                <option value="أخرى" ${selectVal === 'أخرى' ? 'selected' : ''}>أخرى</option>
                             </select>
                             <input type="text" id="${f.id}-custom" placeholder="اكتب هنا..." value="${customVal}" style="display: ${selectVal === 'أخرى' ? 'block' : 'none'}; margin-top: 6px;">
                         </div>
@@ -1352,11 +1415,10 @@
             if (document.getElementById('id-height')) document.getElementById('id-height').value = myLoadedCard.height || '';
             if (document.getElementById('id-weight')) document.getElementById('id-weight').value = myLoadedCard.weight || '';
 
-            document.getElementById('header-logo').value = myLoadedCard.insta || '';
             document.getElementById('social-insta').value = myLoadedCard.insta || '';
             document.getElementById('social-snap').value = myLoadedCard.snap || '';
             document.getElementById('social-x').value = myLoadedCard.x || '';
-            document.getElementById('social-tiktok').value, document.getElementById('social-tiktok').value = myLoadedCard.tiktok || '';
+            document.getElementById('social-tiktok').value = myLoadedCard.tiktok || '';
             document.getElementById('social-whatsapp').value = myLoadedCard.whatsapp || '';
 
             document.getElementById('owner-preview-panel').style.display = 'none';
