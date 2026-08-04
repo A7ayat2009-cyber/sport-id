@@ -39,6 +39,8 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            /* Fixed: Ensure scroll works */
+            overflow-y: auto;
             color: var(--text-light);
             transition: background 0.5s ease;
         }
@@ -51,8 +53,10 @@
                 radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 1) 0%, transparent 50%),
                 radial-gradient(circle at 100% 100%, rgba(0, 80, 0, 0.2) 0%, transparent 50%),
                 linear-gradient(180deg, #050a05 0%, #000000 100%);
-            height: 100vh;
-            overflow: hidden;
+            /* Fixed: Allow scroll if content exceeds screen */
+            height: auto;
+            min-height: 100vh;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -76,9 +80,9 @@
         }
 
         body.profile-mode .main-wrapper {
-            padding: 0;
+            padding: 40px 20px;
             margin: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -118,10 +122,9 @@
 
         body.profile-mode .profile-footer-minimal {
             display: block !important;
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
+            margin-top: 30px;
+            text-align: center;
             font-size: 0.75rem;
             color: #64748b;
             font-weight: 600;
@@ -139,6 +142,14 @@
             margin-bottom: 14px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
         }
 
         body.profile-mode .linktree-btn:hover {
@@ -947,6 +958,10 @@
                             <input type="file" id="id-photo-upload" accept="image/*" style="display: none;">
                             <button type="button" class="photo-upload-btn" id="btn-upload-photo">📸 اختيار صورة شخصية</button>
                             <div id="photo-upload-status" style="font-size: 0.75rem; color: var(--card-accent); margin-top: 8px; display: none;">تم اختيار الصورة</div>
+                            <!-- Progress Bar -->
+                            <div id="upload-progress-container" style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 10px; display: none;">
+                                <div id="upload-progress-bar" style="width: 0%; height: 100%; background: var(--card-accent); border-radius: 3px; transition: width 0.3s ease;"></div>
+                            </div>
                         </div>
 
                         <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
@@ -1063,12 +1078,11 @@
 </script>
 
 <script type="module">
-    import { db, auth } from './firebase-config.js';
+    import { db, auth, storage } from './firebase-config.js';
     import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { doc, setDoc, getDoc, deleteDoc, query, where, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+    import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-    const storage = getStorage();
     const urlParams = new URLSearchParams(window.location.search);
     const usernameQuery = urlParams.get('u');
 
@@ -1254,6 +1268,8 @@
         const photoAvatarPlaceholder = document.getElementById('photo-avatar-placeholder');
         const photoUploadStatus = document.getElementById('photo-upload-status');
         const fullnameInput = document.getElementById('id-fullname');
+        const progressContainer = document.getElementById('upload-progress-container');
+        const progressBar = document.getElementById('upload-progress-bar');
 
         btnUploadPhoto.addEventListener('click', () => {
             photoUploadInput.click();
@@ -1514,7 +1530,7 @@
 
             let photoURL = myLoadedCard ? myLoadedCard.photoURL : null;
 
-            // Handle Photo Upload
+            // Handle Photo Upload with Progress
             if (selectedPhotoFile) {
                 try {
                     // Delete old photo if exists
@@ -1529,8 +1545,28 @@
                     
                     const fileExt = selectedPhotoFile.name.split('.').pop();
                     const photoRef = ref(storage, `profile_photos/${currentUser.uid}_${Date.now()}.${fileExt}`);
-                    await uploadBytes(photoRef, selectedPhotoFile);
-                    photoURL = await getDownloadURL(photoRef);
+                    
+                    progressContainer.style.display = 'block';
+                    const uploadTask = uploadBytesResumable(photoRef, selectedPhotoFile);
+
+                    photoURL = await new Promise((resolve, reject) => {
+                        uploadTask.on('state_changed', 
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                progressBar.style.width = progress + '%';
+                            }, 
+                            (error) => {
+                                progressContainer.style.display = 'none';
+                                reject(error);
+                            }, 
+                            () => {
+                                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                                    progressContainer.style.display = 'none';
+                                    resolve(downloadURL);
+                                });
+                            }
+                        );
+                    });
                 } catch (error) {
                     alert("حدث خطأ أثناء رفع الصورة: " + error.message);
                     saveBtn.innerText = originalBtnText;
