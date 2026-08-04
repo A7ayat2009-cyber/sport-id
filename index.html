@@ -506,6 +506,106 @@
         }
         .color-bubble.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 12px rgba(255,255,255,0.6); }
 
+        /* --- Profile Photo Styles --- */
+        .photo-upload-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .photo-preview-container {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--card-accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-glow);
+            overflow: hidden;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+            transition: var(--transition-smooth);
+        }
+
+        .photo-preview-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
+        }
+
+        .photo-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .photo-avatar-placeholder {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--card-accent);
+            text-transform: uppercase;
+        }
+
+        .photo-upload-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .photo-upload-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .id-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--card-accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-glow);
+            object-fit: cover;
+            margin: 0 auto 16px auto;
+            display: block;
+            transition: var(--transition-smooth);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .id-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
+        }
+
+        .id-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--card-accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-glow);
+            margin: 0 auto 16px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--card-accent);
+            background: rgba(255, 255, 255, 0.05);
+            text-transform: uppercase;
+            transition: var(--transition-smooth);
+        }
+
+        .id-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
+        }
+
         .identity-card-preview {
             background: linear-gradient(145deg, rgba(23, 37, 65, 0.95) 0%, rgba(12, 22, 41, 0.98) 100%);
             border-radius: 28px;
@@ -759,6 +859,7 @@
             <!-- قسم عرض البطاقة للزوار -->
             <div id="public-profile-view" style="display: none;">
                 <div class="identity-card-preview">
+                    <div id="prev-photo-container"></div>
                     <div class="id-name" id="prev-name"></div>
                     <div class="id-role-badge" id="prev-role">Sport ID</div>
                     
@@ -798,6 +899,7 @@
                     </div>
                     
                     <div class="identity-card-preview" style="margin-bottom: 18px;">
+                        <div id="owner-prev-photo-container"></div>
                         <div class="id-name" id="owner-prev-name"></div>
                         <div class="id-role-badge" id="owner-prev-role">Sport ID</div>
                         <div class="discord-cards-container" id="owner-prev-discord-cards"></div>
@@ -837,6 +939,16 @@
                     </div>
 
                     <div class="wizard-step active-step" id="step-1">
+                        <div class="photo-upload-wrapper">
+                            <div class="photo-preview-container" id="photo-preview-container">
+                                <img id="photo-preview-img" class="photo-preview-img" src="" alt="Preview">
+                                <div id="photo-avatar-placeholder" class="photo-avatar-placeholder">?</div>
+                            </div>
+                            <input type="file" id="id-photo-upload" accept="image/*" style="display: none;">
+                            <button type="button" class="photo-upload-btn" id="btn-upload-photo">📸 اختيار صورة شخصية</button>
+                            <div id="photo-upload-status" style="font-size: 0.75rem; color: var(--card-accent); margin-top: 8px; display: none;">تم اختيار الصورة</div>
+                        </div>
+
                         <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
                         <select id="id-type" required>
                             <option value="" disabled selected>اختر نوع البطاقة الرياضية *</option>
@@ -954,7 +1066,9 @@
     import { db, auth } from './firebase-config.js';
     import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { doc, setDoc, getDoc, deleteDoc, query, where, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
+    const storage = getStorage();
     const urlParams = new URLSearchParams(window.location.search);
     const usernameQuery = urlParams.get('u');
 
@@ -977,8 +1091,9 @@
             case 'لاعب':
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'الرياضة (اختر أو اكتب)', options: ['كرة القدم ⚽', 'كرة السلة 🏀', 'بادل 🎾', 'سباحة 🏊‍♂️', 'أخرى'] },
-                        { id: 'dyn2', label: 'النادي الحالي', options: [] }
+                        { id: 'dyn1', label: 'الرياضة (اختر أو اكتب)', options: ['كرة القدم ⚽', 'دراجات نارية / راليات 🏍️', 'كورة صالات 🥅', 'أخرى'] },
+                        { id: 'dyn2', label: 'المركز (اختر أو اكتب)', options: ['هجوم ⚡', 'وسط 🎯', 'دفاع 🛡️', 'حراسة 🧤', 'أخرى'] },
+                        { id: 'dyn3', label: 'القدم المفضلة (اختر أو اكتب)', options: ['يمنى 🦶', 'يسرى 🦵', 'كلا القدمين ⚡', 'أخرى'] }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -986,8 +1101,8 @@
             case 'محلل':
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'التخصص (اختر أو اكتب)', options: ['تحليل تكتيكي 📋', 'إحصائيات 📊', 'سوق الانتقالات 🔄', 'أخرى'] },
-                        { id: 'dyn2', label: 'المنصة الأساسية', options: ['تويتر (X)', 'يوتيوب', 'تيك توك', 'أخرى'] }
+                        { id: 'dyn1', label: 'الدوري أو البطولة المتابعة (اختر أو اكتب)', options: ['دوري روشن 🇸🇦', 'دوري زين الكويتي 🇰🇼', 'دوري أبطال أوروبا 🇪🇺', 'أخرى'] },
+                        { id: 'dyn2', label: 'التخصص التحليلي (اختر أو اكتب)', options: ['فني وتكتيكي 📊', 'إحصائيات وأرقام 📈', 'عام وشامل 🎙️', 'أخرى'] }
                     ],
                     showPhysical: false,
                     showLocation: true
@@ -995,23 +1110,32 @@
             case 'إداري':
                 return {
                     fields: [
-                        { id: 'dyn1', label: 'المنصب / المسمى الإداري', options: [] },
-                        { id: 'dyn2', label: 'الجهة / المنظمة', options: [] }
+                        { id: 'dyn1', label: 'الصفة الإدارية (اختر أو اكتب)', options: ['منظم بطولات 🏆', 'رئيس رابطة مشجعين 🗣️', 'مشرف عام ⚙️', 'أخرى'] },
+                        { id: 'dyn2', label: 'المنصة أو الجهة (اختر أو اكتب)', options: ['منصة توقعات الزعيم ⚡', 'فريق رياضي 🏅', 'رابطة رسمية 🏛️', 'أخرى'] }
                     ],
                     showPhysical: false,
                     showLocation: true
                 };
             default:
-                return { fields: [], showPhysical: false, showLocation: false };
+                return {
+                    fields: [
+                        { id: 'dyn1', label: 'الاهتمام الرياضي الأول (اكتبه هنا)', options: [] },
+                        { id: 'dyn2', label: 'الاهتمام الرياضي الثاني (اكتبه هنا)', options: [] }
+                    ],
+                    showPhysical: true,
+                    showLocation: true
+                };
         }
     }
 
-    function sanitizeUsername(u) {
-        return u ? u.toLowerCase().replace(/[^a-z0-9_-]/g, '') : '';
+    function sanitizeUsername(rawUsername) {
+        if (!rawUsername) return '';
+        return rawUsername.trim().toLowerCase();
     }
 
-    function validateUsernameFormat(u) {
-        return /^[a-z0-9_-]+$/.test(u);
+    function validateUsernameFormat(username) {
+        const regex = /^[a-z0-9_-]+$/;
+        return regex.test(username);
     }
 
     function hideLoader() {
@@ -1019,13 +1143,13 @@
         if (loader) loader.style.display = 'none';
     }
 
-    window.onload = async () => {
+    window.addEventListener('DOMContentLoaded', () => {
         if (usernameQuery) {
-            await loadPublicProfile();
+            loadPublicProfile();
         } else {
             initDashboard();
         }
-    };
+    });
 
     async function loadPublicProfile() {
         try {
@@ -1038,7 +1162,7 @@
                 showErrorState();
                 return;
             }
-            renderProfileCard(snap.docs[0].data(), 'prev-name', 'prev-role', 'prev-discord-cards', 'prev-bio', 'prev-socials');
+            renderProfileCard(snap.docs[0].data(), 'prev-name', 'prev-role', 'prev-discord-cards', 'prev-bio', 'prev-socials', 'prev-photo-container');
         } catch (e) {
             console.error(e);
             hideLoader();
@@ -1046,10 +1170,21 @@
         }
     }
 
-    function renderProfileCard(data, nameId, roleId, discordContainerId, bioId, socialsId) {
+    function renderProfileCard(data, nameId, roleId, discordContainerId, bioId, socialsId, photoContainerId) {
         if (data.accentColor) {
             document.documentElement.style.setProperty('--card-accent', data.accentColor);
             document.documentElement.style.setProperty('--primary', data.primaryColor || data.accentColor);
+        }
+
+        // Render Photo or Avatar
+        const photoContainer = document.getElementById(photoContainerId);
+        if (photoContainer) {
+            if (data.photoURL) {
+                photoContainer.innerHTML = `<img src="${data.photoURL}" alt="Profile Photo" class="id-photo">`;
+            } else {
+                const firstLetter = data.fullName ? data.fullName.charAt(0).toUpperCase() : '?';
+                photoContainer.innerHTML = `<div class="id-avatar">${firstLetter}</div>`;
+            }
         }
 
         document.getElementById(nameId).innerText = data.fullName || '';
@@ -1110,6 +1245,40 @@
         let currentAccent = '#10b981';
         let currentPrimary = '#008000';
         let myLoadedCard = null;
+        let selectedPhotoFile = null;
+
+        // Photo Upload Logic
+        const photoUploadInput = document.getElementById('id-photo-upload');
+        const btnUploadPhoto = document.getElementById('btn-upload-photo');
+        const photoPreviewImg = document.getElementById('photo-preview-img');
+        const photoAvatarPlaceholder = document.getElementById('photo-avatar-placeholder');
+        const photoUploadStatus = document.getElementById('photo-upload-status');
+        const fullnameInput = document.getElementById('id-fullname');
+
+        btnUploadPhoto.addEventListener('click', () => {
+            photoUploadInput.click();
+        });
+
+        photoUploadInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                selectedPhotoFile = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photoPreviewImg.src = e.target.result;
+                    photoPreviewImg.style.display = 'block';
+                    photoAvatarPlaceholder.style.display = 'none';
+                    photoUploadStatus.style.display = 'block';
+                };
+                reader.readAsDataURL(selectedPhotoFile);
+            }
+        });
+
+        fullnameInput.addEventListener('input', () => {
+            if (!selectedPhotoFile && (!myLoadedCard || !myLoadedCard.photoURL)) {
+                const name = fullnameInput.value.trim();
+                photoAvatarPlaceholder.innerText = name ? name.charAt(0).toUpperCase() : '?';
+            }
+        });
 
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
@@ -1149,7 +1318,7 @@
                     const profileUrl = `${window.location.origin}${window.location.pathname}?u=${encodeURIComponent(myLoadedCard.usernameLink)}`;
                     document.getElementById('prev-link').innerText = profileUrl;
                     
-                    renderProfileCard(myLoadedCard, 'owner-prev-name', 'owner-prev-role', 'owner-prev-discord-cards', 'owner-prev-bio', 'owner-prev-socials');
+                    renderProfileCard(myLoadedCard, 'owner-prev-name', 'owner-prev-role', 'owner-prev-discord-cards', 'owner-prev-bio', 'owner-prev-socials', 'owner-prev-photo-container');
                     
                     document.getElementById('owner-preview-panel').style.display = 'block';
                     document.getElementById('identity-form').style.display = 'none';
@@ -1308,11 +1477,19 @@
 
         document.getElementById('btn-save-card').addEventListener('click', async () => {
             if (!currentUser) return;
+            
+            const saveBtn = document.getElementById('btn-save-card');
+            const originalBtnText = saveBtn.innerText;
+            saveBtn.innerText = 'جاري الحفظ...';
+            saveBtn.disabled = true;
+
             const rawUname = document.getElementById('id-username-link').value;
             const usernameKey = sanitizeUsername(rawUname);
 
             if (!validateUsernameFormat(usernameKey)) {
                 alert("⚠️ اسم المستخدم غير صالح. مسموح فقط بالحروف الإنجليزية والأرقام و '_' و '-' بدون مسافات.");
+                saveBtn.innerText = originalBtnText;
+                saveBtn.disabled = false;
                 return;
             }
             
@@ -1325,6 +1502,8 @@
                 });
                 if (isTaken) {
                     alert("اسم المستخدم هذا مستخدم مسبقاً، الرجاء اختيار اسم آخر.");
+                    saveBtn.innerText = originalBtnText;
+                    saveBtn.disabled = false;
                     return;
                 }
             } catch (e) { console.error(e); }
@@ -1332,6 +1511,33 @@
             let typeVal = typeSelect.value;
             if (typeVal === 'أخرى') typeVal = typeCustomInput.value.trim();
             const cfg = getConfigByType(typeVal);
+
+            let photoURL = myLoadedCard ? myLoadedCard.photoURL : null;
+
+            // Handle Photo Upload
+            if (selectedPhotoFile) {
+                try {
+                    // Delete old photo if exists
+                    if (photoURL) {
+                        try {
+                            const oldPhotoRef = ref(storage, photoURL);
+                            await deleteObject(oldPhotoRef);
+                        } catch (err) {
+                            console.log("Old photo not found or couldn't be deleted", err);
+                        }
+                    }
+                    
+                    const fileExt = selectedPhotoFile.name.split('.').pop();
+                    const photoRef = ref(storage, `profile_photos/${currentUser.uid}_${Date.now()}.${fileExt}`);
+                    await uploadBytes(photoRef, selectedPhotoFile);
+                    photoURL = await getDownloadURL(photoRef);
+                } catch (error) {
+                    alert("حدث خطأ أثناء رفع الصورة: " + error.message);
+                    saveBtn.innerText = originalBtnText;
+                    saveBtn.disabled = false;
+                    return;
+                }
+            }
 
             let cardData = {
                 ownerUid: currentUser.uid,
@@ -1351,6 +1557,7 @@
                 whatsapp: document.getElementById('social-whatsapp').value.trim(),
                 accentColor: currentAccent,
                 primaryColor: currentPrimary,
+                photoURL: photoURL,
                 updatedAt: serverTimestamp()
             };
 
@@ -1377,9 +1584,15 @@
             try {
                 await setDoc(docRef, cardData, { merge: true });
                 myLoadedCard = cardData;
+                selectedPhotoFile = null; // Reset after successful save
                 alert("✅ تم حفظ البطاقة وتثبيتها بنجاح!");
                 await checkAndLoadDashboard();
-            } catch (e) { alert("حدث خطأ أثناء الحفظ: " + e.message); }
+            } catch (e) { 
+                alert("حدث خطأ أثناء الحفظ: " + e.message); 
+            } finally {
+                saveBtn.innerText = originalBtnText;
+                saveBtn.disabled = false;
+            }
         });
 
         document.getElementById('btn-copy-link').addEventListener('click', () => {
@@ -1391,6 +1604,22 @@
 
         document.getElementById('btn-open-edit').addEventListener('click', () => {
             if (!myLoadedCard) return;
+            
+            // Reset photo selection
+            selectedPhotoFile = null;
+            photoUploadInput.value = '';
+            photoUploadStatus.style.display = 'none';
+
+            if (myLoadedCard.photoURL) {
+                photoPreviewImg.src = myLoadedCard.photoURL;
+                photoPreviewImg.style.display = 'block';
+                photoAvatarPlaceholder.style.display = 'none';
+            } else {
+                photoPreviewImg.style.display = 'none';
+                photoAvatarPlaceholder.style.display = 'block';
+                photoAvatarPlaceholder.innerText = myLoadedCard.fullName ? myLoadedCard.fullName.charAt(0).toUpperCase() : '?';
+            }
+
             document.getElementById('id-fullname').value = myLoadedCard.fullName || '';
             
             const standardTypes = ['مشجع', 'لاعب', 'محلل', 'إداري'];
@@ -1429,6 +1658,16 @@
         document.getElementById('btn-delete-card').addEventListener('click', async () => {
             if (!currentUser || !confirm("هل أنت متأكد من حذف بطاقتك بشكل نهائي؟")) return;
             try {
+                // Delete photo from storage if exists
+                if (myLoadedCard && myLoadedCard.photoURL) {
+                    try {
+                        const photoRef = ref(storage, myLoadedCard.photoURL);
+                        await deleteObject(photoRef);
+                    } catch (err) {
+                        console.log("Photo not found or couldn't be deleted", err);
+                    }
+                }
+
                 await deleteDoc(doc(db, "identityCards", currentUser.uid));
                 myLoadedCard = null;
                 alert("🗑️ تم حذف البطاقة بنجاح.");
