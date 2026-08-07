@@ -278,6 +278,51 @@
             color: #fff; padding: 7px 14px; border-radius: 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer;
         }
 
+        /* --- Instagram Style Cropper Modal Styles --- */
+        .insta-crop-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 10, 20, 0.9); backdrop-filter: blur(12px);
+            z-index: 2000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 20px;
+        }
+        .insta-crop-modal.open { opacity: 1; visibility: visible; }
+        .insta-crop-box {
+            background: rgba(12, 22, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 28px; width: 100%; max-width: 420px; padding: 24px; text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+        }
+        .insta-crop-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+        .insta-crop-subtitle { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 16px; }
+        
+        .insta-canvas-container {
+            position: relative; width: 280px; height: 280px; margin: 0 auto 16px auto;
+            border-radius: 16px; overflow: hidden; background: #000;
+            border: 1px solid rgba(255,255,255,0.2); touch-action: none;
+            cursor: grab;
+        }
+        .insta-canvas-container:active { cursor: grabbing; }
+        #insta-crop-canvas { display: block; width: 100%; height: 100%; }
+        
+        /* Circular Instagram Overlay Mask */
+        .insta-circle-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%; border: 4px solid var(--card-accent);
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75);
+            pointer-events: none;
+        }
+        
+        .insta-slider-container { margin-bottom: 18px; padding: 0 10px; }
+        .insta-slider-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; text-align: right; }
+        .insta-range-input {
+            width: 100%; -webkit-appearance: none; background: rgba(255,255,255,0.1);
+            height: 6px; border-radius: 3px; outline: none; margin: 0;
+        }
+        .insta-range-input::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+            background: var(--card-accent); cursor: pointer; box-shadow: 0 0 10px var(--card-glow);
+        }
+        .insta-crop-actions { display: flex; gap: 10px; }
+
         .id-photo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-accent); box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px var(--card-glow); object-fit: cover; margin: 0 auto 12px auto; display: block; background: rgba(255,255,255,0.05); }
         .id-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-accent); box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px var(--card-glow); margin: 0 auto 12px auto; display: flex; justify-content: center; align-items: center; font-size: 2.8rem; font-weight: 900; color: var(--card-accent); background: rgba(255,255,255,0.05); }
 
@@ -394,6 +439,29 @@
         </a>
     </div>
 
+    <!-- Instagram Style Crop Modal -->
+    <div class="insta-crop-modal" id="instaCropModal">
+        <div class="insta-crop-box">
+            <div class="insta-crop-title">تعديل الصورة الشخصية</div>
+            <div class="insta-crop-subtitle">اسحب الصورة أو قم بتقريبها لتناسب الدائرة</div>
+            
+            <div class="insta-canvas-container" id="instaCanvasContainer">
+                <canvas id="insta-crop-canvas" width="280" height="280"></canvas>
+                <div class="insta-circle-overlay"></div>
+            </div>
+
+            <div class="insta-slider-container">
+                <div class="insta-slider-label">تكبير / تصغير الصورة</div>
+                <input type="range" id="instaScaleSlider" class="insta-range-input" min="0.5" max="3" step="0.01" value="1">
+            </div>
+
+            <div class="insta-crop-actions">
+                <button type="button" class="action-btn" id="instaCropCancel" style="background: rgba(255,255,255,0.1); margin:0;">إلغاء</button>
+                <button type="button" class="action-btn" id="instaCropApply" style="background: var(--card-accent); color:#000; margin:0;">تم واقتصاص</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Wrapper -->
     <div class="main-wrapper">
         <div class="box">
@@ -485,7 +553,7 @@
                             </div>
                             <input type="file" id="id-photo-upload" accept="image/*" style="display: none;">
                             <button type="button" class="photo-upload-btn" id="btn-upload-photo">📸 اختيار صورة أو شعار</button>
-                            <div id="photo-upload-status" style="font-size: 0.72rem; color: var(--card-accent); margin-top: 6px; display: none;">تم اختيار الصورة</div>
+                            <div id="photo-upload-status" style="font-size: 0.72rem; color: var(--card-accent); margin-top: 6px; display: none;">تم اختيار الصورة وتعديلها</div>
                         </div>
 
                         <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
@@ -814,31 +882,130 @@
         const photoUploadStatus = document.getElementById('photo-upload-status');
         const fullnameInput = document.getElementById('id-fullname');
 
+        // Instagram Crop Variables
+        const instaModal = document.getElementById('instaCropModal');
+        const instaCanvas = document.getElementById('insta-crop-canvas');
+        const instaCtx = instaCanvas.getContext('2d');
+        const instaScaleSlider = document.getElementById('instaScaleSlider');
+        const instaCropCancel = document.getElementById('instaCropCancel');
+        const instaCropApply = document.getElementById('instaCropApply');
+        const instaContainer = document.getElementById('instaCanvasContainer');
+
+        let cropImg = new Image();
+        let imgScale = 1;
+        let imgX = 0;
+        let imgY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
         btnUploadPhoto.addEventListener('click', () => photoUploadInput.click());
 
         photoUploadInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height, max = 400;
-                        if (w > h) { if (w > max) { h *= max / w; w = max; } }
-                        else { if (h > max) { w *= max / h; h = max; } }
-                        canvas.width = w; canvas.height = h;
-                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        selectedBase64Image = canvas.toDataURL('image/jpeg', 0.8);
-                        
-                        photoPreviewImg.src = selectedBase64Image;
-                        photoPreviewImg.style.display = 'block';
-                        photoAvatarPlaceholder.style.display = 'none';
-                        photoUploadStatus.style.display = 'block';
+                    cropImg = new Image();
+                    cropImg.onload = () => {
+                        // Initialize position & scale
+                        const canvasSize = 280;
+                        let minDim = Math.min(cropImg.width, cropImg.height);
+                        imgScale = canvasSize / minDim;
+                        instaScaleSlider.min = imgScale * 0.5;
+                        instaScaleSlider.max = imgScale * 4;
+                        instaScaleSlider.value = imgScale;
+
+                        imgX = (canvasSize - cropImg.width * imgScale) / 2;
+                        imgY = (canvasSize - cropImg.height * imgScale) / 2;
+
+                        drawCropCanvas();
+                        instaModal.classList.add('open');
                     };
-                    img.src = event.target.result;
+                    cropImg.src = event.target.result;
                 };
                 reader.readAsDataURL(e.target.files[0]);
             }
+        });
+
+        function drawCropCanvas() {
+            instaCtx.clearRect(0, 0, instaCanvas.width, instaCanvas.height);
+            instaCtx.save();
+            instaCtx.translate(imgX, imgY);
+            instaCtx.scale(imgScale, imgScale);
+            instaCtx.drawImage(cropImg, 0, 0);
+            instaCtx.restore();
+        }
+
+        // Drag handlers
+        instaContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - imgX;
+            startY = e.clientY - imgY;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            imgX = e.clientX - startX;
+            imgY = e.clientY - startY;
+            drawCropCanvas();
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Touch handlers for mobile
+        instaContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX - imgX;
+                startY = e.touches[0].clientY - imgY;
+            }
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            imgX = e.touches[0].clientX - startX;
+            imgY = e.touches[0].clientY - startY;
+            drawCropCanvas();
+        });
+        window.addEventListener('touchend', () => { isDragging = false; });
+
+        instaScaleSlider.addEventListener('input', (e) => {
+            const newScale = parseFloat(e.target.value);
+            const centerSize = 280;
+            // Zoom towards center
+            const centerX = centerSize / 2;
+            const centerY = centerSize / 2;
+            
+            imgX = centerX - (centerX - imgX) * (newScale / imgScale);
+            imgY = centerY - (centerY - imgY) * (newScale / imgScale);
+            imgScale = newScale;
+            drawCropCanvas();
+        });
+
+        instaCropCancel.addEventListener('click', () => {
+            instaModal.classList.remove('open');
+            photoUploadInput.value = '';
+        });
+
+        instaCropApply.addEventListener('click', () => {
+            // Render final circular crop into high-res canvas
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = 400;
+            finalCanvas.height = 400;
+            const fCtx = finalCanvas.getContext('2d');
+            
+            const ratio = 400 / 280;
+            fCtx.save();
+            fCtx.translate(imgX * ratio, imgY * ratio);
+            fCtx.scale(imgScale * ratio, imgScale * ratio);
+            fCtx.drawImage(cropImg, 0, 0);
+            fCtx.restore();
+
+            selectedBase64Image = finalCanvas.toDataURL('image/jpeg', 0.9);
+            photoPreviewImg.src = selectedBase64Image;
+            photoPreviewImg.style.display = 'block';
+            photoAvatarPlaceholder.style.display = 'none';
+            photoUploadStatus.style.display = 'block';
+
+            instaModal.classList.remove('open');
+            photoUploadInput.value = '';
         });
 
         fullnameInput.addEventListener('input', () => {
