@@ -413,7 +413,7 @@
                     <div id="prev-categorized-content"></div>
                     
                     <div class="id-bio" id="prev-bio" style="display: none;"></div>
-                    <div class="linktree-section-title">روابط التواصل</div>
+                    <div class="linktree-section-title">روابط التواصل والموقع</div>
                     <div class="id-socials-linktree" id="prev-socials"></div>
                 </div>
             </div>
@@ -451,7 +451,7 @@
                         <div id="owner-prev-categorized-content"></div>
 
                         <div class="id-bio" id="owner-prev-bio" style="display: none;"></div>
-                        <div class="linktree-section-title">روابط التواصل</div>
+                        <div class="linktree-section-title">روابط التواصل والموقع</div>
                         <div class="id-socials-linktree" id="owner-prev-socials"></div>
                     </div>
 
@@ -548,6 +548,11 @@
 
                     <div class="wizard-step" id="step-4">
                         <textarea id="id-bio" placeholder="نبذة بسيطة أو وصف تفصيلي..." rows="2" style="resize:none; padding:10px; font-size:0.85rem;"></textarea>
+                        
+                        <div style="margin: 4px 0 2px 0; font-size: 0.8rem; font-weight: 700; color: var(--card-accent);">🌐 الموقع الإلكتروني (للمتاجر والمشاريع):</div>
+                        <input type="text" id="social-website" placeholder="الويب سايت : (مثال: https://example.com)" style="padding:10px; font-size:0.85rem; direction: ltr; text-align: right;">
+
+                        <div style="margin: 6px 0 2px 0; font-size: 0.8rem; font-weight: 700; color: var(--card-accent);">📱 وسائل التواصل:</div>
                         <input type="text" id="social-insta" placeholder="Instagram (@username)" style="padding:10px; font-size:0.85rem;">
                         <input type="text" id="social-snap" placeholder="Snapchat" style="padding:10px; font-size:0.85rem;">
                         <input type="text" id="social-x" placeholder="X (Twitter)" style="padding:10px; font-size:0.85rem;">
@@ -773,6 +778,10 @@
         }
 
         let socialsHtml = '';
+        if (data.website) {
+            let formattedUrl = data.website.startsWith('http') ? data.website : `https://${data.website}`;
+            socialsHtml += `<a href="${formattedUrl}" target="_blank" class="linktree-btn">🌐 زيارة الموقع الإلكتروني</a>`;
+        }
         if (data.insta) socialsHtml += `<a href="https://instagram.com/${data.insta.replace('@','')}" target="_blank" class="linktree-btn">📷 Instagram (@${data.insta.replace('@','')})</a>`;
         if (data.snap) socialsHtml += `<a href="https://snapchat.com/add/${data.snap}" target="_blank" class="linktree-btn">👻 Snapchat (${data.snap})</a>`;
         if (data.x) socialsHtml += `<a href="https://x.com/${data.x.replace('@','')}" target="_blank" class="linktree-btn">𝕏 X (@${data.x.replace('@','')})</a>`;
@@ -1011,6 +1020,7 @@
                 age: document.getElementById('id-age')?.value.trim() || '',
                 height: document.getElementById('id-height')?.value.trim() || '',
                 weight: document.getElementById('id-weight')?.value.trim() || '',
+                website: document.getElementById('social-website').value.trim(),
                 insta: document.getElementById('social-insta').value.trim(),
                 snap: document.getElementById('social-snap').value.trim(),
                 x: document.getElementById('social-x').value.trim(),
@@ -1091,6 +1101,7 @@
             if (document.getElementById('id-height')) document.getElementById('id-height').value = myLoadedCard.height || '';
             if (document.getElementById('id-weight')) document.getElementById('id-weight').value = myLoadedCard.weight || '';
 
+            document.getElementById('social-website').value = myLoadedCard.website || '';
             document.getElementById('social-insta').value = myLoadedCard.insta || '';
             document.getElementById('social-snap').value = myLoadedCard.snap || '';
             document.getElementById('social-x').value = myLoadedCard.x || '';
