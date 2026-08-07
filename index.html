@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport ID - النظام الموحد</title>
+    <title>Sport ID - البطاقة التعريفية الرياضية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,12 +11,12 @@
             --primary-dark: #005500;
             --card-accent: #10b981;
             --card-glow: rgba(16, 185, 129, 0.25);
-            --bg-base: #0c1629;
-            --glass-bg: rgba(23, 37, 65, 0.88);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --bg-base: #070d18;
+            --glass-bg: rgba(15, 23, 42, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.12);
             --text-light: #f8fafc;
             --text-dim: #94a3b8;
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -28,9 +28,9 @@
             font-family: 'Cairo', sans-serif; 
             background: var(--bg-base);
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 128, 0, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
-                linear-gradient(135deg, #070d18 0%, #172541 100%);
+                radial-gradient(circle at 15% 15%, rgba(0, 128, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.18) 0%, transparent 50%),
+                linear-gradient(135deg, #050a14 0%, #0c1629 100%);
             background-attachment: fixed;
             min-height: 100vh;
             margin: 0;
@@ -38,35 +38,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-            overflow-y: auto;
             color: var(--text-light);
-            transition: background 0.5s ease;
+            overflow-x: hidden;
         }
 
-        /* --- Profile Mode Specific Styles --- */
+        /* --- Profile Fullscreen Linktree Mode --- */
         body.profile-mode {
-            background: #000;
-            background-image: 
-                radial-gradient(circle at 50% -20%, rgba(0, 128, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 1) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(0, 80, 0, 0.2) 0%, transparent 50%),
-                linear-gradient(180deg, #050a05 0%, #000000 100%);
-            height: auto;
+            background: linear-gradient(145deg, var(--card-full-bg-1, #081226) 0%, var(--card-full-bg-2, #020610) 100%);
             min-height: 100vh;
-            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        body.profile-mode::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
-            pointer-events: none;
-            z-index: 1;
+            padding: 20px;
         }
 
         body.profile-mode .sticky-header,
@@ -78,32 +61,25 @@
         }
 
         body.profile-mode .main-wrapper {
-            padding: 40px 20px;
-            margin: 0;
+            padding: 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 2;
+            width: 100%;
         }
 
         body.profile-mode .box {
             max-width: 520px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 40px var(--card-glow);
-            border-radius: 40px;
-            padding: 40px 30px;
-            transform: scale(1);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        body.profile-mode .box:hover {
-            transform: scale(1.02);
-            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.9), 0 0 50px var(--card-glow);
+            width: 100%;
+            background: rgba(12, 22, 41, 0.65);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7), 0 0 40px var(--card-glow);
+            border-radius: 36px;
+            padding: 35px 24px;
+            margin: auto;
         }
 
         body.profile-mode .identity-card-preview {
@@ -120,704 +96,263 @@
 
         body.profile-mode .profile-footer-minimal {
             display: block !important;
-            position: relative;
-            margin-top: 30px;
+            position: fixed;
+            bottom: 12px;
+            left: 0; right: 0;
             text-align: center;
             font-size: 0.75rem;
             color: #64748b;
-            font-weight: 600;
-            letter-spacing: 1px;
-            z-index: 3;
-        }
-
-        body.profile-mode .linktree-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 18px;
-            font-size: 1.05rem;
-            margin-bottom: 14px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 800;
-        }
-
-        body.profile-mode .linktree-btn:hover {
-            background: var(--card-accent);
-            border-color: var(--card-accent);
-            color: #000;
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 25px var(--card-glow);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 10;
         }
 
         /* --- Standard Site Styles --- */
         .sticky-header {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 72px;
+            top: 0; left: 0; width: 100%;
+            height: 70px;
             background: rgba(12, 22, 41, 0.85);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 28px;
+            padding: 0 24px;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .header-logo {
-            display: inline-flex;
-            align-items: center;
-            cursor: default;
-            text-decoration: none;
         }
 
         .header-logo img {
-            height: 45px;
+            height: 40px;
             width: auto;
             display: block;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .header-logo:hover img {
-            transform: scale(1.05);
+            transition: transform 0.3s ease;
         }
 
         .hamburger-btn {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: var(--text-light);
-            font-size: 1.3rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; color: var(--text-light); font-size: 1.2rem;
+            transition: var(--transition-smooth);
         }
 
         .hamburger-btn:hover {
-            background: rgba(16, 185, 129, 0.18);
+            background: rgba(16, 185, 129, 0.2);
             border-color: var(--card-accent);
             color: var(--card-accent);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px var(--card-glow);
         }
 
         .drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(5, 10, 20, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1100;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 10, 20, 0.7); backdrop-filter: blur(8px);
+            opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 1100;
         }
-
-        .drawer-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
+        .drawer-overlay.open { opacity: 1; visibility: visible; }
 
         .side-drawer {
-            position: fixed;
-            top: 0;
-            right: -340px;
-            width: 320px;
-            height: 100%;
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
             background: linear-gradient(180deg, #0e1930 0%, #0a1224 100%);
             border-left: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: -15px 0 40px rgba(0, 0, 0, 0.7);
-            z-index: 1200;
-            display: flex;
-            flex-direction: column;
-            transition: right 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 28px 22px;
+            z-index: 1200; display: flex; flex-direction: column;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 24px 20px;
         }
-
-        .side-drawer.open {
-            right: 0;
-        }
+        .side-drawer.open { right: 0; }
 
         .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 12px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        .drawer-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.3px;
-        }
-
+        .drawer-title { font-size: 1.1rem; font-weight: 800; color: #fff; }
         .close-drawer {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            color: var(--text-dim);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.25s ease;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 34px; height: 34px; border-radius: 8px; color: var(--text-dim);
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
         }
-
-        .close-drawer:hover {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.4);
-            transform: rotate(90deg);
-        }
-
-        .drawer-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex: 1;
-        }
-
+        .drawer-nav { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .drawer-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 15px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: var(--text-dim);
-            border-radius: 16px;
-            cursor: pointer;
-            font-weight: 700;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-dim); border-radius: 14px; font-weight: 700;
+            font-size: 0.92rem; text-decoration: none; transition: var(--transition-smooth);
         }
-
-        .drawer-item span.icon {
-            font-size: 1.25rem;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-
-        .drawer-item:hover {
-            background: rgba(255, 255, 255, 0.07);
-            color: #ffffff;
-            transform: translateX(-6px);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
+        .drawer-item:hover { background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(-4px); }
         .drawer-item.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: #ffffff;
-            box-shadow: 0 6px 20px var(--card-glow);
-            border-color: rgba(16, 185, 129, 0.4);
+            color: #fff; border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 4px 15px var(--card-glow);
         }
-
         .drawer-footer-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            margin-top: auto;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 16px;
-            color: #34d399;
-            font-weight: 800;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .drawer-footer-link:hover {
-            background: rgba(16, 185, 129, 0.2);
-            box-shadow: 0 6px 22px var(--card-glow);
-            transform: translateY(-2px);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px; margin-top: auto; background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px;
+            color: #34d399; font-weight: 800; text-decoration: none;
         }
 
         .main-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 110px 20px 50px 20px;
-            min-height: 100vh;
+            width: 100%; display: flex; justify-content: center; align-items: center;
+            padding: 100px 20px 40px 20px; min-height: 100vh;
         }
 
         .box { 
-            width: 100%; 
-            max-width: 480px; 
-            background: var(--glass-bg); 
-            padding: 36px 24px; 
-            border-radius: 36px; 
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), 
-                        0 0 0 1px var(--glass-border) inset; 
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            position: relative;
-            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            width: 100%; max-width: 480px; background: var(--glass-bg); 
+            padding: 32px 22px; border-radius: 32px; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--glass-border) inset; 
+            backdrop-filter: blur(25px); position: relative;
         }
 
         .title { 
-            text-align: center; 
-            font-size: 1.7rem; 
-            margin-bottom: 6px; 
-            font-weight: 900; 
-            letter-spacing: -0.5px;
-            background: linear-gradient(180deg, #ffffff 20%, #86efac 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.2));
+            text-align: center; font-size: 1.6rem; margin-bottom: 4px; font-weight: 900; 
+            background: linear-gradient(180deg, #fff 20%, #86efac 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .subtitle-tagline {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
+        .subtitle-tagline { text-align: center; font-size: 0.82rem; color: #cbd5e1; margin-bottom: 18px; font-weight: 600; }
 
         .notice-box {
-            background: rgba(18, 30, 53, 0.75);
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            border-right: 4px solid var(--card-accent);
-            padding: 16px;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            font-size: 0.88rem;
-            color: #ffffff;
-            line-height: 1.6;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: var(--transition-smooth);
+            background: rgba(18, 30, 53, 0.75); border: 1px solid rgba(16, 185, 129, 0.35);
+            border-right: 4px solid var(--card-accent); padding: 14px; border-radius: 16px;
+            margin-bottom: 18px; font-size: 0.85rem; color: #fff; line-height: 1.5; font-weight: 600;
         }
 
         .wizard-step { display: none; opacity: 0; transition: opacity 0.3s ease; }
         .wizard-step.active-step { display: block; opacity: 1; }
 
-        .step-indicator {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 18px; }
         .step-dot {
-            flex: 1;
-            text-align: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            padding-bottom: 8px;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            transition: var(--transition-smooth);
+            flex: 1; text-align: center; font-size: 0.72rem; font-weight: 700; color: var(--text-dim);
+            padding-bottom: 6px; border-bottom: 2px solid rgba(255,255,255,0.1);
         }
-
-        .step-dot.active {
-            color: var(--card-accent);
-            border-bottom-color: var(--card-accent);
-        }
+        .step-dot.active { color: var(--card-accent); border-bottom-color: var(--card-accent); }
 
         input, select, textarea { 
-            width: 100%; 
-            padding: 15px 18px; 
-            margin: 9px 0; 
-            border: 1px solid rgba(255, 255, 255, 0.12); 
-            border-radius: 16px; 
-            box-sizing: border-box; 
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.92rem;
-            background: rgba(10, 18, 35, 0.75);
-            color: #ffffff;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            width: 100%; padding: 14px 16px; margin: 8px 0; 
+            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; 
+            font-family: 'Cairo', sans-serif; font-size: 0.9rem;
+            background: rgba(10, 18, 35, 0.8); color: #fff;
+            transition: var(--transition-smooth);
         }
-
         input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--card-accent);
-            background: rgba(10, 18, 35, 0.95);
-            box-shadow: 0 0 0 4px var(--card-glow), inset 0 2px 4px rgba(0,0,0,0.1);
+            outline: none; border-color: var(--card-accent);
+            box-shadow: 0 0 0 3px var(--card-glow);
         }
 
         .action-btn { 
-            width: 100%; 
-            padding: 16px; 
+            width: 100%; padding: 15px; 
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
-            color: white; 
-            border: none; 
-            border-radius: 16px; 
-            font-weight: 800; 
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.05rem;
-            cursor: pointer; 
-            margin-top: 14px; 
-            box-shadow: 0 8px 25px var(--card-glow);
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white; border: none; border-radius: 14px; font-weight: 800; 
+            font-family: 'Cairo', sans-serif; font-size: 1rem; cursor: pointer; 
+            margin-top: 12px; box-shadow: 0 6px 20px var(--card-glow);
+            text-decoration: none; display: inline-block; text-align: center;
+            transition: var(--transition-smooth);
         }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px var(--card-glow);
-            filter: brightness(1.1);
-        }
-
-        .btn-group { display: flex; gap: 10px; margin-top: 12px; }
+        .action-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
 
         .color-picker-wrapper {
-            margin: 12px 0;
-            background: rgba(18, 30, 53, 0.6);
-            padding: 16px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
+            margin: 10px 0; background: rgba(18, 30, 53, 0.6); padding: 14px;
+            border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);
         }
-
-        .color-options { display: flex; gap: 12px; justify-content: center; margin-top: 10px; }
+        .color-options { display: flex; gap: 12px; justify-content: center; margin-top: 8px; }
         .color-bubble {
-            width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.3);
+            width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.3);
             transition: var(--transition-smooth);
         }
         .color-bubble.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 12px rgba(255,255,255,0.6); }
 
-        /* --- Profile Photo Styles --- */
-        .photo-upload-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
+        /* --- Linktree Style Card Preview --- */
+        .photo-upload-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
         .photo-preview-container {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid var(--card-accent);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-glow);
-            overflow: hidden;
-            position: relative;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 12px;
-            transition: var(--transition-smooth);
+            width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-accent);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px var(--card-glow);
+            overflow: hidden; background: rgba(255,255,255,0.05); display: flex;
+            justify-content: center; align-items: center; margin-bottom: 10px;
         }
-
-        .photo-preview-container:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
-        }
-
-        .photo-preview-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .photo-avatar-placeholder {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--card-accent);
-            text-transform: uppercase;
-        }
-
+        .photo-preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .photo-avatar-placeholder { font-size: 2.2rem; font-weight: 900; color: var(--card-accent); }
         .photo-upload-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition-smooth);
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff; padding: 7px 14px; border-radius: 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer;
         }
 
-        .photo-upload-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .id-photo {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid var(--card-accent);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-glow);
-            object-fit: cover;
-            margin: 0 auto 16px auto;
-            display: block;
-            transition: var(--transition-smooth);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .id-photo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
-        }
-
-        .id-avatar {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid var(--card-accent);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-glow);
-            margin: 0 auto 16px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--card-accent);
-            background: rgba(255, 255, 255, 0.05);
-            text-transform: uppercase;
-            transition: var(--transition-smooth);
-        }
-
-        .id-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-glow);
-        }
+        .id-photo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-accent); box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px var(--card-glow); object-fit: cover; margin: 0 auto 12px auto; display: block; background: rgba(255,255,255,0.05); }
+        .id-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-accent); box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px var(--card-glow); margin: 0 auto 12px auto; display: flex; justify-content: center; align-items: center; font-size: 2.8rem; font-weight: 900; color: var(--card-accent); background: rgba(255,255,255,0.05); }
 
         .identity-card-preview {
-            background: linear-gradient(145deg, var(--card-full-bg-1, rgba(23, 37, 65, 0.95)) 0%, var(--card-full-bg-2, rgba(12, 22, 41, 0.98)) 100%);
-            border-radius: 28px;
-            padding: 26px;
-            border: 3px solid var(--card-accent);
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 35px var(--card-glow);
-            margin-bottom: 18px;
-            animation: fadeIn 0.4s ease-out;
-            position: relative;
-            overflow: hidden;
+            background: transparent; border-radius: 0; padding: 0; border: none; text-align: center; box-shadow: none; margin-bottom: 10px;
         }
 
-        .identity-card-preview::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 6px;
-            background: linear-gradient(90deg, var(--card-accent), var(--primary), var(--card-accent));
-        }
-
-        .id-name { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .id-name { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
         .id-role-badge {
-            background: var(--card-accent);
-            color: #000;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 900;
-            display: inline-block;
-            margin-bottom: 22px;
-            box-shadow: 0 4px 15px var(--card-glow);
+            background: var(--card-accent); color: #000; padding: 5px 16px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 900; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 15px var(--card-glow);
         }
 
-        .discord-cards-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-            text-align: right;
+        /* --- Linktree Organized Sections --- */
+        .linktree-section-title {
+            font-size: 0.78rem; font-weight: 800; color: var(--card-accent); text-transform: uppercase;
+            letter-spacing: 1px; margin: 16px 0 8px 0; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px;
         }
 
-        .discord-info-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            padding: 14px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition-smooth);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        .linktree-cards-container {
+            display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; text-align: right;
         }
 
-        .discord-info-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(-4px);
-            border-color: var(--card-accent);
+        .linktree-info-pill {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(10px); transition: var(--transition-smooth);
         }
-
-        .discord-card-label { font-size: 0.85rem; color: var(--text-dim); font-weight: 700; }
-        .discord-card-value { font-size: 0.95rem; color: #ffffff; font-weight: 800; }
+        .linktree-info-pill:hover {
+            background: rgba(255, 255, 255, 0.09); border-color: var(--card-accent); transform: translateY(-2px);
+        }
+        .pill-label { font-size: 0.82rem; color: var(--text-dim); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .pill-value { font-size: 0.92rem; color: #fff; font-weight: 800; }
 
         .id-bio {
-            font-size: 0.95rem;
-            color: #e2e8f0;
-            margin-bottom: 22px;
-            line-height: 1.8;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 16px;
-            border-radius: 16px;
-            text-align: right;
-            font-style: italic;
-            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.9rem; color: #e2e8f0; margin-bottom: 16px; line-height: 1.6;
+            background: rgba(0, 0, 0, 0.35); padding: 14px; border-radius: 14px; text-align: right;
+            font-style: italic; border: 1px solid rgba(255,255,255,0.06);
         }
 
-        .id-socials-linktree {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
+        .id-socials-linktree { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
         .linktree-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            border-radius: 18px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: var(--transition-smooth);
+            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+            padding: 15px; background: rgba(255, 255, 255, 0.07); color: #fff; border-radius: 16px;
+            text-decoration: none; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: var(--transition-smooth); backdrop-filter: blur(10px);
         }
-
         .linktree-btn:hover {
-            background: var(--card-accent);
-            color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px var(--card-glow);
-        }
-
-        .card-footer-identity {
-            margin-top: 18px;
-            padding-top: 14px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.15);
-            font-size: 0.8rem;
-            color: #cbd5e1;
-            font-weight: 700;
+            background: var(--card-accent); color: #000; transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--card-glow); border-color: var(--card-accent);
         }
 
         .profile-link-box {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            color: #a7f3d0;
-            direction: ltr;
-            margin-bottom: 14px;
-            border: 1px dashed var(--card-accent);
-            word-break: break-all;
-            text-align: center;
+            background: rgba(255, 255, 255, 0.04); padding: 10px; border-radius: 12px;
+            font-size: 0.82rem; color: #a7f3d0; direction: ltr; margin-bottom: 12px;
+            border: 1px dashed var(--card-accent); word-break: break-all; text-align: center;
         }
 
-        .error-state { text-align: center; padding: 25px; animation: fadeIn 0.3s ease; }
-        .error-title { font-size: 1.4rem; font-weight: 900; color: #ef4444; margin-bottom: 12px; }
-        .error-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 22px; line-height: 1.6; }
+        .error-state { text-align: center; padding: 25px; }
+        .error-title { font-size: 1.3rem; font-weight: 900; color: #ef4444; margin-bottom: 10px; }
+        .error-desc { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 20px; line-height: 1.5; }
 
-        .loading-overlay {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 50px 20px;
-            text-align: center;
-        }
+        .loading-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--card-accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 18px;
+            width: 45px; height: 45px; border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--card-accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .footer { 
-            text-align: center; 
-            margin-top: 30px; 
-            padding-top: 20px; 
-            border-top: 1px solid rgba(255, 255, 255, 0.08); 
-            color: var(--text-dim); 
-            font-size: 0.85rem; 
-            font-weight: 600;
-        }
-        
-        .sponsor-container { 
-            margin-top: 14px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 8px; 
-            width: 100%;
-        }
-
-        .sponsors-row { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 14px; 
-            width: 100%; 
-            max-width: 100%;
-            margin-top: 6px;
-            overflow: hidden;
-        }
-
-        .sponsor-logo-uniform { 
-            width: 75px; 
-            height: 75px; 
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-        }
-
-        #halha-logo { width: 100px; height: 100px; object-fit: contain; }
-        #samar-logo { width: 115px; height: 115px; object-fit: contain; transform: scale(1.5); margin: 0 6px; }
-
-        @media (max-width: 600px) {
-            body.profile-mode .box {
-                padding: 30px 20px;
-                width: 92%;
-                border-radius: 30px;
-            }
-            .id-name { font-size: 1.5rem; }
-        }
+        .footer { text-align: center; margin-top: 25px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); color: var(--text-dim); font-size: 0.82rem; font-weight: 600; }
+        .sponsor-container { margin-top: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+        .sponsors-row { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; margin-top: 4px; }
+        .sponsor-logo-uniform { width: 65px; height: 65px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
+        #halha-logo { width: 90px; height: 90px; object-fit: contain; }
+        #samar-logo { width: 100px; height: 100px; object-fit: contain; transform: scale(1.4); margin: 0 4px; }
     </style>
 </head>
 <body>
@@ -827,9 +362,7 @@
         <div class="header-logo">
             <img src="https://i.ibb.co/Q3417SNF/972-CDF93-4-F40-4-B7-D-82-A1-FCC9-BB608-B51.png" alt="Alza3eem Logo">
         </div>
-        <button class="hamburger-btn" id="hamburgerToggle" aria-label="فتح القائمة">
-            ☰
-        </button>
+        <button class="hamburger-btn" id="hamburgerToggle" aria-label="فتح القائمة">☰</button>
     </header>
 
     <!-- Side Drawer & Overlay -->
@@ -841,69 +374,61 @@
         </div>
         <nav class="drawer-nav">
             <a href="https://alza3eemkw.github.io/alza3eem.github.io/" class="drawer-item">
-                <span class="icon">🏠</span>
-                <span>منصتنا</span>
+                <span class="icon">🏠</span><span>منصتنا</span>
             </a>
             <a href="https://alza3eemkw.github.io/alza3eem.github.io/#prediction" class="drawer-item">
-                <span class="icon">🎯</span>
-                <span>سجل توقعك</span>
+                <span class="icon">🎯</span><span>سجل توقعك</span>
             </a>
             <a href="https://alza3eemkw.github.io/alza3eem.github.io/#leaderboard" class="drawer-item">
-                <span class="icon">📊</span>
-                <span>الجدول</span>
+                <span class="icon">📊</span><span>الجدول</span>
             </a>
             <a href="index.html" class="drawer-item active">
-                <span class="icon">🪪</span>
-                <span>Sport ID</span>
+                <span class="icon">🪪</span><span>Sport ID</span>
             </a>
             <a href="https://alza3eemkw.github.io/alza3eem.github.io/#kickoff" class="drawer-item">
-                <span class="icon">⏳</span>
-                <span>Kick off</span>
+                <span class="icon">⏳</span><span>Kick off</span>
             </a>
         </nav>
         <a href="https://instagram.com/alza3eem__kw" target="_blank" class="drawer-footer-link">
-            <span>📸</span>
-            <span>تواصل معنا</span>
+            <span>📸</span><span>تواصل معنا</span>
         </a>
     </div>
 
-    <!-- Main Wrapper & Container Layout -->
+    <!-- Main Wrapper -->
     <div class="main-wrapper">
         <div class="box">
-            <!-- شاشة التحميل العامة -->
+            <!-- شاشة التحميل -->
             <div id="global-loader" class="loading-overlay">
                 <div class="spinner"></div>
-                <div style="font-size: 0.9rem; color: var(--text-dim); font-weight: 700;">جاري تحميل البيانات...</div>
+                <div style="font-size: 0.88rem; color: var(--text-dim); font-weight: 700;">جاري تحميل الهوية الرياضية...</div>
             </div>
 
-            <!-- قسم عرض البطاقة للزوار -->
+            <!-- عرض البطاقة للزوار (شكل لينك تري مرتب) -->
             <div id="public-profile-view" style="display: none;">
                 <div class="identity-card-preview" id="preview-box-wrapper">
                     <div id="prev-photo-container"></div>
                     <div class="id-name" id="prev-name"></div>
                     <div class="id-role-badge" id="prev-role">Sport ID</div>
                     
-                    <div class="discord-cards-container" id="prev-discord-cards"></div>
+                    <div id="prev-categorized-content"></div>
+                    
                     <div class="id-bio" id="prev-bio" style="display: none;"></div>
+                    <div class="linktree-section-title">روابط التواصل</div>
                     <div class="id-socials-linktree" id="prev-socials"></div>
-
-                    <div class="card-footer-identity">
-                        منصة الزعيم الرياضية - Alza3eem Prediction Platform
-                    </div>
                 </div>
             </div>
 
-            <!-- حالة الخطأ للبطاقة غير الموجودة -->
+            <!-- حالة الخطأ -->
             <div id="error-container" class="error-state" style="display: none;">
                 <div class="error-title">⚠️ هذه البطاقة غير موجودة</div>
                 <div class="error-desc">عذراً، اسم المستخدم الذي تبحث عنه غير مسجل أو تم حذف البطاقة المرتبطة به.</div>
-                <a href="index.html" class="action-btn">إنشاء بطاقتك</a>
+                <a href="index.html" class="action-btn">إنشاء بطاقتك الخاصة</a>
             </div>
 
-            <!-- لوحة التحكم وتسجيل الدخول -->
+            <!-- لوحة التحكم وإدارة البطاقة -->
             <div id="dashboard-container" style="display: none;">
                 <div class="title">⚡ لوحة تحكم Sport ID</div>
-                <div class="subtitle-tagline">أنشئ هويتك الرياضية وشاركها عبر رابط واحد.</div>
+                <div class="subtitle-tagline">أنشئ هويتك الرياضية بتصميم Linktree فخم وشاركها برابط واحد.</div>
                 
                 <div id="login-box" class="notice-box" style="text-align:center;">
                     <button type="button" class="action-btn" id="google-login-btn" style="margin-top:0;">
@@ -912,45 +437,39 @@
                     <p id="login-status" style="font-size:0.82rem; margin-top:8px; color:#4ade80;"></p>
                 </div>
 
-                <!-- معاينة البطاقة للمالك بعد الإنشاء -->
+                <!-- معاينة المالك -->
                 <div id="owner-preview-panel" style="display: none;">
                     <div class="notice-box" style="text-align:center; background: rgba(16, 185, 129, 0.15);">
-                        ✨ معاينة بطاقتك كما ستظهر للزوار:
+                        ✨ معاينة بطاقتك بنمط اللينك تري:
                     </div>
                     
-                    <div class="identity-card-preview" id="owner-preview-box-wrapper" style="margin-bottom: 18px;">
+                    <div class="identity-card-preview" id="owner-preview-box-wrapper" style="margin-bottom: 14px;">
                         <div id="owner-prev-photo-container"></div>
                         <div class="id-name" id="owner-prev-name"></div>
                         <div class="id-role-badge" id="owner-prev-role">Sport ID</div>
-                        <div class="discord-cards-container" id="owner-prev-discord-cards"></div>
+                        
+                        <div id="owner-prev-categorized-content"></div>
+
                         <div class="id-bio" id="owner-prev-bio" style="display: none;"></div>
+                        <div class="linktree-section-title">روابط التواصل</div>
                         <div class="id-socials-linktree" id="owner-prev-socials"></div>
-                        <div class="card-footer-identity">
-                            منصة الزعيم الرياضية - Alza3eem Prediction Platform
-                        </div>
                     </div>
 
                     <div class="profile-link-box" id="prev-link" style="display: none;"></div>
                     
-                    <button type="button" class="action-btn" id="btn-open-edit" style="background: #3b82f6; margin-bottom: 12px;">
+                    <button type="button" class="action-btn" id="btn-open-edit" style="background: #3b82f6; margin-bottom: 10px;">
                         ✏️ تعديل البطاقة
                     </button>
-
-                    <button type="button" class="action-btn" id="btn-copy-link" style="background: var(--card-accent); color: #000; margin-bottom: 12px;">
+                    <button type="button" class="action-btn" id="btn-copy-link" style="background: var(--card-accent); color: #000; margin-bottom: 10px;">
                         📋 نسخ رابط البطاقة (للبايو)
                     </button>
-
                     <button type="button" class="action-btn" id="btn-delete-card" style="background: #ef4444; margin-bottom: 0;">
                         🗑️ حذف البطاقة نهائياً
                     </button>
                 </div>
 
-                <!-- نموذج إنشاء / تعديل البطاقة -->
+                <!-- نموذج الإنشاء والتعديل -->
                 <form id="identity-form" onsubmit="event.preventDefault();" style="display: none;">
-                    <div style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 14px; font-weight: 600; text-align: center;">
-                        أنشئ هويتك الرياضية وشاركها عبر رابط واحد.
-                    </div>
-
                     <div class="step-indicator">
                         <div class="step-dot active" id="dot-1">1. الأساسيات</div>
                         <div class="step-dot" id="dot-2">2. التصميم</div>
@@ -965,13 +484,13 @@
                                 <div id="photo-avatar-placeholder" class="photo-avatar-placeholder">?</div>
                             </div>
                             <input type="file" id="id-photo-upload" accept="image/*" style="display: none;">
-                            <button type="button" class="photo-upload-btn" id="btn-upload-photo">📸 اختيار صورة شخصية أو شعار</button>
-                            <div id="photo-upload-status" style="font-size: 0.75rem; color: var(--card-accent); margin-top: 8px; display: none;">تم اختيار الصورة</div>
+                            <button type="button" class="photo-upload-btn" id="btn-upload-photo">📸 اختيار صورة أو شعار</button>
+                            <div id="photo-upload-status" style="font-size: 0.72rem; color: var(--card-accent); margin-top: 6px; display: none;">تم اختيار الصورة</div>
                         </div>
 
                         <input type="text" id="id-fullname" placeholder="الاسم الكامل أو اسم الحساب *" required>
                         <select id="id-type" required>
-                            <option value="" disabled selected>اختر نوع البطاقة الرياضية *</option>
+                            <option value="" disabled selected>اختر فئتك الرياضية *</option>
                             <option value="مشجع">مشجع رياضي</option>
                             <option value="لاعب">لاعب / رياضي</option>
                             <option value="محلل">محلل رياضي</option>
@@ -979,7 +498,7 @@
                             <option value="متجر او مشروع">متجر أو مشروع 🛍️</option>
                             <option value="أخرى">أخرى (اكتبه بنفسك)</option>
                         </select>
-                        <input type="text" id="id-type-custom" placeholder="اكتب نوع البطاقة هنا..." style="display:none; margin-top:8px;">
+                        <input type="text" id="id-type-custom" placeholder="اكتب فئتك هنا..." style="display:none; margin-top:6px;">
                         
                         <input type="text" id="id-username-link" placeholder="اسم المستخدم للرابط (مثال: ahmed) *" required>
                         <button type="button" class="action-btn" id="btn-next-1">التالي ⬅</button>
@@ -987,14 +506,14 @@
 
                     <div class="wizard-step" id="step-2">
                         <div class="color-picker-wrapper">
-                            <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 8px;">🎨 اختر لون البطاقة الشامل:</label>
+                            <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">🎨 اختر لون البطاقة الشامل:</label>
                             <div class="color-options">
-                                <div class="color-bubble selected" data-color="#10b981" data-bg1="rgba(6, 78, 59, 0.9)" data-bg2="rgba(2, 44, 34, 0.98)" style="background: #10b981;"></div>
-                                <div class="color-bubble" data-color="#3b82f6" data-bg1="rgba(30, 58, 138, 0.9)" data-bg2="rgba(15, 23, 42, 0.98)" style="background: #3b82f6;"></div>
-                                <div class="color-bubble" data-color="#ef4444" data-bg1="rgba(127, 29, 29, 0.9)" data-bg2="rgba(43, 10, 10, 0.98)" style="background: #ef4444;"></div>
-                                <div class="color-bubble" data-color="#f59e0b" data-bg1="rgba(120, 53, 15, 0.9)" data-bg2="rgba(41, 24, 8, 0.98)" style="background: #f59e0b;"></div>
-                                <div class="color-bubble" data-color="#8b5cf6" data-bg1="rgba(76, 29, 149, 0.9)" data-bg2="rgba(26, 11, 46, 0.98)" style="background: #8b5cf6;"></div>
-                                <div class="color-bubble" data-color="#ec4899" data-bg1="rgba(131, 24, 67, 0.9)" data-bg2="rgba(45, 10, 26, 0.98)" style="background: #ec4899;"></div>
+                                <div class="color-bubble selected" data-color="#10b981" data-bg1="#064e3b" data-bg2="#022c22" style="background: #10b981;"></div>
+                                <div class="color-bubble" data-color="#3b82f6" data-bg1="#1e3a8a" data-bg2="#0f172a" style="background: #3b82f6;"></div>
+                                <div class="color-bubble" data-color="#ef4444" data-bg1="#7f1d1d" data-bg2="#2b0a0a" style="background: #ef4444;"></div>
+                                <div class="color-bubble" data-color="#f59e0b" data-bg1="#78350f" data-bg2="#291808" style="background: #f59e0b;"></div>
+                                <div class="color-bubble" data-color="#8b5cf6" data-bg1="#4c1d95" data-bg2="#1a0b2e" style="background: #8b5cf6;"></div>
+                                <div class="color-bubble" data-color="#ec4899" data-bg1="#831843" data-bg2="#2d0a1a" style="background: #ec4899;"></div>
                             </div>
                         </div>
                         <div class="btn-group">
@@ -1004,7 +523,7 @@
                     </div>
 
                     <div class="wizard-step" id="step-3">
-                        <div id="dynamic-fields-container" style="margin: 8px 0;"></div>
+                        <div id="dynamic-fields-container" style="margin: 6px 0;"></div>
                         
                         <div id="location-fields-wrapper">
                             <div style="display: flex; gap: 8px;">
@@ -1028,16 +547,16 @@
                     </div>
 
                     <div class="wizard-step" id="step-4">
-                        <textarea id="id-bio" placeholder="نبذة بسيطة أو وصف تفصيلي..." rows="2" style="resize:none; padding:12px; font-size:0.85rem;"></textarea>
-                        <input type="text" id="social-insta" placeholder="Instagram (@username)" style="padding:12px; font-size:0.85rem;">
-                        <input type="text" id="social-snap" placeholder="Snapchat" style="padding:12px; font-size:0.85rem;">
-                        <input type="text" id="social-x" placeholder="X (Twitter)" style="padding:12px; font-size:0.85rem;">
-                        <input type="text" id="social-tiktok" placeholder="TikTok" style="padding:12px; font-size:0.85rem;">
-                        <input type="text" id="social-whatsapp" placeholder="WhatsApp" style="padding:12px; font-size:0.85rem;">
+                        <textarea id="id-bio" placeholder="نبذة بسيطة أو وصف تفصيلي..." rows="2" style="resize:none; padding:10px; font-size:0.85rem;"></textarea>
+                        <input type="text" id="social-insta" placeholder="Instagram (@username)" style="padding:10px; font-size:0.85rem;">
+                        <input type="text" id="social-snap" placeholder="Snapchat" style="padding:10px; font-size:0.85rem;">
+                        <input type="text" id="social-x" placeholder="X (Twitter)" style="padding:10px; font-size:0.85rem;">
+                        <input type="text" id="social-tiktok" placeholder="TikTok" style="padding:10px; font-size:0.85rem;">
+                        <input type="text" id="social-whatsapp" placeholder="WhatsApp" style="padding:10px; font-size:0.85rem;">
                         
                         <div class="btn-group">
                             <button type="button" class="action-btn" id="btn-prev-4" style="background: rgba(255,255,255,0.1); margin-top:0;">السابق</button>
-                            <button type="button" class="action-btn" id="btn-save-card" style="background: var(--card-accent); color:#000; margin-top:0;">حفظ البطاقة</button>
+                            <button type="button" class="action-btn" id="btn-save-card" style="background: var(--card-accent); color:#000; margin-top:0;">حفظ البطاقة النهائية</button>
                         </div>
                     </div>
                 </form>
@@ -1046,7 +565,7 @@
             <div class="footer">
                 <p>إدارة المنصة: @alza3eem__kw</p>
                 <div class="sponsor-container">
-                    <p style="font-size: 0.75rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
+                    <p style="font-size: 0.72rem; font-weight: 700; margin: 0; color: var(--text-dim);">الرعاة الرسميون:</p>
                     <div class="sponsors-row">
                         <img src="https://i.ibb.co/v6WXzMpR/IMG-5197.png" alt="حلها" id="halha-logo">
                         <img src="https://i.ibb.co/RTXLRggY/IMG-5213.png" alt="Samar" id="samar-logo">
@@ -1057,13 +576,12 @@
         </div>
     </div>
 
-    <!-- Minimal Footer for Profile View -->
+    <!-- Minimal Footer -->
     <div class="profile-footer-minimal" style="display: none;">
-        منصة الزعيم الرياضية
+        منصة الزعيم الرياضية - Alza3eem Platform
     </div>
 
 <script>
-    // Navigation Drawer Toggle Logic
     const hamburgerBtn = document.getElementById('hamburgerToggle');
     const closeDrawerBtn = document.getElementById('closeDrawer');
     const sideDrawer = document.getElementById('sideDrawer');
@@ -1078,7 +596,6 @@
             drawerOverlay.classList.remove('open');
         }
     }
-
     if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => toggleDrawer(true));
     if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => toggleDrawer(false));
     if (drawerOverlay) drawerOverlay.addEventListener('click', () => toggleDrawer(false));
@@ -1100,56 +617,62 @@
         switch (type) {
             case 'مشجع':
                 return {
+                    categoryTitle: 'الانتماءات الكروية',
                     fields: [
-                        { id: 'dyn1', label: 'النادي المفضّل (اختر أو اكتب)', options: ['العربي الكويتي 🇰🇼', 'بايرن ميونخ 🇩🇪', 'ريال مدريد 🇪🇸', 'برشلونة 🇪🇸', 'أخرى'] },
-                        { id: 'dyn2', label: 'المنتخب المفضّل (اختر أو اكتب)', options: ['الكويت 🇰🇼', 'السعودية 🇸🇦', 'البرازيل 🇧🇷', 'الأرجنتين 🇦🇷', 'أخرى'] }
+                        { id: 'dyn1', label: 'النادي المفضّل', options: ['العربي الكويتي 🇰🇼', 'بايرن ميونخ 🇩🇪', 'ريال مدريد 🇪🇸', 'برشلونة 🇪🇸', 'أخرى'], icon: '⚽' },
+                        { id: 'dyn2', label: 'المنتخب المفضّل', options: ['الكويت 🇰🇼', 'السعودية 🇸🇦', 'البرازيل 🇧🇷', 'الأرجنتين 🇦🇷', 'أخرى'], icon: '🏆' }
                     ],
                     showPhysical: false,
                     showLocation: true
                 };
             case 'لاعب':
                 return {
+                    categoryTitle: 'المعلومات الرياضية',
                     fields: [
-                        { id: 'dyn1', label: 'الرياضة (اختر أو اكتب)', options: ['كرة القدم ⚽', 'دراجات نارية / راليات 🏍️', 'كورة صالات 🥅', 'أخرى'] },
-                        { id: 'dyn2', label: 'المركز (اختر أو اكتب)', options: ['هجوم ⚡', 'وسط 🎯', 'دفاع 🛡️', 'حراسة 🧤', 'أخرى'] },
-                        { id: 'dyn3', label: 'القدم المفضلة (اختر أو اكتب)', options: ['يمنى 🦶', 'يسرى 🦵', 'كلا القدمين ⚡', 'أخرى'] }
+                        { id: 'dyn1', label: 'الرياضة', options: ['كرة القدم ⚽', 'دراجات نارية / راليات 🏍️', 'كورة صالات 🥅', 'أخرى'], icon: '🏅' },
+                        { id: 'dyn2', label: 'المركز', options: ['هجوم ⚡', 'وسط 🎯', 'دفاع 🛡️', 'حراسة 🧤', 'أخرى'], icon: '📌' },
+                        { id: 'dyn3', label: 'القدم المفضلة', options: ['يمنى 🦶', 'يسرى 🦵', 'كلا القدمين ⚡', 'أخرى'], icon: '🎯' }
                     ],
                     showPhysical: true,
                     showLocation: true
                 };
             case 'محلل':
                 return {
+                    categoryTitle: 'التخصص التحليلي',
                     fields: [
-                        { id: 'dyn1', label: 'الدوري أو البطولة المتابعة (اختر أو اكتب)', options: ['دوري روشن 🇸🇦', 'دوري زين الكويتي 🇰🇼', 'دوري أبطال أوروبا 🇪🇺', 'أخرى'] },
-                        { id: 'dyn2', label: 'التخصص التحليلي (اختر أو اكتب)', options: ['فني وتكتيكي 📊', 'إحصائيات وأرقام 📈', 'عام وشامل 🎙️', 'أخرى'] }
+                        { id: 'dyn1', label: 'البطولة المتابعة', options: ['دوري روشن 🇸🇦', 'دوري زين الكويتي 🇰🇼', 'دوري أبطال أوروبا 🇪🇺', 'أخرى'], icon: '📊' },
+                        { id: 'dyn2', label: 'التخصص', options: ['فني وتكتيكي 📈', 'إحصائيات وأرقام 🔢', 'تحليل شامل 🎙️', 'أخرى'], icon: '💡' }
                     ],
                     showPhysical: false,
                     showLocation: true
                 };
             case 'إداري':
                 return {
+                    categoryTitle: 'البيانات الإدارية',
                     fields: [
-                        { id: 'dyn1', label: 'الصفة الإدارية (اختر أو اكتب)', options: ['منظم بطولات 🏆', 'رئيس رابطة مشجعين 🗣️', 'مشرف عام ⚙️', 'أخرى'] },
-                        { id: 'dyn2', label: 'المنصة أو الجهة (اختر أو اكتب)', options: ['منصة توقعات الزعيم ⚡', 'فريق رياضي 🏅', 'رابطة رسمية 🏛️', 'أخرى'] }
+                        { id: 'dyn1', label: 'الصفة الإدارية', options: ['منظم بطولات 🏆', 'رئيس رابطة مشجعين 🗣️', 'مشرف عام ⚙️', 'أخرى'], icon: '👔' },
+                        { id: 'dyn2', label: 'الجهة التابعة', options: ['منصة توقعات الزعيم ⚡', 'فريق رياضي 🏅', 'رابطة رسمية 🏛️', 'أخرى'], icon: '🏢' }
                     ],
                     showPhysical: false,
                     showLocation: true
                 };
             case 'متجر او مشروع':
                 return {
+                    categoryTitle: 'معلومات المتجر / المشروع',
                     fields: [
-                        { id: 'dyn1', label: 'اسم المتجر أو المشروع', type: 'text', placeholder: 'اكتب اسم المتجر أو المشروع هنا...' },
-                        { id: 'dyn2', label: 'نوع المتجر أو المشروع', type: 'text', placeholder: 'مثال: مستلزمات رياضية، تصميم، إلكترونيات...' },
-                        { id: 'dyn3', label: 'ماذا نقدم', type: 'text', placeholder: 'اكتب الخدمات أو المنتجات المقدمة باختصار...' }
+                        { id: 'dyn1', label: 'اسم المتجر', type: 'text', placeholder: 'اسم المتجر...', icon: '🛍️' },
+                        { id: 'dyn2', label: 'نوع النشاط', type: 'text', placeholder: 'مستلزمات، تصميم، إلخ...', icon: '🏷️' },
+                        { id: 'dyn3', label: 'ماذا نقدم', type: 'text', placeholder: 'الخدمات أو المنتجات...', icon: '✨' }
                     ],
                     showPhysical: false,
                     showLocation: true
                 };
             default:
                 return {
+                    categoryTitle: 'الاهتمامات الرياضية',
                     fields: [
-                        { id: 'dyn1', label: 'الاهتمام الرياضي الأول (اكتبه هنا)', options: [] },
-                        { id: 'dyn2', label: 'الاهتمام الرياضي الثاني (اكتبه هنا)', options: [] }
+                        { id: 'dyn1', label: 'الاهتمام الأول', options: [], icon: '⭐' },
+                        { id: 'dyn2', label: 'الاهتمام الثاني', options: [], icon: '⭐' }
                     ],
                     showPhysical: true,
                     showLocation: true
@@ -1157,27 +680,13 @@
         }
     }
 
-    function sanitizeUsername(rawUsername) {
-        if (!rawUsername) return '';
-        return rawUsername.trim().toLowerCase();
-    }
-
-    function validateUsernameFormat(username) {
-        const regex = /^[a-z0-9_-]+$/;
-        return regex.test(username);
-    }
-
-    function hideLoader() {
-        const loader = document.getElementById('global-loader');
-        if (loader) loader.style.display = 'none';
-    }
+    function sanitizeUsername(raw) { return raw ? raw.trim().toLowerCase() : ''; }
+    function validateUsernameFormat(u) { return /^[a-z0-9_-]+$/.test(u); }
+    function hideLoader() { const l = document.getElementById('global-loader'); if(l) l.style.display = 'none'; }
 
     window.addEventListener('DOMContentLoaded', () => {
-        if (usernameQuery) {
-            loadPublicProfile();
-        } else {
-            initDashboard();
-        }
+        if (usernameQuery) loadPublicProfile();
+        else initDashboard();
     });
 
     async function loadPublicProfile() {
@@ -1187,11 +696,8 @@
             const snap = await getDocs(q);
             
             hideLoader();
-            if (snap.empty) {
-                showErrorState();
-                return;
-            }
-            renderProfileCard(snap.docs[0].data(), 'prev-name', 'prev-role', 'prev-discord-cards', 'prev-bio', 'prev-socials', 'prev-photo-container');
+            if (snap.empty) { showErrorState(); return; }
+            renderProfileCard(snap.docs[0].data(), 'prev-name', 'prev-role', 'prev-categorized-content', 'prev-bio', 'prev-socials', 'prev-photo-container');
         } catch (e) {
             console.error(e);
             hideLoader();
@@ -1199,7 +705,7 @@
         }
     }
 
-    function renderProfileCard(data, nameId, roleId, discordContainerId, bioId, socialsId, photoContainerId) {
+    function renderProfileCard(data, nameId, roleId, categorizedContainerId, bioId, socialsId, photoContainerId) {
         if (data.accentColor) {
             document.documentElement.style.setProperty('--card-accent', data.accentColor);
             document.documentElement.style.setProperty('--primary', data.primaryColor || data.accentColor);
@@ -1223,29 +729,40 @@
         document.getElementById(roleId).innerText = data.type || 'هوية رياضية';
 
         const cfg = getConfigByType(data.type);
-        let cardsHtml = '';
+        let htmlContent = `<div class="linktree-section-title">${cfg.categoryTitle}</div><div class="linktree-cards-container">`;
         
         cfg.fields.forEach(f => {
             const val = data[f.id];
             if (val) {
-                let cleanLabel = f.label.split(' (')[0];
-                cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">${cleanLabel}</span><span class="discord-card-value">${val}</span></div>`;
+                htmlContent += `
+                    <div class="linktree-info-pill">
+                        <span class="pill-label"><span>${f.icon || '📌'}</span> ${f.label}</span>
+                        <span class="pill-value">${val}</span>
+                    </div>
+                `;
             }
         });
-        
-        if (cfg.showLocation) {
-            if (data.country || data.city) {
-                cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">📍 الموقع</span><span class="discord-card-value">${data.country || ''} ${data.city ? `- ${data.city}` : ''}</span></div>`;
-            }
+
+        if (cfg.showLocation && (data.country || data.city)) {
+            htmlContent += `
+                <div class="linktree-info-pill">
+                    <span class="pill-label"><span>📍</span> الموقع</span>
+                    <span class="pill-value">${data.country || ''} ${data.city ? `- ${data.city}` : ''}</span>
+                </div>
+            `;
         }
-        
-        if (cfg.showPhysical) {
-            if (data.age || data.height || data.weight) {
-                cardsHtml += `<div class="discord-info-card"><span class="discord-card-label">🎂 العمر / الطول / الوزن</span><span class="discord-card-value">${data.age ? data.age + ' سنة' : ''} ${data.height ? ' | ' + data.height + ' سم' : ''} ${data.weight ? ' | ' + data.weight + ' كغ' : ''}</span></div>`;
-            }
+
+        if (cfg.showPhysical && (data.age || data.height || data.weight)) {
+            htmlContent += `
+                <div class="linktree-info-pill">
+                    <span class="pill-label"><span>📏</span> الخصائص البدنية</span>
+                    <span class="pill-value">${data.age ? data.age + ' سنة' : ''} ${data.height ? ' | ' + data.height + ' سم' : ''} ${data.weight ? ' | ' + data.weight + ' كغ' : ''}</span>
+                </div>
+            `;
         }
-        
-        document.getElementById(discordContainerId).innerHTML = cardsHtml;
+
+        htmlContent += `</div>`;
+        document.getElementById(categorizedContainerId).innerHTML = htmlContent;
 
         const bioBox = document.getElementById(bioId);
         if (data.bio) { 
@@ -1260,7 +777,7 @@
         if (data.snap) socialsHtml += `<a href="https://snapchat.com/add/${data.snap}" target="_blank" class="linktree-btn">👻 Snapchat (${data.snap})</a>`;
         if (data.x) socialsHtml += `<a href="https://x.com/${data.x.replace('@','')}" target="_blank" class="linktree-btn">𝕏 X (@${data.x.replace('@','')})</a>`;
         if (data.tiktok) socialsHtml += `<a href="https://tiktok.com/@${data.tiktok.replace('@','')}" target="_blank" class="linktree-btn">🎵 TikTok (@${data.tiktok.replace('@','')})</a>`;
-        if (data.whatsapp) socialsHtml += `<a href="https://wa.me/${data.whatsapp}" target="_blank" class="linktree-btn">💬 WhatsApp</a>`;
+        if (data.whatsapp) socialsHtml += `<a href="https://wa.me/${data.whatsapp}" target="_blank" class="linktree-btn">💬 تواصل عبر WhatsApp</a>`;
         
         document.getElementById(socialsId).innerHTML = socialsHtml;
         document.getElementById('public-profile-view').style.display = 'block';
@@ -1276,8 +793,8 @@
         const provider = new GoogleAuthProvider();
         let currentUser = null;
         let currentAccent = '#10b981';
-        let currentBg1 = 'rgba(6, 78, 59, 0.9)';
-        let currentBg2 = 'rgba(2, 44, 34, 0.98)';
+        let currentBg1 = '#064e3b';
+        let currentBg2 = '#022c22';
         let myLoadedCard = null;
         let selectedBase64Image = null;
 
@@ -1288,38 +805,20 @@
         const photoUploadStatus = document.getElementById('photo-upload-status');
         const fullnameInput = document.getElementById('id-fullname');
 
-        btnUploadPhoto.addEventListener('click', () => {
-            photoUploadInput.click();
-        });
+        btnUploadPhoto.addEventListener('click', () => photoUploadInput.click());
 
         photoUploadInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files[0]) {
-                const file = e.target.files[0];
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        const maxSide = 400;
-
-                        if (width > height) {
-                            if (width > maxSide) {
-                                height *= maxSide / width;
-                                width = maxSide;
-                            }
-                        } else {
-                            if (height > maxSide) {
-                                width *= maxSide / height;
-                                height = maxSide;
-                            }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
+                        let w = img.width, h = img.height, max = 400;
+                        if (w > h) { if (w > max) { h *= max / w; w = max; } }
+                        else { if (h > max) { w *= max / h; h = max; } }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                         selectedBase64Image = canvas.toDataURL('image/jpeg', 0.8);
                         
                         photoPreviewImg.src = selectedBase64Image;
@@ -1329,7 +828,7 @@
                     };
                     img.src = event.target.result;
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(e.target.files[0]);
             }
         });
 
@@ -1361,25 +860,20 @@
         });
 
         document.getElementById("google-login-btn").addEventListener("click", async () => {
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (e) {
-                alert("خطأ في تسجيل الدخول: " + e.message);
-            }
+            try { await signInWithPopup(auth, provider); } catch (e) { alert("خطأ: " + e.message); }
         });
 
         async function checkAndLoadDashboard() {
             if (!currentUser) return;
             try {
-                const docRef = doc(db, "identityCards", currentUser.uid);
-                const docSnap = await getDoc(docRef);
+                const docSnap = await getDoc(doc(db, "identityCards", currentUser.uid));
                 if (docSnap.exists()) {
                     myLoadedCard = docSnap.data();
                     const profileUrl = `${window.location.origin}${window.location.pathname}?u=${encodeURIComponent(myLoadedCard.usernameLink)}`;
                     document.getElementById('prev-link').innerText = profileUrl;
                     document.getElementById('prev-link').style.display = 'block';
                     
-                    renderProfileCard(myLoadedCard, 'owner-prev-name', 'owner-prev-role', 'owner-prev-discord-cards', 'owner-prev-bio', 'owner-prev-socials', 'owner-prev-photo-container');
+                    renderProfileCard(myLoadedCard, 'owner-prev-name', 'owner-prev-role', 'owner-prev-categorized-content', 'owner-prev-bio', 'owner-prev-socials', 'owner-prev-photo-container');
                     
                     document.getElementById('owner-preview-panel').style.display = 'block';
                     document.getElementById('identity-form').style.display = 'none';
@@ -1415,34 +909,17 @@
 
         document.getElementById('btn-next-1').addEventListener('click', async () => {
             const name = document.getElementById('id-fullname').value.trim();
-            let type = typeSelect.value;
-            if (type === 'أخرى') {
-                type = typeCustomInput.value.trim();
-            }
-            const rawUname = document.getElementById('id-username-link').value;
-            const uname = sanitizeUsername(rawUname);
+            let type = typeSelect.value === 'أخرى' ? typeCustomInput.value.trim() : typeSelect.value;
+            const uname = sanitizeUsername(document.getElementById('id-username-link').value);
             
-            if (!name || !type || !uname) {
-                alert("الرجاء تعبئة الاسم، نوع البطاقة، ورابط المستخدم أولاً.");
-                return;
-            }
-
-            if (!validateUsernameFormat(uname)) {
-                alert("⚠️ اسم المستخدم غير صالح. مسموح فقط بالحروف الإنجليزية والأرقام و '_' و '-' بدون مسافات.");
-                return;
-            }
+            if (!name || !type || !uname) { alert("الرجاء تعبئة الاسم، نوع البطاقة، ورابط المستخدم."); return; }
+            if (!validateUsernameFormat(uname)) { alert("⚠️ اسم المستخدم غير صالح (حروف إنجليزية وأرقام و _ و - فقط)."); return; }
 
             try {
-                const q = query(collection(db, "identityCards"), where("usernameLink", "==", uname));
-                const snap = await getDocs(q);
-                let isTaken = false;
-                snap.forEach(docSnap => {
-                    if (docSnap.id !== currentUser.uid) isTaken = true;
-                });
-                if (isTaken) {
-                    alert("اسم المستخدم هذا مستخدم مسبقاً، الرجاء اختيار اسم آخر.");
-                    return;
-                }
+                const snap = await getDocs(query(collection(db, "identityCards"), where("usernameLink", "==", uname)));
+                let taken = false;
+                snap.forEach(d => { if (d.id !== currentUser.uid) taken = true; });
+                if (taken) { alert("اسم المستخدم مستخدم مسبقاً."); return; }
             } catch (e) { console.error(e); }
 
             updateDynamicFields();
@@ -1466,124 +943,62 @@
         });
 
         function updateDynamicFields(saved = {}) {
-            let type = typeSelect.value;
-            if (type === 'أخرى') type = typeCustomInput.value;
-            
+            let type = typeSelect.value === 'أخرى' ? typeCustomInput.value : typeSelect.value;
             const container = document.getElementById('dynamic-fields-container');
             const physicalWrapper = document.getElementById('physical-fields-wrapper');
             const locationWrapper = document.getElementById('location-fields-wrapper');
             if (!container) return;
 
             const cfg = getConfigByType(type);
-
-            if (cfg.showPhysical) {
-                physicalWrapper.style.display = 'block';
-            } else {
-                physicalWrapper.style.display = 'none';
-            }
-
-            if (cfg.showLocation) {
-                locationWrapper.style.display = 'block';
-            } else {
-                locationWrapper.style.display = 'none';
-            }
+            physicalWrapper.style.display = cfg.showPhysical ? 'block' : 'none';
+            locationWrapper.style.display = cfg.showLocation ? 'block' : 'none';
 
             let html = '';
             cfg.fields.forEach(f => {
                 const savedVal = saved[f.id] || '';
                 if (f.type === 'text') {
                     html += `
-                        <div style="margin-bottom: 10px;">
-                            <label style="font-size:0.8rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size:0.78rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
                             <input type="text" id="${f.id}" placeholder="${f.placeholder}" value="${savedVal}">
                         </div>
                     `;
                 } else {
-                    let isFromOptions = false;
-                    if (f.options && f.options.length > 0) {
-                        isFromOptions = f.options.includes(savedVal);
-                    }
+                    let isFromOptions = f.options && f.options.includes(savedVal);
+                    let selectVal = isFromOptions ? savedVal : (savedVal ? 'أخرى' : '');
+                    let customVal = !isFromOptions && savedVal ? savedVal : '';
 
-                    if (f.options && f.options.length > 0) {
-                        const selectVal = isFromOptions ? savedVal : (savedVal ? 'أخرى' : '');
-                        const customVal = !isFromOptions && savedVal ? savedVal : '';
-
-                        html += `
-                            <div style="margin-bottom: 10px;">
-                                <label style="font-size:0.8rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
-                                <select id="${f.id}" class="dyn-select" data-custom-id="${f.id}-custom">
-                                    <option value="" disabled ${!selectVal ? 'selected' : ''}>اختر أو اكتب...</option>
-                                    ${f.options.map(opt => `<option value="${opt}" ${selectVal === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                                    <option value="أخرى" ${selectVal === 'أخرى' ? 'selected' : ''}>أخرى</option>
-                                </select>
-                                <input type="text" id="${f.id}-custom" placeholder="اكتب هنا..." value="${customVal}" style="display: ${selectVal === 'أخرى' ? 'block' : 'none'}; margin-top: 6px;">
-                            </div>
-                        `;
-                    } else {
-                        html += `
-                            <div style="margin-bottom: 10px;">
-                                <label style="font-size:0.8rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
-                                <input type="text" id="${f.id}" placeholder="${f.label}" value="${savedVal}">
-                            </div>
-                        `;
-                    }
+                    html += `
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size:0.78rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px;">${f.label}</label>
+                            <select id="${f.id}" class="dyn-select" data-custom-id="${f.id}-custom">
+                                <option value="" disabled ${!selectVal ? 'selected' : ''}>اختر أو اكتب...</option>
+                                ${f.options.map(opt => `<option value="${opt}" ${selectVal === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                                <option value="أخرى" ${selectVal === 'أخرى' ? 'selected' : ''}>أخرى (كتابة حرة)</option>
+                            </select>
+                            <input type="text" id="${f.id}-custom" placeholder="اكتب هنا..." value="${customVal}" style="display: ${selectVal === 'أخرى' ? 'block' : 'none'}; margin-top: 6px;">
+                        </div>
+                    `;
                 }
             });
 
             container.innerHTML = html;
-
             container.querySelectorAll('.dyn-select').forEach(sel => {
                 sel.addEventListener('change', (e) => {
                     const customInput = document.getElementById(e.target.getAttribute('data-custom-id'));
-                    if (e.target.value === 'أخرى') {
-                        customInput.style.display = 'block';
-                        customInput.focus();
-                    } else {
-                        customInput.style.display = 'none';
-                        customInput.value = '';
-                    }
+                    if (e.target.value === 'أخرى') { customInput.style.display = 'block'; customInput.focus(); }
+                    else { customInput.style.display = 'none'; customInput.value = ''; }
                 });
             });
         }
 
         document.getElementById('btn-save-card').addEventListener('click', async () => {
             if (!currentUser) return;
-            
             const saveBtn = document.getElementById('btn-save-card');
-            const originalBtnText = saveBtn.innerText;
-            saveBtn.innerText = 'جاري الحفظ...';
-            saveBtn.disabled = true;
+            saveBtn.innerText = 'جاري الحفظ...'; saveBtn.disabled = true;
 
-            const rawUname = document.getElementById('id-username-link').value;
-            const usernameKey = sanitizeUsername(rawUname);
-
-            if (!validateUsernameFormat(usernameKey)) {
-                alert("⚠️ اسم المستخدم غير صالح. مسموح فقط بالحروف الإنجليزية والأرقام و '_' و '-' بدون مسافات.");
-                saveBtn.innerText = originalBtnText;
-                saveBtn.disabled = false;
-                return;
-            }
-            
-            try {
-                const q = query(collection(db, "identityCards"), where("usernameLink", "==", usernameKey));
-                const snap = await getDocs(q);
-                let isTaken = false;
-                snap.forEach(docSnap => {
-                    if (docSnap.id !== currentUser.uid) isTaken = true;
-                });
-                if (isTaken) {
-                    alert("اسم المستخدم هذا مستخدم مسبقاً، الرجاء اختيار اسم آخر.");
-                    saveBtn.innerText = originalBtnText;
-                    saveBtn.disabled = false;
-                    return;
-                }
-            } catch (e) { console.error(e); }
-
-            let typeVal = typeSelect.value;
-            if (typeVal === 'أخرى') typeVal = typeCustomInput.value.trim();
-            const cfg = getConfigByType(typeVal);
-
-            let profileImage = selectedBase64Image || (myLoadedCard ? myLoadedCard.profileImage : null);
+            let typeVal = typeSelect.value === 'أخرى' ? typeCustomInput.value.trim() : typeSelect.value;
+            const usernameKey = sanitizeUsername(document.getElementById('id-username-link').value);
 
             let cardData = {
                 ownerUid: currentUser.uid,
@@ -1604,22 +1019,17 @@
                 accentColor: currentAccent,
                 cardBg1: currentBg1,
                 cardBg2: currentBg2,
-                profileImage: profileImage,
+                profileImage: selectedBase64Image || (myLoadedCard ? myLoadedCard.profileImage : null),
                 updatedAt: serverTimestamp()
             };
 
-            cfg.fields.forEach(f => {
-                const fieldEl = document.getElementById(f.id);
-                if (fieldEl) {
-                    if (fieldEl.tagName === 'SELECT') {
-                        if (fieldEl.value === 'أخرى') {
-                            const customEl = document.getElementById(`${f.id}-custom`);
-                            cardData[f.id] = customEl ? customEl.value.trim() : '';
-                        } else {
-                            cardData[f.id] = fieldEl.value;
-                        }
+            getConfigByType(typeVal).fields.forEach(f => {
+                const el = document.getElementById(f.id);
+                if (el) {
+                    if (el.tagName === 'SELECT' && el.value === 'أخرى') {
+                        cardData[f.id] = document.getElementById(`${f.id}-custom`)?.value.trim() || '';
                     } else {
-                        cardData[f.id] = fieldEl.value.trim();
+                        cardData[f.id] = el.value.trim();
                     }
                 }
             });
@@ -1632,26 +1042,20 @@
                 await setDoc(docRef, cardData, { merge: true });
                 myLoadedCard = cardData;
                 selectedBase64Image = null;
-                alert("✅ تم حفظ البطاقة وتثبيتها بنجاح!");
+                alert("✅ تم حفظ وتحديث البطاقة بنجاح!");
                 await checkAndLoadDashboard();
-            } catch (e) { 
-                alert("حدث خطأ أثناء الحفظ: " + e.message); 
-            } finally {
-                saveBtn.innerText = originalBtnText;
-                saveBtn.disabled = false;
-            }
+            } catch (e) { alert("خطأ: " + e.message); }
+            finally { saveBtn.innerText = 'حفظ البطاقة النهائية'; saveBtn.disabled = false; }
         });
 
         document.getElementById('btn-copy-link').addEventListener('click', () => {
-            const link = document.getElementById('prev-link').innerText;
-            navigator.clipboard.writeText(link).then(() => {
-                alert("📋 تم نسخ الرابط بنجاح! ضعه الآن في البايو أو أرسله لأصدقائك.");
+            navigator.clipboard.writeText(document.getElementById('prev-link').innerText).then(() => {
+                alert("📋 تم نسخ رابط البطاقة بنجاح!");
             });
         });
 
         document.getElementById('btn-open-edit').addEventListener('click', () => {
             if (!myLoadedCard) return;
-            
             selectedBase64Image = null;
             photoUploadInput.value = '';
             photoUploadStatus.style.display = 'none';
@@ -1667,12 +1071,10 @@
             }
 
             document.getElementById('id-fullname').value = myLoadedCard.fullName || '';
-            
-            const standardTypes = ['مشجع', 'لاعب', 'محلل', 'إداري', 'متجر او مشروع'];
-            if (standardTypes.includes(myLoadedCard.type)) {
+            const stdTypes = ['مشجع', 'لاعب', 'محلل', 'إداري', 'متجر او مشروع'];
+            if (stdTypes.includes(myLoadedCard.type)) {
                 typeSelect.value = myLoadedCard.type;
                 typeCustomInput.style.display = 'none';
-                typeCustomInput.value = '';
             } else {
                 typeSelect.value = 'أخرى';
                 typeCustomInput.style.display = 'block';
@@ -1681,7 +1083,6 @@
 
             document.getElementById('id-username-link').value = myLoadedCard.usernameLink || '';
             document.getElementById('id-bio').value = myLoadedCard.bio || '';
-            
             updateDynamicFields(myLoadedCard);
 
             if (document.getElementById('id-country')) document.getElementById('id-country').value = myLoadedCard.country || '';
@@ -1702,13 +1103,12 @@
         });
 
         document.getElementById('btn-delete-card').addEventListener('click', async () => {
-            if (!currentUser || !confirm("هل أنت متأكد من حذف بطاقتك بشكل نهائي؟")) return;
+            if (!currentUser || !confirm("هل أنت متأكد من حذف البطاقة نهائياً؟")) return;
             try {
                 await deleteDoc(doc(db, "identityCards", currentUser.uid));
-                myLoadedCard = null;
-                alert("🗑️ تم حذف البطاقة بنجاح.");
+                alert("🗑️ تم الحذف بنجاح.");
                 window.location.reload();
-            } catch (e) { alert("خطأ أثناء الحذف: " + e.message); }
+            } catch (e) { alert("خطأ: " + e.message); }
         });
     }
 </script>
